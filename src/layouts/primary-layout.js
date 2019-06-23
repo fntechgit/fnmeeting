@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import NavMenu from '../components/nav-menu'
 
-import MyMeetingsPage from "../pages/meetings/my-meetings-page"
+import MyReservations from "./my-reservations"
 import SearchRoomsLayout from "./rooms-layout"
 import {getSummitById} from '../actions/summit-actions'
 
@@ -37,8 +37,8 @@ class PrimaryLayout extends React.Component {
 
   componentDidMount() {
     let {currentSummit} = this.props;
-    if(currentSummit === null) {
-      this.props.getSummitById(7);
+    if(currentSummit.id === 0) {
+      this.props.getSummitById('27');
     }
   }
 
@@ -46,12 +46,12 @@ class PrimaryLayout extends React.Component {
     let {currentSummit} = this.props;
 
     if (currentSummit === null && currentSummit.id != newProps.currentSummit.id) {
-      this.props.getSummitById(1);
+      this.props.getSummitById(27);
     }
   }
 
   render(){
-    let { match, location, member } = this.props;
+    let { match, location, member, currentSummit } = this.props;
 
     return(
         <div className="primary-layout">
@@ -60,10 +60,12 @@ class PrimaryLayout extends React.Component {
           </div>
           <div className="col-xs-8">
             <main id="page-wrap">
+              {(currentSummit.id !== 0) ? 
               <Switch>
-                <Route strict exact path={`${match.path}/my-meetings`} component={MyMeetingsPage}/>
+                <Route strict exact path={`${match.path}/my-meetings`} component={MyReservations}/>
                 <Route path={`${match.path}/rooms`} component={SearchRoomsLayout}/>
               </Switch>
+              : 'Loading...' }
             </main>
           </div>
         </div>
