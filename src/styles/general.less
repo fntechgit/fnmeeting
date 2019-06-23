@@ -151,3 +151,102 @@ body {
   padding-top: 2px;
   font-weight: 400;
 }
+
+
+/* Meeting Styles*/
+
+body{
+  font-size: 18px;
+}
+
+.primary-layout{
+  max-width: 1140px;
+  margin: 2em auto;
+}
+
+.inline-number-field{
+  label{
+    padding: 0 .5em 0 0;
+  }
+
+  input{
+    width: 3em;
+  }
+}
+
+.form-group{
+  margin-bottom: 2em;
+}
+
+
+.meeting-room{
+  border: 1px solid #ccc;
+  padding: 0;
+  background: #fff;
+  display: flex;
+  margin-bottom: 1em;
+
+  .meeting-room-image{
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+  }
+  .meeting-room-body{
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+
+    .meeting-room-title{
+      font-size: 1.25em;
+      margin-bottom: .5em;
+    }
+
+    .meeting-room-info{
+      margin-bottom: 1em;
+      font-size: .825em;
+    }
+
+    .meeting-room-amenities{
+      flex: 1;
+      font-size: .825em;
+    }
+
+    .availability-button{
+      font-weight: 400;
+      padding-top: 1em;
+      i{
+        float: right;
+        color: orange;
+      }
+    }
+  }
+}
+
+.meeting-room-availability{
+
+  .meeting-room-availability-date{
+    text-align: center;
+  }
+
+  .meeting-room-availability-body{
+    text-align: center;
+    background-color: #fff;
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #ccc;
+  }
+
+  .meeting-room-availability-slot{
+    background: #efefef;
+    margin: .5em 0;
+    text-align: center;
+    padding: 1em;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+}
+
+.no-padding {
+  padding: 0;
+}
