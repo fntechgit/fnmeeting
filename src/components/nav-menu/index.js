@@ -13,9 +13,8 @@
 
 import React from 'react'
 import T from 'i18n-react/dist/i18n-react'
-import { slide as Menu } from 'react-burger-menu'
 import { withRouter } from 'react-router-dom'
-import SubMenuItem from './sub-menu-item'
+import history from '../../history'
 import MenuItem from './menu-item'
 import MenuItemsDefinitions from './menu-items-definition'
 import '../../styles/menu.less';
@@ -26,66 +25,38 @@ class NavMenu extends React.Component {
         super(props);
 
         this.state = {
-            subMenuOpen: '',
-            menuOpen: false
+            open: false,
+            activeItem: props.active
         }
-
-        this.drawMenuItem = this.drawMenuItem.bind(this);
     }
 
-    toggleSubMenu(event, submenu) {
+    onMenuItemClick(event, item){
         event.preventDefault();
-        this.setState({ ...this.state,
-            subMenuOpen: submenu,
-            menuOpen: true
+
+        this.setState({
+            activeItem: item.name
         });
-    }
 
-    onMenuItemClick(event, url){
-        let { history } = this.props;
-
-        event.preventDefault();
-        this.setState({menuOpen: false});
-
-        history.push(`/app/${url}`);
-    }
-
-    drawMenuItem(item) {
-        let {subMenuOpen} = this.state;
-
-        if (item.hasOwnProperty('childs')) {
-            return (
-                <SubMenuItem
-                    key={item.name}
-                    subMenuOpen={subMenuOpen}
-                    {...item}
-                    onClick={(e) => this.toggleSubMenu(e, item.name)}
-                    onItemClick={this.onMenuItemClick.bind(this)}
-                />
-            )
-        } else {
-            return (
-                <MenuItem
-                    key={item.name}
-                    {...item}
-                    onClick={(e) => this.onMenuItemClick(e, item.linkUrl)}
-                />
-            )
-        }
+        history.push(`/app/${item.name}`);
     }
 
     render() {
-        let {menuOpen} = this.state;
+        // let {user} = this.props;
+        let {activeItem, open} = this.state;
 
         return (
-            <Menu id="app_menu" isOpen={ menuOpen } noOverlay width={ 300 } pageWrapId={ "page-wrap" } >
-                <div className="separator">
-                    {T.translate('menu.general')}
+            <div id="app_menu" >
+                <div id="app_menu_body">
+                    { MenuItemsDefinitions.map(it => (
+                        <MenuItem
+                            key={it.name}
+                            {...it}
+                            onClick={(e) => this.onMenuItemClick(e, it)}
+                            active={activeItem == it.name}
+                        />
+                    ))}
                 </div>
-                { MenuItemsDefinitions.map(it => {
-                    return this.drawMenuItem(it);
-                })}
-            </Menu>
+            </div>
         );
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2017 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,48 +14,70 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Breadcrumbs, Breadcrumb } from 'react-breadcrumbs'
-import NavMenu from '../components/nav-menu/index'
+import NavMenu from '../components/nav-menu'
+
+import MyMeetingsPage from "../pages/meetings/my-meetings-page"
+import SearchRoomsLayout from "./rooms-layout"
+import {getSummitById} from '../actions/summit-actions'
 
 class PrimaryLayout extends React.Component {
 
-  render(){
-    let { match, location } = this.props;
-    let extraClass = 'container';
-
-    // full width pages
-    /*
-    if (location.pathname.includes('')) {
-      extraClass = '';
+  // TODO: React Router can handle this
+  getActiveMenu() {
+    let {location} = this.props;
+    switch(location.pathname) {
+      case '/app/my-meetings':
+        return 'my-meetings';
+        break;
+      case '/app/rooms':
+        return 'rooms';
+        break
     }
-    */
+  }
 
-    let useMenu = false;
-    
+  componentDidMount() {
+    let {currentSummit} = this.props;
+    if(currentSummit === null) {
+      this.props.getSummitById(7);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    let {currentSummit} = this.props;
+
+    if (currentSummit === null && currentSummit.id != newProps.currentSummit.id) {
+      this.props.getSummitById(1);
+    }
+  }
+
+  render(){
+    let { match, location, member } = this.props;
+
     return(
-      <div className="primary-layout">
-        { useMenu && <NavMenu /> }
-        <main id="page-wrap">
-          <Breadcrumbs className={"breadcrumbs-wrapper " + extraClass} separator="/" />
-          <Breadcrumb data={{ title: <i className="fa fa-home"></i>, pathname: match.url }} ></Breadcrumb>
-          <Switch>
-            <Route exact path="/app" component={()=><div>A route!</div>}/>
-
-            {/* add here your main routes
-              ex: <Route exact path="/app/directory" component={SummitDirectoryPage}/>
-             */}
-          </Switch>
-        </main>
-      </div>
+        <div className="primary-layout">
+          <div className="col-xs-4">
+            <NavMenu active={this.getActiveMenu()}/>
+          </div>
+          <div className="col-xs-8">
+            <main id="page-wrap">
+              <Switch>
+                <Route strict exact path={`${match.path}/my-meetings`} component={MyMeetingsPage}/>
+                <Route path={`${match.path}/rooms`} component={SearchRoomsLayout}/>
+              </Switch>
+            </main>
+          </div>
+        </div>
     );
   }
 
 }
 
-const mapStateToProps = ({  }) => ({
-
+const mapStateToProps = ({ summitReducer, loggedUserState }) => ({
+  currentSummit: summitReducer.currentSummit,
+  member: loggedUserState.member
 })
 
-export default connect(mapStateToProps, {})(PrimaryLayout)
-
-
+export default connect(
+    mapStateToProps,
+    {getSummitById}
+)(PrimaryLayout)

@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2017 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,22 +13,29 @@
 
 import React from 'react';
 import T from 'i18n-react/dist/i18n-react';
+import moment from 'moment-timezone';
+import { Modal } from 'react-bootstrap';
+import './schedule-modal.less';
 
-export default class MenuItem extends React.Component {
 
+export default class FilterModal extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
 
     render() {
-        let {name, iconClass, show, onClick, active} = this.props;
-
-        if(!show) return null;
-
-        let active_class = (active) ? ' active' : '';
+        let {children, show, title, onClose} = this.props;
 
         return (
-            <div id={name + '-menu'} className={"menu-item" + active_class} onClick={onClick} >
-                {T.translate('menu.' + name)}
-                <i className={iconClass + ' fa'} />
-            </div>
+            <Modal show={show} onHide={onClose} dialogClassName="oes-modal">
+                <Modal.Header closeButton>
+                    <Modal.Title>{title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {children}
+                </Modal.Body>
+            </Modal>
         );
 
     }

@@ -10,27 +10,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-
 import React from 'react';
-import T from 'i18n-react/dist/i18n-react';
+import MeetingRoomCard from '../../components/meeting-room-card'
 
-export default class MenuItem extends React.Component {
+class MyMeetingsPage extends React.Component {
 
+	constructor (props) {
+		super(props);
 
-    render() {
-        let {name, iconClass, show, onClick, active} = this.props;
-
-        if(!show) return null;
-
-        let active_class = (active) ? ' active' : '';
-
-        return (
-            <div id={name + '-menu'} className={"menu-item" + active_class} onClick={onClick} >
-                {T.translate('menu.' + name)}
-                <i className={iconClass + ' fa'} />
-            </div>
-        );
-
-    }
+		this.state = {
+			date: null,
+			number: null
+		}
+	}
+	
+	render(){
+		return (
+			<div>
+				<h2>My Meetings</h2>
+				<MeetingRoomCard
+					image={'https://via.placeholder.com/150'}
+					name={'Sky Lounge'}
+					capacity={'22'}
+					floor={'1'}
+					amenities={'Teleconference, Meeting, Phone'}
+					actionLabel={'Cancel Meeting'}
+					action={()=>{alert('are you sure?')}}
+				/>
+			</div>
+		);
+	}
 }
 
+export default MyMeetingsPage;

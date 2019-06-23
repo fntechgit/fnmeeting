@@ -24,7 +24,7 @@ class DefaultRoute extends React.Component {
           return (<Redirect
             exact
             to={{
-              pathname: '/app/index',
+              pathname: '/app/my-meetings',
               state: { from: props.location }
             }}
           />)

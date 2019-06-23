@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2017 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,29 +16,32 @@ import { Route, Redirect } from 'react-router-dom'
 
 class AuthorizedRoute extends React.Component {
 
-  render() {
-    let { component: Component, isLoggedUser, backUrl, currentSummit, ...rest } = this.props;
-    return (
-      <Route {...rest} render={props => {
-        let { location } = this.props;
-        let currentBackUrl =  backUrl == null ? location.pathname :  backUrl ;
+    render() {
+        let { component: Component, isLoggedUser, backUrl, currentSummit, ...rest } = this.props;
+        return (
+            <Route {...rest} render={props => {
+                let { location } = this.props;
+                let currentBackUrl =  backUrl == null ? location.pathname :  backUrl ;
 
-        if(location.search != null && location.search != null){
-          currentBackUrl += location.search
-        }
-        if(location.hash != null && location.hash != null){
-          currentBackUrl += location.hash
-        }
+                if(location.search != null && location.search != null){
+                    currentBackUrl += location.search
+                }
 
-        if (isLoggedUser) {
-          return (<Component currentSummit={currentSummit} {...props} />);
-        } else {
-          return (<Redirect to={{pathname: `/?BackUrl=${encodeURIComponent(currentBackUrl)}`, state: { from: location }}} />);
-        }
+                if(location.hash != null && location.hash != null){
+                    currentBackUrl += location.hash
+                }
 
-      }} />
-    )
-  }
+                if (isLoggedUser) {
+                    return (<Component currentSummit={currentSummit} {...props} />);
+                } else {
+                    return (<Redirect to={{pathname: `/?BackUrl=${encodeURIComponent(currentBackUrl)}`, state: { from: location }}} />);
+                }
+
+            }} />
+        )
+    }
 }
 
 export default AuthorizedRoute;
+
+

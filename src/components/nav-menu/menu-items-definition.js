@@ -1,18 +1,6 @@
 const MenuItemsDefinitions = [
-
+    {name: 'my-meetings', iconClass: 'fa-arrow-right', show: true},
+    {name: 'rooms', iconClass: 'fa-arrow-right', show: true},
 ];
 
 export default MenuItemsDefinitions;
-
-/*
-
-const MenuItemsDefinitions = [
-     {name: 'menuItemName', iconClass: 'fa-users', show: true,
-                childs: [
-                    {name:'subItemName1', linkUrl:`linkSubItemName1`},
-                    {name:'subItemName1', linkUrl:`linkSubItemName1`}
-                ]
-            }
-];
-
- */

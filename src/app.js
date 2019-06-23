@@ -58,16 +58,16 @@ class App extends React.PureComponent {
   }
 
   render() {
-    let { isLoggedUser, onUserAuth, doLogout, getUserInfo, member, backUrl} = this.props;
+    let { currentSummit, isLoggedUser, onUserAuth, doLogout, getUserInfo, member, backUrl} = this.props;
     let profile_pic = member ? member.pic : '';
     return (
         <Router history={history}>
           <div>
             <AjaxLoader show={ this.props.loading } size={ 120 }/>
-            <OPSessionChecker
-                clientId={window.OAUTH2_CLIENT_ID}
-                idpBaseUrl={window.IDP_BASE_URL}
-            />
+            {/*<OPSessionChecker*/}
+                {/*clientId={window.OAUTH2_CLIENT_ID}*/}
+                {/*idpBaseUrl={window.IDP_BASE_URL}*/}
+            {/*/>*/}
             <div className="header">
               <div className={"header-title " + (isLoggedUser ? '' : 'center')}>
                 {T.translate("general.app_title")}
@@ -75,7 +75,7 @@ class App extends React.PureComponent {
               </div>
             </div>
             <Switch>
-              <AuthorizedRoute isLoggedUser={isLoggedUser} backUrl={backUrl} path="/app" component={PrimaryLayout} />
+              <AuthorizedRoute currentSummit={currentSummit} isLoggedUser={isLoggedUser} backUrl={backUrl} path="/app" component={PrimaryLayout} />
               <AuthorizationCallbackRoute onUserAuth={onUserAuth} path='/auth/callback' getUserInfo={getUserInfo} />
               <LogOutCallbackRoute doLogout={doLogout}  path='/auth/logout'/>
               <Route path="/logout" render={props => (<p>404 - Not Found</p>)}/>
@@ -89,11 +89,12 @@ class App extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ loggedUserState, baseState }) => ({
+const mapStateToProps = ({ loggedUserState, baseState, summitReducer }) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
   backUrl: loggedUserState.backUrl,
   member: loggedUserState.member,
   loading : baseState.loading,
+  currentSummit: summitReducer.currentSummit
 })
 
 export default connect(mapStateToProps, {

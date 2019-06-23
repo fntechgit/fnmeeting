@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2017 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -11,26 +11,29 @@
  * limitations under the License.
  **/
 
-import React from 'react';
-import T from 'i18n-react/dist/i18n-react';
+import React, {Component} from 'react';
+import {CardElement, injectStripe} from 'react-stripe-elements';
 
-export default class MenuItem extends React.Component {
+class CheckoutForm extends Component {
+    constructor(props) {
+        super(props);
+    }
 
+    async submit(ev) {
+        // User clicked submit
+    }
 
     render() {
-        let {name, iconClass, show, onClick, active} = this.props;
-
-        if(!show) return null;
-
-        let active_class = (active) ? ' active' : '';
-
+        const {price} = this.props ;
+        
         return (
-            <div id={name + '-menu'} className={"menu-item" + active_class} onClick={onClick} >
-                {T.translate('menu.' + name)}
-                <i className={iconClass + ' fa'} />
+            <div className="checkout">
+                <p>Would you like to complete the purchase?</p>
+                <CardElement />
+                <button onClick={()=>{this.submit()}}>Pay ${price}</button>
             </div>
         );
-
     }
 }
 
+export default injectStripe(CheckoutForm);

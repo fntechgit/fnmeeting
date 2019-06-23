@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2017 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,16 +16,20 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import IdTokenVerifier from 'idtoken-verifier'
+import history from '../history'
 
 class AuthorizationCallbackRoute extends React.Component {
 
   constructor(props){
+    console.log("AuthorizationCallbackRoute::AuthorizationCallbackRoute");
     super(props);
-    // control variable to avoid double api call
-    this.accessTokenParsed = false;
-  }
-  componentWillMount() {
-
+    this.state = {
+      access_token: null ,
+      id_token: null,
+      session_state: null,
+      error: null,
+      error_description: null,
+    };
   }
 
   extractHashParams() {
@@ -51,34 +55,21 @@ class AuthorizationCallbackRoute extends React.Component {
     return tnonce == storedNonce && aud == process.env['OAUTH2_CLIENT_ID'] && iss == process.env['IDP_BASE_URL'];
   }
 
-  render() {
+  componentWillMount() {
+    console.log("AuthorizationCallbackRoute::componentWillMount");
+    let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
+    this.setState({...this.state, access_token, id_token, session_state, error ,error_description});
+  }
+
+  componentDidMount() {
+    console.log("AuthorizationCallbackRoute::componentDidMount");
+    let {access_token, id_token, session_state, error, error_description } = this.state;
+    if(error){
+      return;
+    }
     let { getUserInfo } = this.props;
 
-    if(this.accessTokenParsed) return null;
 
-
-    let { access_token , id_token, session_state, error, error_description } = this.extractHashParams();
-
-    if(access_token == undefined){
-      return (
-        <Route render={ props => {
-          return <Redirect to={`/error?error=${error}&error_description=${error_description}`} />
-        }} />
-      )
-    }
-
-    if(!this.validateIdToken(id_token))
-    {
-      let error = "validation error";
-      let error_description = "invalid id token";
-      return (
-        <Route render={ props => {
-          return <Redirect to={`/error?error=${error}&error_description=${error_description}`} />
-        }} />
-      )
-    }
-
-    this.accessTokenParsed = true;
     this.props.onUserAuth(access_token, id_token, session_state);
     let url              = URI( window.location.href);
     let query            = url.search(true);
@@ -98,10 +89,46 @@ class AuthorizationCallbackRoute extends React.Component {
       backUrl     += `#${URI.buildQuery(fragment)}`;
     }
 
-    getUserInfo(backUrl);
+    console.log("backUrl is "+backUrl);
+
+    getUserInfo(backUrl, history);
+
+  }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return false;
+  }
+
+  render() {
+    console.log("AuthorizationCallbackRoute::render");
+    let { getUserInfo } = this.props;
+    let {access_token, id_token, error, error_description } = this.state;
+
+    if(error){
+      console.log("AuthorizationCallbackRoute::render - access_token is null");
+
+      return (
+          <Route render={ props => {
+            return <Redirect to={`/error?error=${error}&error_description=${error_description}`} />
+          }} />
+      )
+    }
+
+    if(!this.validateIdToken(id_token))
+    {
+      console.log("AuthorizationCallbackRoute::render - not valid id_token");
+      let tmp_error = "validation error";
+      let tmp_error_description = "invalid id token";
+      return (
+          <Route render={ props => {
+            return <Redirect to={`/error?error=${tmp_error}&error_description=${tmp_error_description}`} />
+          }} />
+      )
+    }
 
     return null;
   }
 }
 
 export default withRouter(AuthorizationCallbackRoute);
+
