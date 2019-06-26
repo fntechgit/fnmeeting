@@ -17,28 +17,26 @@ class MyMeetingsPage extends React.Component {
 
 	constructor (props) {
 		super(props);
-
-		this.state = {
-			date: null,
-			number: null
-		}
 	}
 	
 	render(){
-		return (
-			<div>
-				<h2>My Meetings</h2>
-				<MeetingRoomCard
-					image={'https://via.placeholder.com/150'}
-					name={'Sky Lounge'}
-					capacity={'22'}
-					floor={'1'}
-					amenities={'Teleconference, Meeting, Phone'}
-					actionLabel={'Cancel Meeting'}
-					action={()=>{alert('are you sure?')}}
-				/>
-			</div>
-		);
+		const {reservations} = this.props
+		
+		if(reservations.data.length === 0 ){
+			return <small>No Reservations</small>
+		}
+		
+		return <div> 
+		{reservations.map(
+			r => <MeetingRoomCard
+			image={'https://via.placeholder.com/150'}
+			name={'Sky Lounge'}
+			capacity={'22'}
+			floor={'1'}
+			amenities={'Teleconference, Meeting, Phone'}
+			actionLabel={'Cancel Meeting'}
+			action={()=>{alert('are you sure?')}}
+		/>)}</div>
 	}
 }
 

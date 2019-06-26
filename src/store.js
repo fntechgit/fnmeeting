@@ -16,6 +16,8 @@ import { loggedUserReducer } from "openstack-uicore-foundation/lib/reducers"
 import baseReducer from './reducers/base-reducer'
 import summitReducer from './reducers/summit/summit-reducer';
 import reservationsReducer from './reducers/reservations-reducer';
+import roomsReducer from './reducers/rooms-reducer';
+import roomAvailabilityReducer from './reducers/room-availability-reducer';
 
 
 import thunk from 'redux-thunk';
@@ -25,12 +27,15 @@ import storage from 'redux-persist/es/storage' // default: localStorage if web, 
 const config = {
   key: 'root_fn-meeting',
   storage,
+  whitelist: ['loggedUserState'] // only loggedUserState will be persisted
 }
 
 const reducers = persistCombineReducers(config, {
   loggedUserState: loggedUserReducer,
   summitReducer: summitReducer,
   reservationsReducer: reservationsReducer,
+  roomsReducer: roomsReducer,
+  roomAvailabilityReducer: roomAvailabilityReducer,
   baseState: baseReducer
 });
 

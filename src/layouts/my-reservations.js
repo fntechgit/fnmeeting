@@ -33,10 +33,13 @@ class MyReservations extends React.Component {
   }
 
   render(){
-    let { match, location, member } = this.props;
+    let { myReservations } = this.props;
 
     return(
-        <MyMeetingsPage /> 
+        <div>
+          <h2> My Meetings </h2>
+        <MyMeetingsPage reservations={myReservations} />
+        </div>
     );
   }
 

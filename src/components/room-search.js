@@ -14,6 +14,7 @@ import React from 'react';
 import URI from "urijs";
 import swal from "sweetalert2";
 import Select from 'react-select';
+import moment from 'moment-timezone'
 
 import TextInput from './number-input'
 
@@ -23,16 +24,20 @@ class RoomSearch extends React.Component {
 
 	constructor (props) {
 		super(props);
-
+		
 		this.state = {
 			size: props.size ? props.size : null,
 		}
 
-		this.options = [
-			{ value: 'chocolate', label: 'Chocolate' },
-			{ value: 'strawberry', label: 'Strawberry' },
-			{ value: 'vanilla', label: 'Vanilla' },
-		];
+		this.options = props.days.map((day, i) => {
+			return {value: day, label: `Day ${i + 1}`}
+		})
+		
+		// this.options = [
+		// 	{ value: 'chocolate', label: 'Chocolate' },
+		// 	{ value: 'strawberry', label: 'Strawberry' },
+		// 	{ value: 'vanilla', label: 'Vanilla' },
+		// ];
 		
 		if(props.date){
 			this.state.date = this.options.find(o => o.value === props.date)

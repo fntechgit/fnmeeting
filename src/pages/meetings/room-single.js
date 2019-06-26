@@ -15,6 +15,9 @@ import MeetingRoomCard from '../../components/meeting-room-card'
 import MeetingRoomAvailability from '../../components/meeting-room-availability'
 import MeetingRoomBook from './room-book'
 import {Redirect, Route, Switch} from "react-router-dom";
+import {connect} from "react-redux";
+import {getBookableRooms, getRoomAvailability} from "../../actions/room-actions";
+import queryString from 'query-string'
 
 class AvailableRooms extends React.Component {
 
@@ -22,31 +25,117 @@ class AvailableRooms extends React.Component {
 		super(props);
 
 		this.state = {
-			
+			date: null,
+			slot: null,
+		}
+	}
+	
+	componentDidMount() {
+		let {currentSummit, getBookableRooms, rooms, date, size} = this.props
+		this.checkQueryParams()
+		if(currentSummit !== null) {
+			// Getting all bookable rooms on mount, would be better to get just this ID.
+			getBookableRooms()
 		}
 	}
 
+	checkQueryParams(){
+		const {location} = this.props
+		const {search} = location
+		if(search) {
+		let queryParams = queryString.parse(search);
+			this.setState({...queryParams})
+		}   
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		let {rooms, getRoomAvailability, match, roomAvailability, loading, location, history} = this.props
+		let singleRoom = null
+
+		// If there are rooms
+		if(rooms.data !== null){
+			
+			// Find this room
+			singleRoom = rooms.data.find(room => room.id == match.params.id)
+			
+			// If this room was found
+			if(singleRoom !== null){
+				
+				// Load availability if not loaded yet
+				if(this.state.date && roomAvailability.data == null  && !loading){
+					getRoomAvailability(singleRoom.id, this.state.date)	
+				}
+			}
+		}
+		
+		// If the date or time was changed, pass to the URL
+		// if(prevState.date !== this.state.date || prevState.time !== this.state.time ){
+		// 	let queryParams = queryString.parse(location.search);
+		//
+		// 	queryParams.date = this.state.date;
+		// 	queryParams.time = this.state.time;
+		//	
+		// 	history.push({
+		// 		search: queryString.stringify(queryParams)
+		// 	})
+		// }
+	}
+	
+	// componentWillReceiveProps(newProps) {
+	// 	let {currentSummit, getBookableRooms, date, size} = this.props
+	// 	if (currentSummit !== null && currentSummit.id != newProps.currentSummit.id) {
+	// 		getBookableRooms()
+	// 	}
+	// }
+
 	render(){
-		const {match, history} = this.props
+		const {match, history, rooms, roomAvailability} = this.props
+
+		let singleRoom
+		
+		// Have rooms been loaded
+		if(rooms.data !== null){
+			singleRoom = rooms.data.find(room => room.id == match.params.id)
+		}else{
+			return null
+		}
+		
+		//Is there a room that matches the param ID?
+		if(!singleRoom){
+			return <div>Room Not Found</div>
+		}
+
+		let amenities = singleRoom.attributes.map(a => a.value).join(', ')
 		
 		return (
 			<div>
 				<MeetingRoomCard
 					image={'https://via.placeholder.com/150'}
-					name={'Sky Lounge'}
-					capacity={'22'}
-					floor={'1'}
-					amenities={'Teleconference, Meeting, Phone'}
+					name={singleRoom.name}
+					capacity={singleRoom.capacity}
+					floor={singleRoom.floor_id}
+					amenities={amenities}
 				/>
-				<Switch>
-					<Route exact path={`${match.path}`} component={()=><MeetingRoomAvailability availability={['1', '2', '3', '4', '5', '6']} onSelect={(availability)=>{history.push(`${match.url}/${availability}`)}} />} />
-					<Route path={`${match.path}/:id`} component={MeetingRoomBook} />
-					<Route render={props => (<Redirect to={`${match.path}`}/>)}/>
-				</Switch>
+				
+				{this.state.slot ?  
+					<MeetingRoomBook room={singleRoom} slot={this.state.slot} /> :
+					<MeetingRoomAvailability availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
+				} 
+		
 			</div>
 			
 		);
 	}
 }
 
-export default AvailableRooms;
+const mapStateToProps = ({ summitReducer, roomsReducer, roomAvailabilityReducer, baseState }) => ({
+	currentSummit: summitReducer.currentSummit,
+	rooms: roomsReducer.rooms,
+	roomAvailability: roomAvailabilityReducer.availability,
+	loading: roomAvailabilityReducer.loading
+})
+
+export default connect(
+	mapStateToProps,
+	{getBookableRooms, getRoomAvailability}
+)(AvailableRooms)

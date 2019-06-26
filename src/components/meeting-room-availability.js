@@ -5,10 +5,7 @@ export default (props) => <div className={'meeting-room-availability'}>
 		(2019 October 17)
 	</div>
 	<div className={'meeting-room-availability-body col-xs-12'}>
-		<div onClick={()=>{props.onSelect('5')}} className={'meeting-room-availability-slot'}>9am - 11pm </div>
-		<div className={'meeting-room-availability-slot'}>1pm - 2pm </div>
-		<div className={'meeting-room-availability-slot'}>3pm - 5pm </div>
-		<div className={'meeting-room-availability-slot'}>8pm - 10pm </div>
+		{props.availability && props.availability.data !== null ? props.availability.data.map((a)=>{return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot'}>{a.start_date} - {a.end_date} </div>}) : null }
 	</div>
 </div>
 

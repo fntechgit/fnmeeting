@@ -14,6 +14,8 @@ import React from 'react';
 import {Elements, StripeProvider} from 'react-stripe-elements';
 import CheckoutForm from '../../components/payment-form';
 import Modal from "../../components/modal";
+import {connect} from "react-redux";
+import {createReservation} from "../../actions/room-actions";
 
 class RoomBook extends React.Component {
 
@@ -22,8 +24,8 @@ class RoomBook extends React.Component {
 
 		this.state = {
 			showModal: false,
-			emails: [],
-			confirmed: false
+			confirmed: false,
+			apiKeyToken: null,
 		}
 	}
 
@@ -40,18 +42,19 @@ class RoomBook extends React.Component {
 			return <div>
 				<h3>Confirmation</h3>
 				<h4>You have booked Boardroom 101</h4>
-				<h3>Day 1, Oct 17, 9:00AM – 9:30AM</h3>
-				<h3>An invitation has been sent  to the following:</h3>
-				<ul><li>mike@sicdigital.com</li></ul><br  />
+				<h3>{this.props.date} - {this.props.time}</h3>
+				{/*<h3>An invitation has been sent  to the following:</h3>*/}
+				{/*<ul><li>mike@sicdigital.com</li></ul><br  />*/}
 				<p>You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.</p><br  />
 			</div>
 		}
+		
 		return (
 			<div>
-				<h3>Sky Lounge</h3>
-				<h4>Day 1, Oct 17, 9:00AM – 9:30AM</h4><br  />
-				<h3>Send an invite to the following:</h3>
-					<ul><li>- <input /> +</li></ul>
+				<h3>{this.props.room.name}</h3>
+				<h4>{this.props.slot.start_date}Day 1, Oct 17, 9:00AM – {this.props.slot.end_date}</h4><br  />
+				{/*<h3>Send an invite to the following:</h3>*/}
+					{/*<ul><li>- <input /> +</li></ul>*/}
 				<br  /><br  />
 				<p>You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.</p><br  />
 				
@@ -59,15 +62,23 @@ class RoomBook extends React.Component {
 					<div>
 						<StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
 							<Elements>
-								<CheckoutForm price={90.00} />
+								<CheckoutForm price={this.props.room.time_slot_cost} />
 							</Elements>
 						</StripeProvider>
 					</div>
 				</Modal>
-				<div onClick={()=>{this.toggleModal(true)}} className={'btn btn-warning btn-lg btn-block'}>Book This Room</div>
+				<div onClick={()=>{this.props.createReservation(this.props.room.id, this.props.slot.start_date, this.props.slot.end_date, this.props.room.currency, this.props.room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>Book This Room</div>
 			</div>
 		);
 	}
 }
 
-export default RoomBook;
+const mapStateToProps = ({ summitReducer}) => ({
+	currentSummit: summitReducer.currentSummit,
+})
+
+export default connect(
+	mapStateToProps,
+	{createReservation}
+)(RoomBook)
+

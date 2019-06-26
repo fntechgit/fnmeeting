@@ -25,7 +25,10 @@ import {
     putFile,
     authErrorHandler
 } from 'openstack-uicore-foundation/lib/methods';
+import T from "i18n-react/dist/i18n-react"
+
 import history from "../../../fn-summit/src/history";
+import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS} from "./reservation-actions";
 
 export const REQUEST_ROOMS            = 'REQUEST_ROOMS';
 export const RECEIVE_ROOMS            = 'RECEIVE_ROOMS';
@@ -34,18 +37,25 @@ export const REQUEST_ROOM_AVAILABILITY = 'REQUEST_ROOM_AVAILABILITY';
 export const RECEIVE_ROOM_AVAILABILITY = 'RECEIVE_ROOM_AVAILABILITY';
 
 
-export const getBookableRooms = () => (dispatch, getState) => {
+export const getBookableRooms = (date, size) => (dispatch, getState) => {
 
-    let { loggedUserState } = getState();
+    let { loggedUserState, summitReducer} = getState();
     let { accessToken }     = loggedUserState;
-    let { currentSummit }   = currentSummitState;
+    let { currentSummit }   = summitReducer;
 
     dispatch(startLoading());
 
     let params = {
         access_token : accessToken,
-        // expand: 'event_types,tracks'
-    };
+    }
+    
+    if(date && size){
+        params = {
+            ...params,
+            'filter[]': `availability_day==${date}`,
+            'filter[]': `capacity>${size}`
+            } 
+        }
 
     return getRequest(
         createAction(REQUEST_ROOMS),
@@ -58,11 +68,11 @@ export const getBookableRooms = () => (dispatch, getState) => {
     );
 }
 
-export const getRoomAvailability = (roomId, day) => (dispatch, getState) => {
+export const getRoomAvailability = (room_id, day) => (dispatch, getState) => {
 
-    let { loggedUserState } = getState();
+    let { loggedUserState, summitReducer } = getState();
     let { accessToken }     = loggedUserState;
-    let { currentSummit }   = currentSummitState;
+    let { currentSummit }   = summitReducer;
     dispatch(startLoading());
 
     let params = {
@@ -81,52 +91,43 @@ export const getRoomAvailability = (roomId, day) => (dispatch, getState) => {
     );
 }
 
-export const createBookableRoomReservation = (entity) => (dispatch, getState) => {
-    let { loggedUserState, currentSummitState } = getState();
+export const createReservation = (room_id, start_time, end_time, currency, amount) => (dispatch, getState) => {
+    let { loggedUserState, summitReducer } = getState();
     let { accessToken }     = loggedUserState;
-    let { currentSummit }   = currentSummitState;
+    let { currentSummit }   = summitReducer;
 
     dispatch(startLoading());
 
-    let normalizedEntity = normalizeEntity(entity);
+    // let normalizedEntity = normalizeEntity(entity);
+    
+    let normalizedEntity = {
+        start_datetime: start_time, 
+        end_datetime: end_time, 
+        currency: currency, 
+        amount: amount}
 
     let params = {
         access_token : accessToken,
     };
 
-    if (entity.id) {
-        putRequest(
-            createAction(UPDATE_RSVP_TEMPLATE),
-            createAction(RSVP_TEMPLATE_UPDATED),
-            `${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/${room_id}/reservations`,
-            normalizedEntity,
-            authErrorHandler,
-            entity
-        )(params)(dispatch)
-            .then((payload) => {
-                dispatch(showSuccessMessage(T.translate("edit_rsvp_template.rsvp_template_saved")));
-            });
+    let success_message = {
+        title: T.translate("general.done"),
+        html: T.translate("edit_rsvp_template.rsvp_template_created"),
+        type: 'success'
+    };
 
-    } else {
-        let success_message = {
-            title: T.translate("general.done"),
-            html: T.translate("edit_rsvp_template.rsvp_template_created"),
-            type: 'success'
-        };
-
-        postRequest(
-            createAction(UPDATE_RSVP_TEMPLATE),
-            createAction(RSVP_TEMPLATE_ADDED),
-            `${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/rsvp-templates`,
-            normalizedEntity,
-            authErrorHandler,
-            entity
-        )(params)(dispatch)
-            .then((payload) => {
-                dispatch(showMessage(
-                    success_message,
-                    () => { history.push(`/app/summits/${currentSummit.id}/rsvp-templates/${payload.response.id}`) }
-                ));
-            });
-    }
+    postRequest(
+        createAction(CREATE_RESERVATION),
+        createAction(CREATE_RESERVATION_SUCCESS),
+        `${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/${room_id}/reservations`,
+        normalizedEntity,
+        authErrorHandler,
+        // entity
+    )(params)(dispatch)
+        .then((payload) => {
+            dispatch(showMessage(
+                success_message,
+                () => { history.push(`/app/`) }
+            ));
+        });
 }
