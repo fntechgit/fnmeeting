@@ -74,7 +74,7 @@ class RoomSearchPage extends React.Component {
 		
 		if(this.state.date && this.state.size ) {
 			return (
-				<RoomSearchResults days={summitDays} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`/app/rooms/${room}?date=${this.state.date}`)}} />
+				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`/app/rooms/${room}?date=${this.state.date}`)}} />
 			);
 		}
 		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}}/>

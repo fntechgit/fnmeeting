@@ -76,7 +76,7 @@ class RoomSearch extends React.Component {
 					<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
 					<div className="input-group"><TextInput value={this.state.size} onChange={(event)=>{this.numberChange(event)}}className={'input-number'}/></div>
 					</div>
-					{this.state.size ? <div onClick={()=>{this.submitSearch()}} className={'btn btn-warning btn-lg btn-block'}>Find a room</div> : null}
+					{this.state.size ? <div onSubmit={(values)=>{this.props.onSubmit(values)}} className={'btn btn-warning btn-lg btn-block'}>Find a room</div> : null}
 				</div> : null}
 			</div>
 		);

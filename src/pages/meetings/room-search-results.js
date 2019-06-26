@@ -12,10 +12,12 @@
  **/
 import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
+import RoomSearch from "../../components/room-search";
 import FilterModal from '../../components/modal'
 import AvailableRoomsFilter from '../../components/room-search'
 import {connect} from "react-redux";
 import {getBookableRooms} from "../../actions/room-actions";
+
 
 class RoomSearchResults extends React.Component {
 
@@ -52,7 +54,7 @@ class RoomSearchResults extends React.Component {
 	
 
 	render(){
-		const {onSelect, date, size, rooms} = this.props
+		const {onSelect, date, size, rooms, days} = this.props
 		
 		return (
 			<div>
@@ -74,7 +76,7 @@ class RoomSearchResults extends React.Component {
 				/>}) : null}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
-					<div style={{padding: '1em'}}><AvailableRoomsFilter date={date} size={size} /></div>
+					<div style={{padding: '1em'}}><RoomSearch days={this.props.days} onSubmit={(values)=>{this.props.onSubmit(values)}}/></div>
 				</FilterModal>
 			</div>
 			
