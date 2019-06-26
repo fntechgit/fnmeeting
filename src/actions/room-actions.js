@@ -100,11 +100,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
 
     // let normalizedEntity = normalizeEntity(entity);
     
-    let normalizedEntity = {
-        start_datetime: start_time, 
-        end_datetime: end_time, 
-        currency: currency, 
-        amount: amount}
+    let normalizedEntity = {room_id, start_time, end_time, currency, amount}
 
     let params = {
         access_token : accessToken,

@@ -11,13 +11,9 @@
  * limitations under the License.
  **/
 import React from 'react';
-import URI from "urijs";
-import swal from "sweetalert2";
 import Select from 'react-select';
 import moment from 'moment-timezone'
-
 import TextInput from './number-input'
-
 import T from "i18n-react";
 
 class RoomSearch extends React.Component {
@@ -30,14 +26,8 @@ class RoomSearch extends React.Component {
 		}
 
 		this.options = props.days.map((day, i) => {
-			return {value: day, label: `Day ${i + 1}`}
+			return {value: day, label: `Day ${i + 1} (${moment().format('MMM Do YY')}`}
 		})
-		
-		// this.options = [
-		// 	{ value: 'chocolate', label: 'Chocolate' },
-		// 	{ value: 'strawberry', label: 'Strawberry' },
-		// 	{ value: 'vanilla', label: 'Vanilla' },
-		// ];
 		
 		if(props.date){
 			this.state.date = this.options.find(o => o.value === props.date)

@@ -25,18 +25,14 @@ class MyMeetingsPage extends React.Component {
 		if(reservations.data.length === 0 ){
 			return <small>No Reservations</small>
 		}
-		
-		return <div> 
-		{reservations.map(
-			r => <MeetingRoomCard
-			image={'https://via.placeholder.com/150'}
-			name={'Sky Lounge'}
-			capacity={'22'}
-			floor={'1'}
-			amenities={'Teleconference, Meeting, Phone'}
-			actionLabel={'Cancel Meeting'}
-			action={()=>{alert('are you sure?')}}
-		/>)}</div>
+
+		return <div  style={{maxWidth: '300px;', overflow: 'scroll'}}>
+			{reservations.data.map(
+				room => {
+					return <div>{JSON.stringify(room)}</div>
+				})}
+		</div>
+
 	}
 }
 

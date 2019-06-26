@@ -19,6 +19,7 @@
     "rooms": "Book a Meeting"
   },
   "book_meeting": {
-    "i_need_to_book": "I need to book"
+    "i_need_to_book": "I need to book",
+    "for_how_many": "For how many?"
   }
 }

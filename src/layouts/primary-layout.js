@@ -55,10 +55,10 @@ class PrimaryLayout extends React.Component {
 
     return(
         <div className="primary-layout">
-          <div className="col-xs-4">
+          <div className="col-md-4">
             <NavMenu active={this.getActiveMenu()}/>
           </div>
-          <div className="col-xs-8">
+          <div className="col-md-8">
             <main id="page-wrap">
               {(currentSummit.id !== 0) ? 
               <Switch>
