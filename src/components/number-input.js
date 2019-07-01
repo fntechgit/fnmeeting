@@ -18,24 +18,24 @@ export default class Input extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			value: props.value,
-		};
+		// this.state = {
+		// 	value: props.value,
+		// };
 
-		this.handleChange = this.handleChange.bind(this);
+		// this.handleChange = this.handleChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if( nextProps.hasOwnProperty('value') && this.state.value != nextProps.value ) {
-			this.setState({
-				value: nextProps.value
-			});
-		}
-	}
-
-	handleChange(ev) {
-		this.props.onChange(ev);
-	}
+	// componentWillReceiveProps(nextProps) {
+	// 	if( nextProps.hasOwnProperty('value') && this.state.value != nextProps.value ) {
+	// 		this.setState({
+	// 			value: nextProps.value
+	// 		});
+	// 	}
+	// }
+	//
+	// handleChange(ev) {
+	// 	;
+	// }
 
 	render() {
 
@@ -48,8 +48,8 @@ export default class Input extends React.Component {
 				<input
 					type={'number'}
 					className={class_name + ' ' + (has_error ? 'error' : '')}
-					value={this.state.value}
-					onChange={this.handleChange}
+					value={this.props.value}
+					onChange={(ev)=>{this.props.onChange(ev)}}
 					{...rest}
 				/>
 				{has_error &&

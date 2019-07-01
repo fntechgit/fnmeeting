@@ -22,7 +22,7 @@ class RoomSearch extends React.Component {
 		super(props);
 		
 		this.state = {
-			size: props.size ? props.size : null,
+			size: props.size ? props.size : undefined,
 		}
 
 		this.options = props.days.map((day, i) => {
@@ -71,7 +71,7 @@ class RoomSearch extends React.Component {
 				
 				{this.state.date ? <div><div className="form-group form-inline inline-number-field">
 					<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
-					<div className="input-group"><TextInput value={this.state.size} onChange={(event)=>{this.numberChange(event)}}className={'input-number'}/></div>
+					<div className="input-group"><TextInput value={this.state.size} onChange={(event)=>{this.numberChange(event)}} className={'input-number'}/></div>
 					</div>
 					{this.state.size ?  <input type="submit" className={'btn btn-warning btn-lg btn-block'} value="Find a room" /> : null}
 				</div> : null}

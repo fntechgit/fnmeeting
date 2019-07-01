@@ -100,7 +100,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
 
     // let normalizedEntity = normalizeEntity(entity);
     
-    let normalizedEntity = {room_id, start_time, end_time, currency, amount}
+    let normalizedEntity = {room_id, start_datetime: start_time, end_datetime: end_time, currency, amount}
 
     let params = {
         access_token : accessToken,
@@ -108,7 +108,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
 
     let success_message = {
         title: T.translate("general.done"),
-        html: T.translate("edit_rsvp_template.rsvp_template_created"),
+        html: T.translate("book_meeting.reservation_created"),
         type: 'success'
     };
 

@@ -73,7 +73,7 @@ class RoomBook extends React.Component {
 						</StripeProvider>
 					</div>
 				</Modal>
-				<div onClick={()=>{this.props.createReservation(this.props.room.id, this.props.slot.start_date, this.props.slot.end_date, this.props.room.currency, this.props.room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>Book This Room</div>
+				<div onClick={()=>{this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>Book This Room</div>
 			</div>
 		);
 	}

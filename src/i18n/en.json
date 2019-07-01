@@ -20,6 +20,7 @@
   },
   "book_meeting": {
     "i_need_to_book": "I need to book",
-    "for_how_many": "For how many?"
+    "for_how_many": "For how many?",
+    "reservation_created": "Reservation Created"
   }
 }
