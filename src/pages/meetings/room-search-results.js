@@ -76,7 +76,7 @@ class RoomSearchResults extends React.Component {
 				/>}) : null}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
-					<div style={{padding: '1em'}}><RoomSearch days={this.props.days} onSubmit={(values)=>{this.props.onSubmit(values)}}/></div>
+					<div style={{padding: '1em'}}><RoomSearch days={this.props.days} onSubmit={(a)=>this.props.onSubmit(a)}/></div>
 				</FilterModal>
 			</div>
 			
