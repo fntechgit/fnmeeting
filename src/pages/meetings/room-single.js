@@ -18,6 +18,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import {getBookableRooms, getRoomAvailability} from "../../actions/room-actions";
 import queryString from 'query-string'
+import {daysBetweenDates} from "../../utils/helpers";
 
 class AvailableRooms extends React.Component {
 
@@ -89,7 +90,10 @@ class AvailableRooms extends React.Component {
 	// }
 
 	render(){
-		const {match, history, rooms, roomAvailability} = this.props
+		const {match, history, rooms, roomAvailability, currentSummit} = this.props
+
+		let {start_date, end_date, time_zone} = currentSummit
+		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 
 		let singleRoom
 		
@@ -119,7 +123,7 @@ class AvailableRooms extends React.Component {
 				
 				{this.state.slot ?  
 					<MeetingRoomBook room={singleRoom} slot={this.state.slot} /> :
-					<MeetingRoomAvailability availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
+					<MeetingRoomAvailability days={summitDays}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
 				} 
 		
 			</div>

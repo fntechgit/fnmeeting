@@ -26,14 +26,12 @@ class RoomSearch extends React.Component {
 		}
 
 		this.options = props.days.map((day, i) => {
-			return {value: day, label: `Day ${i + 1} (${moment().format('MMM Do YY')}`}
+			return {value: day, label: `Day ${i + 1} (${moment.unix(day).format('MMM Do YYYY')})`}
 		})
 		
 		if(props.date){
 			this.state.date = this.options.find(o => o.value == props.date)
 		}
-		
-		console.log(this.state.date)
 	}
 
 	componentDidMount() {

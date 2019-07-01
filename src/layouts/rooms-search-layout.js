@@ -16,7 +16,7 @@ import RoomSearchResults from '../pages/meetings/room-search-results'
 import {connect} from "react-redux"
 import {getBookableRooms} from "../actions/room-actions"
 var QueryString = require('querystring')
-import moment from 'moment-timezone'
+import { daysBetweenDates } from '../utils/helpers'
 
 class RoomSearchPage extends React.Component {
 
@@ -27,17 +27,6 @@ class RoomSearchPage extends React.Component {
 			date: false,
 			size: false,
 		}
-	}
-
-	daysBetweenDates(startDate, endDate, timezone) {
-		let startDay = moment(startDate * 1000).tz(timezone)
-		let endDay = moment(endDate * 1000).tz(timezone)
-		let dates = [startDay.clone().unix()]
-		
-		while(startDay.add(1, 'days').diff(endDay) < 0) {
-			dates.push(startDay.clone().unix())
-		}
-		return dates
 	}
 
 	componentDidMount() {
@@ -70,7 +59,7 @@ class RoomSearchPage extends React.Component {
 	render(){
 		const {currentSummit, history} = this.props;
 		let {start_date, end_date, time_zone} = currentSummit
-		let summitDays = this.daysBetweenDates(start_date, end_date, time_zone.name)
+		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 		
 		if(this.state.date && this.state.size ) {
 			return (
