@@ -32,7 +32,7 @@ class AvailableRooms extends React.Component {
 	}
 	
 	componentDidMount() {
-		let {currentSummit, getBookableRooms, rooms, date, size} = this.props
+		let {currentSummit, getBookableRooms} = this.props
 		this.checkQueryParams()
 		if(currentSummit !== null) {
 			// Getting all bookable rooms on mount, would be better to get just this ID.
@@ -66,28 +66,17 @@ class AvailableRooms extends React.Component {
 				if(this.state.date && roomAvailability.data == null  && !loading){
 					getRoomAvailability(singleRoom.id, this.state.date)	
 				}
+				
+				if(prevState.date !== this.state.date){
+					getRoomAvailability(singleRoom.id, this.state.date)
+				}
 			}
 		}
-		
-		// If the date or time was changed, pass to the URL
-		// if(prevState.date !== this.state.date || prevState.time !== this.state.time ){
-		// 	let queryParams = queryString.parse(location.search);
-		//
-		// 	queryParams.date = this.state.date;
-		// 	queryParams.time = this.state.time;
-		//	
-		// 	history.push({
-		// 		search: queryString.stringify(queryParams)
-		// 	})
-		// }
 	}
 	
-	// componentWillReceiveProps(newProps) {
-	// 	let {currentSummit, getBookableRooms, date, size} = this.props
-	// 	if (currentSummit !== null && currentSummit.id != newProps.currentSummit.id) {
-	// 		getBookableRooms()
-	// 	}
-	// }
+	changeDate(date){
+		this.setState({date: date})
+	}
 
 	render(){
 		const {match, history, rooms, roomAvailability, currentSummit} = this.props
@@ -123,9 +112,8 @@ class AvailableRooms extends React.Component {
 				
 				{this.state.slot ?  
 					<MeetingRoomBook days={summitDays} date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
-					<MeetingRoomAvailability days={summitDays}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
-				} 
-		
+					<MeetingRoomAvailability changeDate={(date)=>{this.changeDate(date)}} days={summitDays}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
+				}
 			</div>
 			
 		);
