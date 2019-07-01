@@ -22,18 +22,34 @@ class MyMeetingsPage extends React.Component {
 	render(){
 		const {reservations} = this.props
 		
-		if(reservations.data.length === 0 ){
-			return <small>No Reservations</small>
+		// if(reservations.data.length === 0 ){
+		// 	return <small>No Reservations</small>
+		// }
+
+		return <div>
+			{reservations.data && reservations.data.length > 0 ? 
+				reservations.data.map((reservation, i) => {
+					const {room} = reservation;
+					let amenities = room.attributes.map(a => a.value).join(', ')
+					
+					return <div>
+							<MeetingRoomCard
+							key={i}
+							room={room.id}
+							image={'https://via.placeholder.com/150'}
+							name={room.name}
+							capacity={room.capacity}
+							floor={room.floor_id}
+							amenities={amenities}
+							start_time={reservation.start_datetime}
+							end_time={reservation.end_datetime}
+							status={reservation.status}
+							/>
+							</div>
+				}) : <div>No Rooms Found...</div>}
+			</div>
 		}
-
-		return <div  style={{maxWidth: '300px;', overflow: 'scroll'}}>
-			{reservations.data.map(
-				room => {
-					return <div>{JSON.stringify(room)}</div>
-				})}
-		</div>
-
-	}
+		
 }
 
 export default MyMeetingsPage;

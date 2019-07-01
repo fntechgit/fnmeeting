@@ -52,7 +52,9 @@ export const DEFAULT_ENTITY = {
 
 const DEFAULT_STATE = {
 	currentSummit: DEFAULT_ENTITY,
-	errors: {}
+	errors: {},
+	loading: false,
+	loaded: false
 }
 
 const summitReducer = (state = DEFAULT_STATE, action) => {
@@ -63,7 +65,7 @@ const summitReducer = (state = DEFAULT_STATE, action) => {
 		}
 			break;
 		case REQUEST_SUMMIT: {
-			return DEFAULT_STATE
+			return {...DEFAULT_STATE, loading: true}
 		}
 			break;
 		case RECEIVE_SUMMIT: {
@@ -75,7 +77,7 @@ const summitReducer = (state = DEFAULT_STATE, action) => {
 				}
 			}
 
-			return {...state, currentSummit: entity, errors: {}};
+			return {...state, currentSummit: entity, errors: {}, loading: false, loaded: true};
 		}
 			break;
 		default:

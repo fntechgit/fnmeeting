@@ -43,7 +43,7 @@ export const getMyReservations = () => (dispatch, getState) => {
 
 	let params = {
 		access_token : accessToken,
-		// expand: 'event_types,tracks'
+		expand: 'room',
 	};
 
 	return getRequest(

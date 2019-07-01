@@ -37,19 +37,11 @@ class PrimaryLayout extends React.Component {
 
   componentDidMount() {
     let {currentSummit} = this.props;
-    if(currentSummit.id === 0) {
+    if(!currentSummit.loading && !currentSummit.loaded) {
       this.props.getSummitById('27');
     }
   }
-
-  componentWillReceiveProps(newProps) {
-    let {currentSummit} = this.props;
-
-    if (currentSummit === null && currentSummit.id != newProps.currentSummit.id) {
-      this.props.getSummitById(27);
-    }
-  }
-
+  
   render(){
     let { match, location, member, currentSummit } = this.props;
 
@@ -74,9 +66,10 @@ class PrimaryLayout extends React.Component {
 
 }
 
-const mapStateToProps = ({ summitReducer, loggedUserState }) => ({
+const mapStateToProps = ({ summitReducer, loggedUserState, roomsReducer }) => ({
   currentSummit: summitReducer.currentSummit,
-  member: loggedUserState.member
+  member: loggedUserState.member,
+  rooms: roomsReducer.rooms,
 })
 
 export default connect(
