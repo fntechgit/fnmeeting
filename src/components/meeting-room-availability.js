@@ -12,9 +12,9 @@ export default (props) => {
 	
 	return <div className={'meeting-room-availability'}>
 	<div className={'row meeting-room-availability-date'}>
-		<div className={'col-xs-2'}>{previousIndex || previousIndex === 0  ? <i className='fa-arrow-left fa' onClick={()=>{props.changeDate(props.days[previousIndex])}} /> : null}</div>
+		<div className={'col-xs-2 nav-arrow prev-arrow'}>{previousIndex || previousIndex === 0  ? <i className='fa-arrow-left fa' onClick={()=>{props.changeDate(props.days[previousIndex])}} /> : null}</div>
 		<div className={'col-xs-8'}><h3>Day {currentDay} Availability</h3>{moment.unix(props.date).format('MMM Do YYYY')}</div>
-		<div className={'col-xs-2'}>{nextIndex ? <i className='fa-arrow-right fa' onClick={()=>{props.changeDate(props.days[nextIndex])}} /> : null}</div>
+		<div className={'col-xs-2 nav-arrow next-arrow'}>{nextIndex ? <i className='fa-arrow-right fa' onClick={()=>{props.changeDate(props.days[nextIndex])}} /> : null}</div>
 	</div>
 	<div className={'meeting-room-availability-body col-xs-12'}>
 		{props.availability && props.availability.data !== null ? props.availability.data.map((a)=>{return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot'}>Available<br/>{moment.unix(a.start_date).format('HH:mm')} - {moment.unix(a.end_date).format('HH:mm')} </div>}) : null }
