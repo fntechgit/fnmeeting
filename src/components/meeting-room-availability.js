@@ -17,7 +17,7 @@ export default (props) => {
 		<div className={'col-xs-2'}>{nextIndex ? <i className='fa-arrow-right fa' onClick={()=>{props.changeDate(props.days[nextIndex])}} /> : null}</div>
 	</div>
 	<div className={'meeting-room-availability-body col-xs-12'}>
-		{props.availability && props.availability.data !== null ? props.availability.data.map((a)=>{return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot'}>{moment.unix(a.start_date).format('HH:mm')} - {moment.unix(a.end_date).format('HH:mm')} </div>}) : null }
+		{props.availability && props.availability.data !== null ? props.availability.data.map((a)=>{return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot'}>Available<br/>{moment.unix(a.start_date).format('HH:mm')} - {moment.unix(a.end_date).format('HH:mm')} </div>}) : null }
 	</div>
 </div>	
 }
