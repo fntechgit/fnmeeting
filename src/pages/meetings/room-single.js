@@ -122,7 +122,7 @@ class AvailableRooms extends React.Component {
 				/>
 				
 				{this.state.slot ?  
-					<MeetingRoomBook room={singleRoom} slot={this.state.slot} /> :
+					<MeetingRoomBook days={summitDays} date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
 					<MeetingRoomAvailability days={summitDays}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
 				} 
 		
