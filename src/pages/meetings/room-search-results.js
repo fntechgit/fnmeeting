@@ -35,14 +35,15 @@ class RoomSearchResults extends React.Component {
 			getBookableRooms(date, size)
 		}
 	}
-	
-	componentWillReceiveProps(newProps) {
+
+	componentDidUpdate(newProps) {
 		let {currentSummit, getBookableRooms, date, size} = this.props
-		if (currentSummit !== null && currentSummit.id != newProps.currentSummit.id) {
+		if (date !== newProps.date || size !== newProps.size) {
 			getBookableRooms(date, size)
+			this.toggleFilterModal(false);
 		}
 	}
-	
+
 	toggleFilterModal(value){
 		if(value){
 			this.setState({'showFilterModal': value})	
@@ -51,8 +52,6 @@ class RoomSearchResults extends React.Component {
 		}
 	}
 	
-	
-
 	render(){
 		const {onSelect, date, size, rooms, days} = this.props
 		
@@ -61,7 +60,7 @@ class RoomSearchResults extends React.Component {
 				<h2>Available Rooms</h2>
 				<div id="my-meetings-menu" onClick={()=>{this.toggleFilterModal(true)}} className="menu-item">Filter<i className="fa-filter fa"></i></div>
 				
-				{rooms.data ? rooms.data.map((room, i) => {
+				{rooms.data && rooms.data.length > 0 ? rooms.data.map((room, i) => {
 				let amenities = room.attributes.map(a => a.value).join(', ')			
 				return <MeetingRoomCard
 					key={i}
@@ -73,10 +72,10 @@ class RoomSearchResults extends React.Component {
 					amenities={amenities}
 					action={onSelect}
 					actionLabel={'See Availability'}
-				/>}) : null}
+				/>}) : <div>No Rooms Found...</div>}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
-					<div style={{padding: '1em'}}><RoomSearch days={this.props.days} onSubmit={(a)=>this.props.onSubmit(a)}/></div>
+					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
 				</FilterModal>
 			</div>
 			

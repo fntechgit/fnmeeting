@@ -30,7 +30,7 @@ class RoomSearch extends React.Component {
 		})
 		
 		if(props.date){
-			this.state.date = this.options.find(o => o.value === props.date)
+			this.state.date = this.options.find(o => o.value == props.date)
 		}
 		
 		console.log(this.state.date)
@@ -51,15 +51,14 @@ class RoomSearch extends React.Component {
 		this.setState({'size': event.target.value})
 	}
 	
-	submitSearch(){
+	submitSearch(e){
+		e.preventDefault();
 		this.props.onSubmit({date: this.state.date.value, size: this.state.size})
 	}
 	
 	render(){
-
-		
 		return (
-			<div>
+			<form onSubmit={(e)=>{this.submitSearch(e)}}>
 				<div className="form-group">
 					<label>{T.translate("book_meeting.i_need_to_book")}</label>
 					<Select
@@ -76,9 +75,9 @@ class RoomSearch extends React.Component {
 					<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
 					<div className="input-group"><TextInput value={this.state.size} onChange={(event)=>{this.numberChange(event)}}className={'input-number'}/></div>
 					</div>
-					{this.state.size ? <div onClick={()=>{this.submitSearch()}} className={'btn btn-warning btn-lg btn-block'}>Find a room</div> : null}
+					{this.state.size ?  <input type="submit" className={'btn btn-warning btn-lg btn-block'} value="Find a room" /> : null}
 				</div> : null}
-			</div>
+			</form>
 		);
 	}
 }
