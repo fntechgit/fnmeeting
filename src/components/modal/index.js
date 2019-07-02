@@ -12,11 +12,8 @@
  **/
 
 import React from 'react';
-import T from 'i18n-react/dist/i18n-react';
-import moment from 'moment-timezone';
 import { Modal } from 'react-bootstrap';
 import './schedule-modal.less';
-
 
 export default class FilterModal extends React.Component {
 

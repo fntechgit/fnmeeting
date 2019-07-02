@@ -12,9 +12,8 @@
  **/
 import React from 'react';
 import Select from 'react-select';
-import moment from 'moment-timezone'
-import TextInput from './number-input'
 import T from "i18n-react";
+import {getFormatedDate} from '../utils/helpers'
 
 class RoomSearch extends React.Component {
 
@@ -22,23 +21,16 @@ class RoomSearch extends React.Component {
 		super(props);
 		
 		this.state = {
-			size: props.size ? props.size : undefined,
+			size: props.size ? props.size : '',
 		}
 
 		this.options = props.days.map((day, i) => {
-			return {value: day, label: `Day ${i + 1} (${moment.unix(day).format('MMM Do YYYY')})`}
+			return {value: day, label: `${T.translate("book_meeting.day")} ${i + 1} (${getFormatedDate(day)})`}
 		})
 		
 		if(props.date){
 			this.state.date = this.options.find(o => o.value == props.date)
 		}
-	}
-
-	componentDidMount() {
-		// let query = URI.parseQuery(this.props.location.search);
-		// swal(query.error,
-		// 	query.error_description,
-		// 	"error");
 	}
 
 	dateSelect(option){
@@ -68,12 +60,20 @@ class RoomSearch extends React.Component {
 						isClearable={false}
 					/>
 				</div>
-				
-				{this.state.date ? <div><div className="form-group form-inline inline-number-field">
-					<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
-					<div className="input-group"><TextInput value={this.state.size} onChange={(event)=>{this.numberChange(event)}} className={'input-number'}/></div>
+				{this.state.date ? <div>
+					<div className="form-group form-inline inline-number-field">
+						<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
+						<div className="input-group">
+							<input
+								type={'number'}
+								className={'input-number'}
+								value={this.state.size}
+								onChange={(event)=>{this.numberChange(event)}}
+							/>
+						</div>
 					</div>
-					{this.state.size ?  <input type="submit" className={'btn btn-warning btn-lg btn-block'} value="Find a room" /> : null}
+				
+				{this.state.size ? <input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/> : null}
 				</div> : null}
 			</form>
 		);

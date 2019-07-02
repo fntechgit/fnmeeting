@@ -26,7 +26,6 @@ import {
     authErrorHandler
 } from 'openstack-uicore-foundation/lib/methods';
 import T from "i18n-react/dist/i18n-react"
-
 import history from "../../../fn-summit/src/history";
 import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS} from "./reservation-actions";
 
@@ -97,8 +96,6 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
     let { currentSummit }   = summitReducer;
 
     dispatch(startLoading());
-
-    // let normalizedEntity = normalizeEntity(entity);
     
     let normalizedEntity = {room_id, start_datetime: start_time, end_datetime: end_time, currency, amount}
 

@@ -13,16 +13,9 @@
 
 import {
 	getRequest,
-	putRequest,
-	postRequest,
-	deleteRequest,
 	createAction,
 	stopLoading,
 	startLoading,
-	showMessage,
-	showSuccessMessage,
-	postFile,
-	putFile,
 	authErrorHandler
 } from 'openstack-uicore-foundation/lib/methods';
 

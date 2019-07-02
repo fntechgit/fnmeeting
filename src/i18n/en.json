@@ -18,9 +18,28 @@
     "my-meetings": "My Meetings",
     "rooms": "Book a Meeting"
   },
+  "my_reservations": {
+    "no_reservations": "No reservations"
+  },
+  "bookable_room": {
+    "capacity": "Capacity",
+    "floor": "Floor",
+    "amenities": "Amenities",
+    "status": "Status",
+    "see_availability": "See Availability",
+    "available_rooms": "Available Rooms",
+    "filter_rooms": "Filter",
+    "available": "Available"
+  },
   "book_meeting": {
     "i_need_to_book": "I need to book",
     "for_how_many": "For how many?",
-    "reservation_created": "Reservation Created"
+    "reservation_created": "Reservation Created",
+    "find_a_room": "Find a Room",
+    "no_rooms_found": "No rooms found matching your criteria",
+    "must_cancel_within": "You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.",
+    "day": "Day",
+    "book_this_room": "Book this room",
+    "no_results": "No rooms found matching your criteria"
   }
 }

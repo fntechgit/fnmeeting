@@ -16,6 +16,7 @@ import RoomSearch from "../../components/room-search";
 import FilterModal from '../../components/modal'
 import AvailableRoomsFilter from '../../components/room-search'
 import {connect} from "react-redux";
+import T from 'i18n-react';
 import {getBookableRooms} from "../../actions/room-actions";
 
 
@@ -57,8 +58,11 @@ class RoomSearchResults extends React.Component {
 		
 		return (
 			<div>
-				<h2>Available Rooms</h2>
-				<div id="my-meetings-menu" onClick={()=>{this.toggleFilterModal(true)}} className="menu-item">Filter<i className="fa-filter fa"></i></div>
+				<h2>{T.translate("bookable_room.available_rooms")}</h2>
+				<div id="my-meetings-menu" onClick={()=>{this.toggleFilterModal(true)}} className="menu-item">
+					{T.translate("bookable_room.filter_rooms")}
+					<i className="fa-filter fa"></i>
+				</div>
 				
 				{rooms.data && rooms.data.length > 0 ? rooms.data.map((room, i) => {
 				let amenities = room.attributes.map(a => a.value).join(', ')			
@@ -71,8 +75,8 @@ class RoomSearchResults extends React.Component {
 					floor={room.floor_id}
 					amenities={amenities}
 					action={onSelect}
-					actionLabel={'See Availability'}
-				/>}) : <div>No Rooms Found...</div>}
+					actionLabel={T.translate("bookable_room.see_availability")}
+				/>}) : <div>{T.translate("book_meeting.no_results")}</div>}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} onSubmit={(values)=>this.props.onSubmit(values)}/></div>

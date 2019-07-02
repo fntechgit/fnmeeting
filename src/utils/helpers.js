@@ -22,3 +22,11 @@ export const getDayNumberFromDate = (days, date) => {
 		}})
 	return dayNumber
 }
+
+export const getFormatedDate = (datetime) => {
+	return moment.unix(datetime).format('MMM Do YYYY')
+}
+
+export const getFormatedTime = (datetime) => {
+	return moment.unix(datetime).format('HH:mm')
+}

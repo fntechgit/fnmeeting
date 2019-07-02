@@ -12,8 +12,9 @@
  **/
 import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
+import T from 'i18n-react'
 
-class MyMeetingsPage extends React.Component {
+class MyReservationsPage extends React.Component {
 
 	constructor (props) {
 		super(props);
@@ -21,22 +22,16 @@ class MyMeetingsPage extends React.Component {
 	
 	render(){
 		const {reservations} = this.props
-		
-		// if(reservations.data.length === 0 ){
-		// 	return <small>No Reservations</small>
-		// }
-
 		return <div>
 			{reservations.data && reservations.data.length > 0 ? 
 				reservations.data.map((reservation, i) => {
 					const {room} = reservation;
 					let amenities = room.attributes.map(a => a.value).join(', ')
 					
-					return <div>
+					return <div key={reservation.id}>
 							<MeetingRoomCard
-							key={i}
 							room={room.id}
-							image={'https://via.placeholder.com/150'}
+							image={room.image}
 							name={room.name}
 							capacity={room.capacity}
 							floor={room.floor_id}
@@ -46,10 +41,10 @@ class MyMeetingsPage extends React.Component {
 							status={reservation.status}
 							/>
 							</div>
-				}) : <div>No Rooms Found...</div>}
+				}) : <div>{T.translate("my_reservations.no_reservations")}</div>}
 			</div>
 		}
 		
 }
 
-export default MyMeetingsPage;
+export default MyReservationsPage;

@@ -16,8 +16,8 @@ import CheckoutForm from '../../components/payment-form';
 import Modal from "../../components/modal";
 import {connect} from "react-redux";
 import {createReservation} from "../../actions/room-actions";
-import {getDayNumberFromDate} from "../../utils/helpers";
-import moment from "moment";
+import {getDayNumberFromDate, getFormatedTime, getFormatedDate} from "../../utils/helpers";
+import T from 'i18n-react';
 
 class RoomBook extends React.Component {
 
@@ -45,24 +45,26 @@ class RoomBook extends React.Component {
 		
 		if(this.state.confirmed){
 			return <div>
-				<h3>Confirmation</h3>
-				<h4>You have booked Boardroom 101</h4>
+				<h3>{T.translate("book_meeting.confirmation")}</h3>
+				<h4>{T.translate("book_meeting.you_have_booked")} {room.name}</h4>
 				<h3>{date} - {time}</h3>
-				{/*<h3>An invitation has been sent  to the following:</h3>*/}
-				{/*<ul><li>mike@sicdigital.com</li></ul><br  />*/}
-				<p>You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.</p><br  />
+				<p>{T.translate("book_meeting.must_cancel_within")}</p>
 			</div>
 		}
 		
 		return (
 			<div>
 				<h3>{this.props.room.name}<div className={'pull-right'}>${room.time_slot_cost}</div></h3>
-				<h4>Day {getDayNumberFromDate(days, date)}, {moment.unix(date).format('MMM Do YYYY')}, {moment.unix(slot.start_date).format('HH:mm')} - {moment.unix(slot.end_date).format('HH:mm')}</h4>
+				<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date)}, {getFormatedTime(slot.start_date)} - {getFormatedTime(slot.end_date)}</h4>
 			
 				{/*<h3>Send an invite to the following:</h3>*/}
 					{/*<ul><li>- <input /> +</li></ul>*/}
 				<br  />
-				<p>You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.</p><br  />
+				<p>{T.translate("book_meeting.must_cancel_within")}</p>
+
+				<div onClick={()=>{this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>
+					{T.translate("book_meeting.book_this_room")}
+				</div>
 				
 				<Modal show={this.state.showModal} onClose={()=>{this.toggleModal(false)}} title={''}>
 					<div>
@@ -73,7 +75,7 @@ class RoomBook extends React.Component {
 						</StripeProvider>
 					</div>
 				</Modal>
-				<div onClick={()=>{this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>Book This Room</div>
+				
 			</div>
 		);
 	}
