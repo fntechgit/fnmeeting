@@ -68,7 +68,7 @@ class RoomBook extends React.Component {
 				
 				<Modal show={this.state.showModal} onClose={()=>{this.toggleModal(false)}} title={''}>
 					<div>
-						<StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+						<StripeProvider apiKey={window.STRIPE_PROVIDER}>
 							<Elements>
 								<CheckoutForm price={room.time_slot_cost} />
 							</Elements>
