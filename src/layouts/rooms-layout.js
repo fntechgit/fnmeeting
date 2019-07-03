@@ -25,9 +25,9 @@ class BookAMeeting extends React.Component {
         return(
             <div>
                 <Switch>
-                    <Route exact path={`${match.path}/search`} component={RoomSearchLayout} />
+                    <Route exact path={`${match.path}`} component={RoomSearchLayout} />
                     <Route path={`${match.path}/:id`} component={MeetingRoomAvailability} />
-                    <Route render={props => (<Redirect to={`${match.path}/search`}/>)}/>
+                    <Route render={props => (<Redirect to={`${match.path}`}/>)}/>
                 </Switch>
             </div>
         );

@@ -19,6 +19,7 @@
     "rooms": "Book a Meeting"
   },
   "my_reservations": {
+    "page_title": "My Meetings",
     "no_reservations": "No reservations"
   },
   "bookable_room": {

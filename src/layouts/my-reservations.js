@@ -15,29 +15,24 @@ import React from 'react'
 import { connect } from 'react-redux';
 import MyMeetingsPage from "../pages/meetings/my-meetings-page"
 import {getMyReservations} from '../actions/reservation-actions'
+import T from 'i18n-react'
 
 class MyReservations extends React.Component {
 
-  componentDidMount() {
-    let {currentSummit, getMyReservations} = this.props;
-    if(currentSummit !== null) {
+  componentWillMount() {
+    let {summit, getMyReservations} = this.props;
+    if(summit.loaded & !summit.loading) {
       getMyReservations()
     }
   }
-
-  getDerivedStateFromProps(newProps) {
-    let {currentSummit, getMyReservations} = this.props;
-    if (currentSummit !== null && currentSummit.id != newProps.currentSummit.id) {
-      getMyReservations()
-    }
-  }
+  
 
   render(){
     let { myReservations } = this.props;
 
     return(
         <div>
-          <h2> My Meetings </h2>
+          <h2>{T.translate('my_reservations.page_title')}</h2>
         <MyMeetingsPage reservations={myReservations} />
         </div>
     );
@@ -46,7 +41,7 @@ class MyReservations extends React.Component {
 }
 
 const mapStateToProps = ({ summitReducer, reservationsReducer, loggedUserState }) => ({
-  currentSummit: summitReducer.currentSummit,
+  summit: summitReducer,
   myReservations: reservationsReducer.reservations,
   member: loggedUserState.member
 })

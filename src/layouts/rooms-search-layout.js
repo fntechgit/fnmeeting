@@ -57,13 +57,13 @@ class RoomSearchPage extends React.Component {
 	}
 
 	render(){
-		const {currentSummit, history} = this.props;
+		const {currentSummit, history, match} = this.props;
 		let {start_date, end_date, time_zone} = currentSummit
 		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 		
 		if(this.state.date && this.state.size ) {
 			return (
-				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`/app/rooms/${room}?date=${this.state.date}`)}} />
+				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`${match.url}/${room}?date=${this.state.date}`)}} />
 			);
 		}
 		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}}/>

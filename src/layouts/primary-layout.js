@@ -21,26 +21,11 @@ import SearchRoomsLayout from "./rooms-layout"
 import {getSummitById} from '../actions/summit-actions'
 
 class PrimaryLayout extends React.Component {
-
-  // TODO: React Router can handle this
-  getActiveMenu() {
-    let {location, match} = this.props;
-    switch(location.pathname) {
-      case `${match.path}/my-meetings`:
-        return 'my-meetings';
-        break;
-      case `${match.path}/rooms`:
-        return 'rooms';
-        break
-    }
-  }
-
+  
   componentDidMount() {
     let {summit, match} = this.props;
     if(!summit.loading && !summit.loaded) {
-
       let summitId = match.params.id
-      
       this.props.getSummitById(summitId);
     }
   }

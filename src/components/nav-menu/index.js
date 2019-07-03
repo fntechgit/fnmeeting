@@ -32,6 +32,7 @@ class NavMenu extends React.Component {
                 <div id="app_menu_body">
                     { MenuItemsDefinitions.map(it => (
                         <MenuItem
+                            key={it.name}
                             link={this.props.match.url + '/' + it.name}
                             {...it}
                         />
