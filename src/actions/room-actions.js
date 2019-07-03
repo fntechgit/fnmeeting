@@ -120,7 +120,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
         .then((payload) => {
             dispatch(showMessage(
                 success_message,
-                () => { history.push(`/app/`) }
+                () => { history.push(`/a/`) }
             ));
         });
 }
