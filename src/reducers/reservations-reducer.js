@@ -11,7 +11,8 @@ export const DEFAULT_ENTITY = {
 const DEFAULT_STATE = {
 	reservations: DEFAULT_ENTITY,
 	errors: {},
-	loaded: false
+	loaded: false,
+	loading: false
 }
 
 const reservationsReducer = (state = DEFAULT_STATE, action) => {
@@ -23,14 +24,7 @@ const reservationsReducer = (state = DEFAULT_STATE, action) => {
 			break;
 		case RECEIVE_RESERVATIONS: {
 			let entity = {...payload.response};
-
-			// for(var key in entity) {
-			// 	if(entity.hasOwnProperty(key)) {
-			// 		entity[key] = (entity[key] == null) ? '' : entity[key] ;
-			// 	}
-			// }
-
-			return {...state, reservations: entity, errors: {}};
+			return {...state, reservations: entity, errors: {}, loading: false, loaded: true};
 		}
 			break;
 		default:

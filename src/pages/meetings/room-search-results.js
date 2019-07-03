@@ -14,7 +14,6 @@ import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
 import RoomSearch from "../../components/room-search";
 import FilterModal from '../../components/modal'
-import AvailableRoomsFilter from '../../components/room-search'
 import {connect} from "react-redux";
 import T from 'i18n-react';
 import {getBookableRooms} from "../../actions/room-actions";
@@ -69,7 +68,7 @@ class RoomSearchResults extends React.Component {
 				return <MeetingRoomCard
 					key={i}
 					room={room.id}
-					image={'https://via.placeholder.com/150'}
+					image={room.image}
 					name={room.name}
 					capacity={room.capacity}
 					floor={room.floor_id}

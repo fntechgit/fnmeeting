@@ -43,7 +43,7 @@ class PrimaryLayout extends React.Component {
   }
   
   render(){
-    let { match, location, member, currentSummit } = this.props;
+    let { match, currentSummit } = this.props;
 
     return(
         <div className="primary-layout">

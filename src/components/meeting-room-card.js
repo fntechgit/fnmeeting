@@ -3,7 +3,7 @@ import {getFormatedDate, getFormatedTime} from "../utils/helpers";
 import T from "i18n-react";
 
 export default ({image, name, capacity, floor, amenities, actionLabel, action, room, start_time, end_time, status}) => <div className={'meeting-room'}>
-	<div className={'meeting-room-image'} style={{backgroundImage: `url('${image ? image : 'https://via.placeholder.com/250'}'`}}> </div>
+	<div className={'meeting-room-image'} style={{backgroundImage: `url('${image ? image : T.translate("bookable_room.placeholder_image")}`}}> </div>
 		<div className={'meeting-room-body'}>
 			<div className={'row'}>
 				<div className={'col-xs-12 meeting-room-title'}>

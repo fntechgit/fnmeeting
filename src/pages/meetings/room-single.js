@@ -103,7 +103,7 @@ class AvailableRooms extends React.Component {
 		return (
 			<div>
 				<MeetingRoomCard
-					image={'https://via.placeholder.com/150'}
+					image={singleRoom.image}
 					name={singleRoom.name}
 					capacity={singleRoom.capacity}
 					floor={singleRoom.floor_id}

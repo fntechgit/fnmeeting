@@ -26,7 +26,7 @@ import {
     authErrorHandler
 } from 'openstack-uicore-foundation/lib/methods';
 import T from "i18n-react/dist/i18n-react"
-import history from "../../../fn-summit/src/history";
+import history from "../../src/history";
 import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS} from "./reservation-actions";
 
 export const REQUEST_ROOMS            = 'REQUEST_ROOMS';

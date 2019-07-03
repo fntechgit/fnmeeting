@@ -22,6 +22,7 @@
     "no_reservations": "No reservations"
   },
   "bookable_room": {
+    "placeholder_image": "https://picsum.photos/300/300",
     "capacity": "Capacity",
     "floor": "Floor",
     "amenities": "Amenities",
