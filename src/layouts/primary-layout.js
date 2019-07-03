@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import NavMenu from '../components/nav-menu'
 
 import MyReservations from "./my-reservations"
@@ -24,38 +24,41 @@ class PrimaryLayout extends React.Component {
 
   // TODO: React Router can handle this
   getActiveMenu() {
-    let {location} = this.props;
+    let {location, match} = this.props;
     switch(location.pathname) {
-      case '/app/my-meetings':
+      case `${match.path}/my-meetings`:
         return 'my-meetings';
         break;
-      case '/app/rooms':
+      case `${match.path}/rooms`:
         return 'rooms';
         break
     }
   }
 
   componentDidMount() {
-    let {currentSummit} = this.props;
-    if(!currentSummit.loading && !currentSummit.loaded) {
-      this.props.getSummitById('27');
+    let {summit, match} = this.props;
+    if(!summit.loading && !summit.loaded) {
+
+      let summitId = match.params.id
+      
+      this.props.getSummitById(summitId);
     }
   }
   
   render(){
-    let { match, currentSummit } = this.props;
+    let { match, summit } = this.props;
 
     return(
         <div className="primary-layout">
           <div className="col-md-4">
-            <NavMenu active={this.getActiveMenu()}/>
+            <NavMenu {...this.props}/>
           </div>
           <div className="col-md-8">
             <main id="page-wrap">
-              {(currentSummit.id !== 0) ? 
+              {(summit.loaded) ? 
               <Switch>
-                <Route strict exact path={`${match.path}/my-meetings`} component={MyReservations}/>
-                <Route path={`${match.path}/rooms`} component={SearchRoomsLayout}/>
+                <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations}/>
+                <Route path={`${match.url}/rooms`} component={SearchRoomsLayout}/>
               </Switch>
               : 'Loading...' }
             </main>
@@ -67,7 +70,7 @@ class PrimaryLayout extends React.Component {
 }
 
 const mapStateToProps = ({ summitReducer, loggedUserState, roomsReducer }) => ({
-  currentSummit: summitReducer.currentSummit,
+  summit: summitReducer,
   member: loggedUserState.member,
   rooms: roomsReducer.rooms,
 })

@@ -25,7 +25,7 @@ class MyReservations extends React.Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
+  getDerivedStateFromProps(newProps) {
     let {currentSummit, getMyReservations} = this.props;
     if (currentSummit !== null && currentSummit.id != newProps.currentSummit.id) {
       getMyReservations()

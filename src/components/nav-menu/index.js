@@ -13,7 +13,7 @@
 
 import React from 'react'
 import T from 'i18n-react/dist/i18n-react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import history from '../../history'
 import MenuItem from './menu-item'
 import MenuItemsDefinitions from './menu-items-definition'
@@ -23,36 +23,17 @@ class NavMenu extends React.Component {
 
     constructor (props) {
         super(props);
-
-        this.state = {
-            open: false,
-            activeItem: props.active
-        }
     }
-
-    onMenuItemClick(event, item){
-        event.preventDefault();
-
-        this.setState({
-            activeItem: item.name
-        });
-
-        history.push(`/app/${item.name}`);
-    }
-
+    
     render() {
-        // let {user} = this.props;
-        let {activeItem, open} = this.state;
 
         return (
             <div id="app_menu" >
                 <div id="app_menu_body">
                     { MenuItemsDefinitions.map(it => (
                         <MenuItem
-                            key={it.name}
+                            link={this.props.match.url + '/' + it.name}
                             {...it}
-                            onClick={(e) => this.onMenuItemClick(e, it)}
-                            active={activeItem == it.name}
                         />
                     ))}
                 </div>

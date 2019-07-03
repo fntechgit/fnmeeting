@@ -13,22 +13,20 @@
 
 import React from 'react';
 import T from 'i18n-react/dist/i18n-react';
+import {NavLink} from "react-router-dom";
 
 export default class MenuItem extends React.Component {
 
 
     render() {
-        let {name, iconClass, show, onClick, active} = this.props;
+        let {name, iconClass, show, active, link} = this.props;
 
         if(!show) return null;
-
-        let active_class = (active) ? ' active' : '';
-
-        return (
-            <div id={name + '-menu'} className={"menu-item" + active_class} onClick={onClick} >
+    
+        return (<NavLink to={`${link}`} id={name + '-menu'} className={"menu-item"} activeClassName={active}> 
                 {T.translate('menu.' + name)}
                 <i className={iconClass + ' fa'} />
-            </div>
+            </NavLink>
         );
 
     }
