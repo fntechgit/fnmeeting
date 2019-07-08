@@ -47,7 +47,7 @@ class RoomBook extends React.Component {
 
 	render(){
 		
-		const {days, date, time, slot, room, payReservation} = this.props
+		const {days, date, time, slot, room, payReservation, member} = this.props
 		
 		if(this.state.confirmed){
 			return <div>
@@ -74,6 +74,9 @@ class RoomBook extends React.Component {
 				
 				<Modal show={this.state.showModal} onClose={()=>{this.toggleModal(false)}} title={''}>
 					<div>
+						<div className={'book-meeting-profile-pic'}><img src={member.pic}/>
+							<div className={'book-meeting-name'}>{member.first_name} {member.last_name}</div>
+						</div>
 						<StripeProvider apiKey={window.STRIPE_PRIVATE_KEY}>
 							<Elements>
 								<CheckoutForm price={room.time_slot_cost} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
@@ -87,7 +90,8 @@ class RoomBook extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer, newReservationReducer }) => ({
+const mapStateToProps = ({ summitReducer, newReservationReducer, loggedUserState }) => ({
+	member: loggedUserState.member,
 	currentSummit: summitReducer.currentSummit,
 	newReservation: newReservationReducer,
 })
