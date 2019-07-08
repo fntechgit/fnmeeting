@@ -15,7 +15,7 @@ import {Elements, StripeProvider} from 'react-stripe-elements';
 import CheckoutForm from '../../components/payment-form';
 import Modal from "../../components/modal";
 import {connect} from "react-redux";
-import {createReservation} from "../../actions/room-actions";
+import {createReservation, payReservation} from "../../actions/room-actions";
 import {getDayNumberFromDate, getFormatedTime, getFormatedDate} from "../../utils/helpers";
 import T from 'i18n-react';
 
@@ -47,7 +47,7 @@ class RoomBook extends React.Component {
 
 	render(){
 		
-		const {days, date, time, slot, room} = this.props
+		const {days, date, time, slot, room, payReservation} = this.props
 		
 		if(this.state.confirmed){
 			return <div>
@@ -76,7 +76,7 @@ class RoomBook extends React.Component {
 					<div>
 						<StripeProvider apiKey={window.STRIPE_PRIVATE_KEY}>
 							<Elements>
-								<CheckoutForm price={room.time_slot_cost} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
+								<CheckoutForm price={room.time_slot_cost} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
 							</Elements>
 						</StripeProvider>
 					</div>
@@ -94,6 +94,9 @@ const mapStateToProps = ({ summitReducer, newReservationReducer }) => ({
 
 export default connect(
 	mapStateToProps,
-	{createReservation}
+	{
+		createReservation,
+		payReservation
+	}
 )(RoomBook)
 

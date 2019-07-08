@@ -105,11 +105,6 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
         access_token : accessToken,
     };
 
-    let success_message = {
-        title: T.translate("general.done"),
-        html: T.translate("book_meeting.reservation_created"),
-        type: 'success'
-    };
 
     postRequest(
         createAction(CREATE_RESERVATION),
@@ -127,18 +122,30 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
 
 
 
-export const confirmReservation = (stripe, clientSecret, card) => (dispatch, getState) => {
+export const payReservation = (card, stripe, clientSecret) => (dispatch, getState) => {
+    let {loggedUserState, summitReducer} = getState();
+
+    let success_message = {
+        title: T.translate("general.done"),
+        html: T.translate("book_meeting.reservation_created"),
+        type: 'success'
+    };
+
+    
     stripe.handleCardPayment(
-        clientSecret, this.state.card, {
+        clientSecret, card, {
             payment_method_data: {
-                billing_details: {name: 'Test Name'}
+                billing_details: {name: `${loggedUserState.member.first_name} ${loggedUserState.member.last_name}`}
             }
         }
     ).then(function(result) {
         if (result.error) {
             // Display error.message in your UI.
         } else {
-            alert('this worked')
+            dispatch(showMessage(
+                success_message,
+                () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
+            ));
             // The payment has succeeded. Display a success message.
         }
     });

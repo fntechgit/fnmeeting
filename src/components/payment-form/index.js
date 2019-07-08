@@ -24,24 +24,24 @@ class CheckoutForm extends Component {
     }
 
 
-    submit(ev) {
-        const {stripe, clientSecret} = this.props;
-        
-        stripe.handleCardPayment(
-            clientSecret, this.state.card, {
-                payment_method_data: {
-                    billing_details: {name: 'Test Name'}
-                }
-            }
-        ).then(function(result) {
-            if (result.error) {
-                // Display error.message in your UI.
-            } else {
-                alert('this worked')
-                // The payment has succeeded. Display a success message.
-            }
-        });
-    }
+    // submit(ev) {
+    //     const {stripe, clientSecret} = this.props;
+    //    
+    //     stripe.handleCardPayment(
+    //         clientSecret, this.state.card, {
+    //             payment_method_data: {
+    //                 billing_details: {name: 'Test Name'}
+    //             }
+    //         }
+    //     ).then(function(result) {
+    //         if (result.error) {
+    //             // Display error.message in your UI.
+    //         } else {
+    //             alert('this worked')
+    //             // The payment has succeeded. Display a success message.
+    //         }
+    //     });
+    // }
 
     render() {
         const {price} = this.props ;
@@ -58,7 +58,7 @@ class CheckoutForm extends Component {
         return (
             <div className="checkout">
                 <CardElement style={style} onReady={(el) => {this.setCardElement(el)}} />
-                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.submit(e)}}>Pay ${price}</button>
+                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.props.submit(this.state.card, this.props.stripe, this.props.clientSecret)}}>Pay ${price}</button>
             </div>
         );
     }

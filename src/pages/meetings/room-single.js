@@ -41,10 +41,9 @@ class AvailableRooms extends React.Component {
 	}
 
 	checkQueryParams(){
-		let {summit, getBookableRooms} = this.props
-
-		const {location} = this.props
+		const {summit, location} = this.props
 		const {search} = location
+		
 		if(search) {
 		let queryParams = queryString.parse(search);
 			this.setState({...queryParams})
@@ -52,34 +51,40 @@ class AvailableRooms extends React.Component {
 			this.setState({'date': summit.currentSummit.start_date})
 		}   
 	}
-
-	componentDidUpdate(prevProps, prevState) {
-		let {rooms, getRoomAvailability, match, roomAvailability, loading, location, history} = this.props
+	
+	getSingleRoomAvailability(prevState){
+		const {rooms, getRoomAvailability, match, roomAvailability, loading } = this.props
 		let singleRoom = null
 
 		// If there are rooms
 		if(rooms.data !== null){
-			
+
 			// Find this room
 			singleRoom = rooms.data.find(room => room.id == match.params.id)
-			
+
 			// If this room was found
 			if(singleRoom !== null){
-				
+
 				// Load availability if not loaded yet
 				if(this.state.date && roomAvailability.data == null  && !loading){
-					getRoomAvailability(singleRoom.id, this.state.date)	
+					getRoomAvailability(singleRoom.id, this.state.date)
 				}
-				
+
 				if(prevState.date !== this.state.date){
 					getRoomAvailability(singleRoom.id, this.state.date)
 				}
 			}
 		}
 	}
+
+	componentDidUpdate(prevProps, prevState) {
+		this.getSingleRoomAvailability(prevState)
+	}
 	
 	changeDate(date){
+		const {match, history} = this.props
 		this.setState({date: date})
+		history.push({search: `?date=${date}`})
 	}
 
 	render(){
