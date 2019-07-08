@@ -131,6 +131,8 @@ export const payReservation = (card, stripe, clientSecret) => (dispatch, getStat
         type: 'success'
     };
 
+    dispatch(startLoading());
+
     
     stripe.handleCardPayment(
         clientSecret, card, {
@@ -142,6 +144,7 @@ export const payReservation = (card, stripe, clientSecret) => (dispatch, getStat
         if (result.error) {
             // Display error.message in your UI.
         } else {
+            dispatch(stopLoading());
             dispatch(showMessage(
                 success_message,
                 () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
