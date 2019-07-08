@@ -18,19 +18,47 @@ class CheckoutForm extends Component {
     constructor(props) {
         super(props);
     }
+    
+    setCardElement(el){
+        this.setState({card: el})
+    }
 
-    async submit(ev) {
-        // User clicked submit
+
+    submit(ev) {
+        const {stripe, clientSecret} = this.props;
+        
+        stripe.handleCardPayment(
+            clientSecret, this.state.card, {
+                payment_method_data: {
+                    billing_details: {name: 'Test Name'}
+                }
+            }
+        ).then(function(result) {
+            if (result.error) {
+                // Display error.message in your UI.
+            } else {
+                alert('this worked')
+                // The payment has succeeded. Display a success message.
+            }
+        });
     }
 
     render() {
         const {price} = this.props ;
-        
+
+        const style = {
+            base: {
+                // Add your base input styles here. For example:
+                fontSize: '16px',
+                color: "#32325d",
+            }
+        };
+
+
         return (
             <div className="checkout">
-                <p>Would you like to complete the purchase?</p>
-                <CardElement />
-                <button onClick={()=>{this.submit()}}>Pay ${price}</button>
+                <CardElement style={style} onReady={(el) => {this.setCardElement(el)}} />
+                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.submit(e)}}>Pay ${price}</button>
             </div>
         );
     }

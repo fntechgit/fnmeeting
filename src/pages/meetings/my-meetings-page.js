@@ -27,7 +27,9 @@ class MyReservationsPage extends React.Component {
 				reservations.data.map((reservation, i) => {
 					const {room} = reservation;
 					let amenities = room.attributes.map(a => a.value).join(', ')
-					
+					if(reservation.status === 'Canceled') {
+						return null
+					}
 					return <div key={reservation.id}>
 							<MeetingRoomCard
 							room={room.id}

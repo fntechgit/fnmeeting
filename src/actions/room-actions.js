@@ -27,13 +27,15 @@ import {
 } from 'openstack-uicore-foundation/lib/methods';
 import T from "i18n-react/dist/i18n-react"
 import history from "../../src/history";
-import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS} from "./reservation-actions";
 
 export const REQUEST_ROOMS            = 'REQUEST_ROOMS';
 export const RECEIVE_ROOMS            = 'RECEIVE_ROOMS';
 
 export const REQUEST_ROOM_AVAILABILITY = 'REQUEST_ROOM_AVAILABILITY';
 export const RECEIVE_ROOM_AVAILABILITY = 'RECEIVE_ROOM_AVAILABILITY';
+
+export const CREATE_RESERVATION            = 'CREATE_RESERVATION';
+export const CREATE_RESERVATION_SUCCESS    = 'CREATE_RESERVATION_SUCCESS';
 
 
 export const getBookableRooms = (date, size) => (dispatch, getState) => {
@@ -118,9 +120,26 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
         // entity
     )(params)(dispatch)
         .then((payload) => {
-            dispatch(showMessage(
-                success_message,
-                () => { history.push(`/a/`) }
-            ));
-        });
+            dispatch(stopLoading());
+        })
+}
+
+
+
+
+export const confirmReservation = (stripe, clientSecret, card) => (dispatch, getState) => {
+    stripe.handleCardPayment(
+        clientSecret, this.state.card, {
+            payment_method_data: {
+                billing_details: {name: 'Test Name'}
+            }
+        }
+    ).then(function(result) {
+        if (result.error) {
+            // Display error.message in your UI.
+        } else {
+            alert('this worked')
+            // The payment has succeeded. Display a success message.
+        }
+    });
 }

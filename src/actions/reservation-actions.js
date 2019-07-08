@@ -22,10 +22,6 @@ import {
 export const REQUEST_RESERVATIONS            = 'REQUEST_RESERVATIONS';
 export const RECEIVE_RESERVATIONS            = 'RECEIVE_RESERVATIONS';
 
-export const CREATE_RESERVATION = 'CREATE_RESERVATION'
-export const CREATE_RESERVATION_SUCCESS = 'CREATE_RESERVATION_SUCCESS'
-
-
 export const getMyReservations = () => (dispatch, getState) => {
 
 	let { loggedUserState, summitReducer } = getState();

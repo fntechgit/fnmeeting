@@ -32,20 +32,24 @@ class AvailableRooms extends React.Component {
 	}
 	
 	componentDidMount() {
-		let {currentSummit, getBookableRooms} = this.props
+		let {summit, getBookableRooms} = this.props
 		this.checkQueryParams()
-		if(currentSummit !== null) {
+		if(!summit.loading && summit.loaded) {
 			// Getting all bookable rooms on mount, would be better to get just this ID.
 			getBookableRooms()
 		}
 	}
 
 	checkQueryParams(){
+		let {summit, getBookableRooms} = this.props
+
 		const {location} = this.props
 		const {search} = location
 		if(search) {
 		let queryParams = queryString.parse(search);
 			this.setState({...queryParams})
+		}else{
+			this.setState({'date': summit.currentSummit.start_date})
 		}   
 	}
 
@@ -79,9 +83,9 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {match, history, rooms, roomAvailability, currentSummit} = this.props
+		const {match, history, rooms, roomAvailability, summit} = this.props
 
-		let {start_date, end_date, time_zone} = currentSummit
+		let {start_date, end_date, time_zone} = summit.currentSummit
 		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 
 		let singleRoom
@@ -121,7 +125,7 @@ class AvailableRooms extends React.Component {
 }
 
 const mapStateToProps = ({ summitReducer, roomsReducer, roomAvailabilityReducer, baseState }) => ({
-	currentSummit: summitReducer.currentSummit,
+	summit: summitReducer,
 	rooms: roomsReducer.rooms,
 	roomAvailability: roomAvailabilityReducer.availability,
 	loading: roomAvailabilityReducer.loading

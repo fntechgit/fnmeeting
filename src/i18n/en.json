@@ -31,7 +31,8 @@
     "see_availability": "See Availability",
     "available_rooms": "Available Rooms",
     "filter_rooms": "Filter",
-    "available": "Available"
+    "available": "Available",
+    "unavailable": "Unavailable"
   },
   "book_meeting": {
     "i_need_to_book": "I need to book",

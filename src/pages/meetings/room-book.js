@@ -38,6 +38,12 @@ class RoomBook extends React.Component {
 			this.setState({'showModal': !this.state.showModal})
 		}
 	}
+	
+	componentDidUpdate(){
+		if(this.props.newReservation.loaded && !this.state.showModal){
+			this.toggleModal(true)
+		}
+	}
 
 	render(){
 		
@@ -68,9 +74,9 @@ class RoomBook extends React.Component {
 				
 				<Modal show={this.state.showModal} onClose={()=>{this.toggleModal(false)}} title={''}>
 					<div>
-						<StripeProvider apiKey={window.STRIPE_PROVIDER}>
+						<StripeProvider apiKey={window.STRIPE_PRIVATE_KEY}>
 							<Elements>
-								<CheckoutForm price={room.time_slot_cost} />
+								<CheckoutForm price={room.time_slot_cost} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
 							</Elements>
 						</StripeProvider>
 					</div>
@@ -81,8 +87,9 @@ class RoomBook extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer}) => ({
+const mapStateToProps = ({ summitReducer, newReservationReducer }) => ({
 	currentSummit: summitReducer.currentSummit,
+	newReservation: newReservationReducer,
 })
 
 export default connect(

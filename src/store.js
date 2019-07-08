@@ -18,6 +18,7 @@ import summitReducer from './reducers/summit/summit-reducer';
 import reservationsReducer from './reducers/reservations-reducer';
 import roomsReducer from './reducers/rooms-reducer';
 import roomAvailabilityReducer from './reducers/room-availability-reducer';
+import newReservationReducer from './reducers/room-booking-reducer';
 
 
 import thunk from 'redux-thunk';
@@ -36,6 +37,7 @@ const reducers = persistCombineReducers(config, {
   reservationsReducer: reservationsReducer,
   roomsReducer: roomsReducer,
   roomAvailabilityReducer: roomAvailabilityReducer,
+  newReservationReducer: newReservationReducer,
   baseState: baseReducer
 });
 

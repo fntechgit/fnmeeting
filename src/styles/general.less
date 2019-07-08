@@ -257,15 +257,29 @@ body{
     text-align: center;
     padding: 1em;
     border: 1px solid #ccc;
-    cursor: pointer;
-
-    &:hover{
-      background: orange;
-      color: #fff;
+    
+    
+    &.available{
+      cursor: pointer;
+      &:hover{
+        background: orange;
+        color: #fff;
+      }
+    }
+    
+    &.unavailable{
+      opacity: .5;
+      cursor: not-allowed;
     }
   }
 }
 
 .no-padding {
   padding: 0;
+}
+
+.StripeElement {
+  padding: 1em;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 1em;
 }
