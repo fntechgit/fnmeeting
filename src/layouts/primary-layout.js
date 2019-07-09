@@ -44,6 +44,11 @@ class PrimaryLayout extends React.Component {
               <Switch>
                 <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations}/>
                 <Route path={`${match.url}/rooms`} component={SearchRoomsLayout}/>
+                  <Redirect
+                      to={{
+                          pathname: `${match.url}/my-meetings`
+                      }}
+                  />
               </Switch>
               : 'Loading...' }
             </main>
