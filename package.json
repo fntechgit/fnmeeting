@@ -55,7 +55,7 @@
     "i18n-react": "^0.6.4",
     "idtoken-verifier": "^1.2.0",
     "immutability-helper": "^2.6.6",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.14",
     "moment-timezone": "^0.5.14",
     "node-sass": "^4.9.0",
     "react": "^16.6.3",
