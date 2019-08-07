@@ -66,6 +66,7 @@ class RoomSearch extends React.Component {
 						<div className="input-group">
 							<input
 								type={'number'}
+								min={'1'}
 								className={'input-number'}
 								value={this.state.size}
 								onChange={(event)=>{this.numberChange(event)}}
