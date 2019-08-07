@@ -57,10 +57,13 @@ class RoomBook extends React.Component {
 				<p>{T.translate("book_meeting.must_cancel_within")}</p>
 			</div>
 		}
-		
+
+
+		let cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: room.currency }).format(room.time_slot_cost)
+
 		return (
 			<div>
-				<h3>{this.props.room.name}<div className={'pull-right'}>${room.time_slot_cost}</div></h3>
+				<h3>{this.props.room.name}<div className={'pull-right'}>{cost}</div></h3>
 				<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date)}, {getFormatedTime(slot.start_date)} - {getFormatedTime(slot.end_date)}</h4>
 			
 				{/*<h3>Send an invite to the following:</h3>*/}
