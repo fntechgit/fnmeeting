@@ -54,7 +54,7 @@ export const getBookableRooms = (date, size) => (dispatch, getState) => {
         params = {
             ...params,
             'filter[]': `availability_day==${date}`,
-            'filter[]': `capacity>${size}`
+            'filter[]': `capacity>=${size}`
             } 
         }
 
