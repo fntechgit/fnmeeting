@@ -20,33 +20,44 @@ class MyReservationsPage extends React.Component {
 		super(props);
 	}
 	
-	render(){
+	render() {
 		const {reservations} = this.props
-		return <div>
-			{reservations.data && reservations.data.length > 0 ? 
-				reservations.data.map((reservation, i) => {
-					const {room} = reservation;
-					let amenities = room.attributes.map(a => a.value).join(', ')
-					if(reservation.status === 'Canceled') {
-						return null
-					}
-					return <div key={reservation.id}>
-							<MeetingRoomCard
-							room={room.id}
-							image={room.image}
-							name={room.name}
-							capacity={room.capacity}
-							floor={room.floor_id}
-							amenities={amenities}
-							start_time={reservation.start_datetime}
-							end_time={reservation.end_datetime}
-							status={reservation.status}
-							/>
-							</div>
-				}) : <div>{T.translate("my_reservations.no_reservations")}</div>}
-			</div>
+
+		const noReservations = <div>{T.translate("my_reservations.no_reservations")}</div>
+
+		// If there are no reservations
+		if (!reservations.data || reservations.data.length < 1) {
+			return noReservations
 		}
-		
+
+		// Filter out  only Paid Reservations
+		let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Payed'))
+
+		// If there are no paid reservations, show no reservation message
+		if (paidReservations.length < 1) {
+			return noReservations
+		}
+
+		// Render all reservations
+		return <div> {paidReservations.map((reservation, i) => {
+			const {room} = reservation;
+			let amenities = room.attributes.map(a => a.value).join(', ')
+			// Only show paid reservations (payed)
+			return <div key={reservation.id}>
+				<MeetingRoomCard
+					room={room.id}
+					image={room.image}
+					name={room.name}
+					capacity={room.capacity}
+					floor={room.floor_id}
+					amenities={amenities}
+					start_time={reservation.start_datetime}
+					end_time={reservation.end_datetime}
+					status={reservation.status}
+				/>
+			</div>
+		})}</div>
+	}
 }
 
 export default MyReservationsPage;

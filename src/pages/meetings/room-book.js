@@ -40,15 +40,16 @@ class RoomBook extends React.Component {
 	}
 	
 	componentDidUpdate(){
-		if(this.props.newReservation.loaded && !this.state.showModal){
-			this.toggleModal(true)
-		}
+		// if(this.props.newReservation.loaded && !this.state.showModal){
+		// 	this.toggleModal(true)
+		// }
 	}
 
 	render(){
 		
 		const {days, date, time, slot, room, payReservation, member} = this.props
 		
+		// Show confirmation if payment has been made
 		if(this.state.confirmed){
 			return <div>
 				<h3>{T.translate("book_meeting.confirmation")}</h3>
@@ -58,7 +59,7 @@ class RoomBook extends React.Component {
 			</div>
 		}
 
-
+		// Localize cost to currency passed by API
 		let cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: room.currency }).format(room.time_slot_cost)
 
 		return (
@@ -71,7 +72,8 @@ class RoomBook extends React.Component {
 				<br  />
 				<p>{T.translate("book_meeting.must_cancel_within")}</p>
 
-				<div onClick={()=>{this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)}} className={'btn btn-warning btn-lg btn-block'}>
+				{/* Book this room button */}
+				<div onClick={()=>{this.toggleModal(true)}} className={'btn btn-warning btn-lg btn-block'}>
 					{T.translate("book_meeting.book_this_room")}
 				</div>
 				
