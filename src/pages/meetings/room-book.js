@@ -15,7 +15,7 @@ import {Elements, StripeProvider} from 'react-stripe-elements';
 import CheckoutForm from '../../components/payment-form';
 import Modal from "../../components/modal";
 import {connect} from "react-redux";
-import {createReservation, payReservation} from "../../actions/room-actions";
+import {createReservation, payReservation, clearReservation} from "../../actions/room-actions";
 import {getDayNumberFromDate, getFormatedTime, getFormatedDate} from "../../utils/helpers";
 import T from 'i18n-react';
 
@@ -32,20 +32,28 @@ class RoomBook extends React.Component {
 	}
 
 	toggleModal(value){
-		if(value){
-			this.setState({'showModal': value})
-		}else{
-			this.setState({'showModal': !this.state.showModal})
-		}
+		this.setState({'showModal': value})
 	}
 	
-	componentDidUpdate(){
+	clickBook(){
 		const {slot, room} = this.props
-
-		if(this.state.showModal && !this.props.newReservation.loaded && !this.props.newReservation.loading && this.props.newReservation.errors.length === undefined){
-			this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)
+		if(!this.props.newReservation.loaded && !this.props.newReservation.loading){
+			this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost).then((a)=>{
+				if(!a.err){
+					this.toggleModal(true)	
+				}
+			}).catch(e => {})	
 		}
+		
+		// if(!this.props.newReservation.errors){
+		// 	this.toggleModal(true)
+		// }
 	}
+	
+	componentWillUnmount(){
+		this.props.clearReservation()
+	}
+
 
 	render(){
 		
@@ -75,7 +83,7 @@ class RoomBook extends React.Component {
 				<p>{T.translate("book_meeting.must_cancel_within")}</p>
 
 				{/* Book this room button */}
-				<div onClick={()=>{this.toggleModal(true)}} className={'btn btn-warning btn-lg btn-block'}>
+				<div onClick={()=>{this.clickBook()}} className={'btn btn-warning btn-lg btn-block'}>
 					{T.translate("book_meeting.book_this_room")}
 				</div>
 				
@@ -109,7 +117,8 @@ export default connect(
 	mapStateToProps,
 	{
 		createReservation,
-		payReservation
+		payReservation,
+		clearReservation
 	}
 )(RoomBook)
 

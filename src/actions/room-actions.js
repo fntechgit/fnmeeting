@@ -36,6 +36,9 @@ export const RECEIVE_ROOM_AVAILABILITY = 'RECEIVE_ROOM_AVAILABILITY';
 
 export const CREATE_RESERVATION            = 'CREATE_RESERVATION';
 export const CREATE_RESERVATION_SUCCESS    = 'CREATE_RESERVATION_SUCCESS';
+export const CREATE_RESERVATION_ERROR      = 'CREATE_RESERVATION_ERROR';
+export const CLEAR_RESERVATION             = 'CLEAR_RESERVATION';
+
 
 
 export const getBookableRooms = (date, size) => (dispatch, getState) => {
@@ -92,6 +95,10 @@ export const getRoomAvailability = (room_id, day) => (dispatch, getState) => {
     );
 }
 
+export const clearReservation = () => (dispatch, getState) => {
+    dispatch(createAction(CLEAR_RESERVATION)())
+}
+
 export const createReservation = (room_id, start_time, end_time, currency, amount) => (dispatch, getState) => {
     let { loggedUserState, summitReducer } = getState();
     let { accessToken }     = loggedUserState;
@@ -106,7 +113,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
     };
 
 
-    postRequest(
+    return postRequest(
         createAction(CREATE_RESERVATION),
         createAction(CREATE_RESERVATION_SUCCESS),
         `${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/${room_id}/reservations`,
@@ -116,11 +123,13 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
     )(params)(dispatch)
         .then((payload) => {
             dispatch(stopLoading());
+            return (payload)
+        })
+        .catch(e => {
+            dispatch(createAction(CREATE_RESERVATION_ERROR)(e))
+            return(e)
         })
 }
-
-
-
 
 export const payReservation = (card, stripe, clientSecret) => (dispatch, getState) => {
     let {loggedUserState, summitReducer} = getState();

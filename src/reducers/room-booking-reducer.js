@@ -1,4 +1,4 @@
-import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS} from '../actions/room-actions';
+import {CREATE_RESERVATION, CREATE_RESERVATION_SUCCESS, CREATE_RESERVATION_ERROR, CLEAR_RESERVATION} from '../actions/room-actions';
 
 export const DEFAULT_ENTITY = {
 	current_page: 1,
@@ -10,7 +10,7 @@ export const DEFAULT_ENTITY = {
 
 const DEFAULT_STATE = {
 	reservation: DEFAULT_ENTITY,
-	errors: {},
+	errors: null,
 	loaded: false,
 	loading: false
 }
@@ -24,7 +24,14 @@ const newReservationReducer = (state = DEFAULT_STATE, action) => {
 			break;
 		case CREATE_RESERVATION_SUCCESS: {
 			let entity = {...payload.response};
-			return {...state, reservation: entity, errors: {}, loading: false, loaded: true};
+			return {...state, reservation: entity, errors: null, loading: false, loaded: true};
+		}
+		case CREATE_RESERVATION_ERROR: {
+			let entity = {...payload.err};
+			return {...state, reservation: false, errors: payload.err, loading: false, loaded: true};
+		}
+		case CLEAR_RESERVATION: {
+			return DEFAULT_STATE
 		}
 			break;
 		default:
