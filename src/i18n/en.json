@@ -43,6 +43,8 @@
     "must_cancel_within": "You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.",
     "day": "Day",
     "book_this_room": "Book this room",
+    "back": "Back",
+    "room_not_found": "Room not found",
     "no_results": "No rooms found matching your criteria"
   }
 }

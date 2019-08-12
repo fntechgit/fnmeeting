@@ -17,6 +17,10 @@ import {CardElement, injectStripe} from 'react-stripe-elements';
 class CheckoutForm extends Component {
     constructor(props) {
         super(props);
+        
+        this.state = {
+            card: undefined
+        }
     }
     
     setCardElement(el){

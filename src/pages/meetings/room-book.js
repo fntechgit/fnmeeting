@@ -40,9 +40,11 @@ class RoomBook extends React.Component {
 	}
 	
 	componentDidUpdate(){
-		// if(this.props.newReservation.loaded && !this.state.showModal){
-		// 	this.toggleModal(true)
-		// }
+		const {slot, room} = this.props
+
+		if(this.state.showModal && !this.props.newReservation.loaded && !this.props.newReservation.loading && this.props.newReservation.errors.length === undefined){
+			this.props.createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)
+		}
 	}
 
 	render(){
@@ -77,7 +79,9 @@ class RoomBook extends React.Component {
 					{T.translate("book_meeting.book_this_room")}
 				</div>
 				
+				
 				<Modal show={this.state.showModal} onClose={()=>{this.toggleModal(false)}} title={''}>
+					{this.props.newReservation.loaded ? 
 					<div>
 						<div className={'book-meeting-profile-pic'}><img src={member.pic}/>
 							<div className={'book-meeting-name'}>{member.first_name} {member.last_name}</div>
@@ -87,7 +91,7 @@ class RoomBook extends React.Component {
 								<CheckoutForm price={room.time_slot_cost} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
 							</Elements>
 						</StripeProvider>
-					</div>
+					</div> : ''}
 				</Modal>
 				
 			</div>

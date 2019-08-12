@@ -31,7 +31,7 @@ class MyReservationsPage extends React.Component {
 		}
 
 		// Filter out  only Paid Reservations
-		let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Payed'))
+		let paidReservations = reservations.data.filter(reservation => (reservation.status !== 'Canceled'))
 
 		// If there are no paid reservations, show no reservation message
 		if (paidReservations.length < 1) {

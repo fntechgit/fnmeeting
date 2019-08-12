@@ -19,6 +19,7 @@ import {connect} from "react-redux";
 import {getBookableRooms, getRoomAvailability} from "../../actions/room-actions";
 import queryString from 'query-string'
 import {daysBetweenDates} from "../../utils/helpers";
+import T from "i18n-react";
 
 class AvailableRooms extends React.Component {
 
@@ -86,6 +87,10 @@ class AvailableRooms extends React.Component {
 		this.setState({date: date})
 		history.push({search: `?date=${date}`})
 	}
+	
+	clearSlot(){
+		this.setState({slot: null})
+	}
 
 	render(){
 		const {match, history, rooms, roomAvailability, summit} = this.props
@@ -104,13 +109,20 @@ class AvailableRooms extends React.Component {
 		
 		//Is there a room that matches the param ID?
 		if(!singleRoom){
-			return <div>Room Not Found</div>
+			return <div>{T.translate("book_meeting.room_not_found")}</div>
 		}
 
 		let amenities = singleRoom.attributes.map(a => a.value).join(', ')
 		
+		
 		return (
 			<div>
+				{this.state.slot ?
+					<div className={'back_to_search'} onClick={()=>this.clearSlot()} ><i className='fa fa-arrow-left'/> {T.translate("book_meeting.back")}</div> :
+					<div className={'back_to_search'} onClick={history.goBack} ><i className='fa fa-arrow-left'/> {T.translate("book_meeting.back")}</div> 
+					
+				}
+				
 				<MeetingRoomCard
 					image={singleRoom.image}
 					name={singleRoom.name}
@@ -120,7 +132,7 @@ class AvailableRooms extends React.Component {
 				/>
 				
 				{this.state.slot ?  
-					<MeetingRoomBook days={summitDays} date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
+					<MeetingRoomBook cancel={()=>this.clearSlot()} days={summitDays} date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
 					<MeetingRoomAvailability changeDate={(date)=>{this.changeDate(date)}} days={summitDays}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
 				}
 			</div>
