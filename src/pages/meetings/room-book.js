@@ -54,6 +54,11 @@ class RoomBook extends React.Component {
 		this.props.clearReservation()
 	}
 
+	submitPaymentForm(ev, stripe, clientSecret){
+		if(ev._invalid !== 'true'){
+			payReservation(ev, stripe, clientSecret)
+		}
+	}
 
 	render(){
 		

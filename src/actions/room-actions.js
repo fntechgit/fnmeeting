@@ -140,8 +140,11 @@ export const payReservation = (card, stripe, clientSecret) => (dispatch, getStat
         type: 'success'
     };
 
+    if(card._empty || card._invalid === 'true') {
+        return
+    }
+    
     dispatch(startLoading());
-
     
     stripe.handleCardPayment(
         clientSecret, card, {
