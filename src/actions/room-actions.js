@@ -135,33 +135,32 @@ export const payReservation = (card, stripe, clientSecret) => (dispatch, getStat
     let {loggedUserState, summitReducer} = getState();
 
     let success_message = {
-        title: T.translate("general.done"),
-        html: T.translate("book_meeting.reservation_created"),
+        title: T.translate("book_meeting.reservation_created"),
         type: 'success'
     };
 
-    if(card._empty || card._invalid === 'true') {
-        return
-    }
-    
-    dispatch(startLoading());
-    
-    stripe.handleCardPayment(
-        clientSecret, card, {
-            payment_method_data: {
-                billing_details: {name: `${loggedUserState.member.first_name} ${loggedUserState.member.last_name}`}
+    if(card._empty || card._invalid) {
+        return false
+    }else{
+        dispatch(startLoading());
+
+        stripe.handleCardPayment(
+            clientSecret, card, {
+                payment_method_data: {
+                    billing_details: {name: `${loggedUserState.member.first_name} ${loggedUserState.member.last_name}`}
+                }
             }
-        }
-    ).then(function(result) {
-        if (result.error) {
-            // Display error.message in your UI.
-        } else {
-            dispatch(stopLoading());
-            dispatch(showMessage(
-                success_message,
-                () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
-            ));
-            // The payment has succeeded. Display a success message.
-        }
-    });
+        ).then(function(result) {
+            if (result.error) {
+                // Display error.message in your UI.
+            } else {
+                dispatch(stopLoading());
+                dispatch(showMessage(
+                    success_message,
+                    () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
+                ));
+                // The payment has succeeded. Display a success message.
+            }
+        });
+    }
 }
