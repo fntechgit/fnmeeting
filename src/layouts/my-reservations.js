@@ -28,12 +28,12 @@ class MyReservations extends React.Component {
   
 
   render(){
-    let { myReservations } = this.props;
+    let { myReservations, summit} = this.props;
 
     return(
         <div>
           <h2>{T.translate('my_reservations.page_title')}</h2>
-        <MyMeetingsPage reservations={myReservations} />
+        <MyMeetingsPage reservations={myReservations} summit={summit.currentSummit}/>
         </div>
     );
   }

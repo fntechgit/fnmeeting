@@ -21,7 +21,7 @@ class MyReservationsPage extends React.Component {
 	}
 	
 	render() {
-		const {reservations} = this.props
+		const {reservations, summit} = this.props
 
 		const noReservations = <div>{T.translate("my_reservations.no_reservations")}</div>
 
@@ -45,6 +45,7 @@ class MyReservationsPage extends React.Component {
 			// Only show paid reservations (payed)
 			return <div key={reservation.id}>
 				<MeetingRoomCard
+					time_zone={summit.time_zone.name}
 					room={room.id}
 					image={room.image}
 					name={room.name}

@@ -23,10 +23,20 @@ export const getDayNumberFromDate = (days, date) => {
 	return dayNumber
 }
 
-export const getFormatedDate = (datetime) => {
+export const getFormatedDate = (datetime, time_zone = false) => {
+	
+	if(time_zone){
+		let formattedTime = moment.unix(datetime)
+		return moment.tz(datetime * 1000, time_zone).format('MMM Do YYYY')
+	}
 	return moment.unix(datetime).format('MMM Do YYYY')
 }
 
-export const getFormatedTime = (datetime) => {
+export const getFormatedTime = (datetime, time_zone = false) => {
+	
+	if(time_zone){
+		// let formattedTime = moment.unix(datetime).format()
+		return moment.tz(datetime * 1000, time_zone).format('HH:mm')
+	}
 	return moment.unix(datetime).format('HH:mm')
 }

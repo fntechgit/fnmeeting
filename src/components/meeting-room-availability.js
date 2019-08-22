@@ -12,7 +12,7 @@ export default (props) => {
 	return <div className={'meeting-room-availability'}>
 	<div className={'row meeting-room-availability-date'}>
 		<div className={'col-xs-2 nav-arrow prev-arrow'}>{previousIndex || previousIndex === 0  ? <i className='fa-arrow-left fa' onClick={()=>{props.changeDate(props.days[previousIndex])}} /> : null}</div>
-		<div className={'col-xs-8'}><h3>Day {currentDay} Availability</h3>{getFormatedDate(props.date)}</div>
+		<div className={'col-xs-8'}><h3>Day {currentDay} Availability</h3>{getFormatedDate(props.date, props.time_zone)}</div>
 		<div className={'col-xs-2 nav-arrow next-arrow'}>{nextIndex ? <i className='fa-arrow-right fa' onClick={()=>{props.changeDate(props.days[nextIndex])}} /> : null}</div>
 	</div>
 	<div className={'meeting-room-availability-body col-xs-12'}>
@@ -23,11 +23,11 @@ export default (props) => {
 				if(isAvailable){
 					return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot available'}>
 						{T.translate("bookable_room.available")}
-						<br/>{getFormatedTime(a.start_date)} - {getFormatedTime(a.end_date)}</div>	
+						<br/>{getFormatedTime(a.start_date, props.time_zone)} - {getFormatedTime(a.end_date, props.time_zone)}</div>	
 				}else{
 					return <div key={a.start_date} className={'meeting-room-availability-slot unavailable'}>
 						{T.translate("bookable_room.unavailable")}
-						<br/>{getFormatedTime(a.start_date)} - {getFormatedTime(a.end_date)}</div>
+						<br/>{getFormatedTime(a.start_date, props.time_zone)} - {getFormatedTime(a.end_date, props.time_zone)}</div>
 				}
 				
 			}) : null }

@@ -62,7 +62,7 @@ class RoomBook extends React.Component {
 
 	render(){
 		
-		const {days, date, time, slot, room, payReservation, member} = this.props
+		const {days, date, time, slot, room, payReservation, member, time_zone} = this.props
 		
 		// Show confirmation if payment has been made
 		if(this.state.confirmed){
@@ -80,7 +80,7 @@ class RoomBook extends React.Component {
 		return (
 			<div>
 				<h3>{this.props.room.name}<div className={'pull-right'}>{cost}</div></h3>
-				<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date)}, {getFormatedTime(slot.start_date)} - {getFormatedTime(slot.end_date)}</h4>
+				<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date, time_zone)}, {getFormatedTime(slot.start_date, time_zone)} - {getFormatedTime(slot.end_date, time_zone)}</h4>
 			
 				{/*<h3>Send an invite to the following:</h3>*/}
 					{/*<ul><li>- <input /> +</li></ul>*/}

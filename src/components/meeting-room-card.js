@@ -2,12 +2,12 @@ import React from "react"
 import {getFormatedDate, getFormatedTime} from "../utils/helpers";
 import T from "i18n-react";
 
-export default ({image, name, capacity, floor, amenities, actionLabel, action, room, start_time, end_time, status}) => <div className={'meeting-room'}>
-	<div className={'meeting-room-image'} style={{backgroundImage: `url('${image ? image : T.translate("bookable_room.placeholder_image")}`}}> </div>
+export default ({image, name, capacity, floor, amenities, actionLabel, action, room, start_time, end_time, status, time_zone}) => <div className={'meeting-room'}>
+	<div className={'meeting-room-image'} style={{backgroundImage: `url('${image ? image.url : T.translate("bookable_room.placeholder_image")}`}}> </div>
 		<div className={'meeting-room-body'}>
 			<div className={'row'}>
 				<div className={'col-xs-12 meeting-room-title'}>
-					<div>{name}{start_time ? <span> - {getFormatedDate(start_time)}, {getFormatedTime(start_time)} - {getFormatedTime(end_time)}</span> : null}</div>
+					<div>{name}{start_time ? <span> - {getFormatedDate(start_time, time_zone)}, {getFormatedTime(start_time, time_zone)} - {getFormatedTime(end_time, time_zone)}</span> : null}</div>
 				</div>
 			</div>
 
