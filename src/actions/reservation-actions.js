@@ -32,7 +32,7 @@ export const getMyReservations = () => (dispatch, getState) => {
 
 	let params = {
 		access_token : accessToken,
-		expand: 'room',
+		expand: 'room,floor',
 	};
 
 	return getRequest(

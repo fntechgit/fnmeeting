@@ -51,6 +51,7 @@ export const getBookableRooms = (date, size) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
+        expand: 'floor'
     }
     
     if(date && size){
@@ -81,7 +82,7 @@ export const getRoomAvailability = (room_id, day) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
-        // expand: 'event_types,tracks'
+        expand: 'floor'
     };
 
     return getRequest(

@@ -25,7 +25,7 @@ export default ({image, name, capacity, floor, amenities, actionLabel, action, r
 				</div>
 				<div className={'col-xs-6'}>
 					<div>
-						{T.translate("bookable_room.floor")} : {floor}
+						{floor > 0 ? `${T.translate("bookable_room.floor")} : floor}` : null} 
 					</div>
 				</div>
 			</div>
