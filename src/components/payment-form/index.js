@@ -26,43 +26,23 @@ class CheckoutForm extends Component {
     setCardElement(el){
         this.setState({card: el})
     }
-
-
-    // submit(ev) {
-    //     const {stripe, clientSecret} = this.props;
-    //    
-    //     stripe.handleCardPayment(
-    //         clientSecret, this.state.card, {
-    //             payment_method_data: {
-    //                 billing_details: {name: 'Test Name'}
-    //             }
-    //         }
-    //     ).then(function(result) {
-    //         if (result.error) {
-    //             // Display error.message in your UI.
-    //         } else {
-    //             alert('this worked')
-    //             // The payment has succeeded. Display a success message.
-    //         }
-    //     });
-    // }
-
+    
     render() {
-        const {price} = this.props ;
+        const {price, currency} = this.props ;
 
         const style = {
             base: {
-                // Add your base input styles here. For example:
                 fontSize: '16px',
                 color: "#32325d",
             }
         };
 
-
+        let cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: currency }).format(price)
+        
         return (
             <div className="checkout">
                 <CardElement style={style} onReady={(el) => {this.setCardElement(el)}} />
-                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.props.submit(this.state.card, this.props.stripe, this.props.clientSecret)}}>Pay ${price}</button>
+                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.props.submit(this.state.card, this.props.stripe, this.props.clientSecret)}}>Pay {cost}</button>
             </div>
         );
     }

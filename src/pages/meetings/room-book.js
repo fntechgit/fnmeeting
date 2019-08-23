@@ -101,7 +101,7 @@ class RoomBook extends React.Component {
 						</div>
 						<StripeProvider apiKey={window.STRIPE_PRIVATE_KEY}>
 							<Elements>
-								<CheckoutForm price={room.time_slot_cost} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
+								<CheckoutForm price={room.time_slot_cost} currency={room.currency} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
 							</Elements>
 						</StripeProvider>
 					</div> : ''}
