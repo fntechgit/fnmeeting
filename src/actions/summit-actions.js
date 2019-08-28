@@ -32,6 +32,7 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
+        expand: 'values'
     };
 
     return getRequest(

@@ -66,7 +66,7 @@ class RoomSearchPage extends React.Component {
 				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`${match.url}/${room}?date=${this.state.date}`)}} />
 			);
 		}
-		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}}/>
+		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} ammenities={currentSummit.meeting_booking_room_allowed_attributes}/>
 	}
 }
 

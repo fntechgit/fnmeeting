@@ -22,6 +22,7 @@ class RoomSearch extends React.Component {
 		
 		this.state = {
 			size: props.size ? props.size : '',
+			ammenities: []
 		}
 
 		this.options = props.days.map((day, i) => {
@@ -41,9 +42,17 @@ class RoomSearch extends React.Component {
 		this.setState({'size': event.target.value})
 	}
 	
+	selectAmmenity(event){
+		console.log(event.target.checked);
+		console.log(event.target.name);
+		console.log(this.state.ammenities)
+		let newAmmenities = this.state.ammenities.push(event.target.name)
+		this.setState({'ammenities': newAmmenities})
+	}
+
 	submitSearch(e){
 		e.preventDefault();
-		this.props.onSubmit({date: this.state.date.value, size: this.state.size})
+		this.props.onSubmit({date: this.state.date.value, size: this.state.size, ammenities: this.state.ammenities})
 	}
 	
 	render(){
@@ -73,9 +82,22 @@ class RoomSearch extends React.Component {
 							/>
 						</div>
 					</div>
+
+					<div className="form-group">
+						{this.props.ammenities.map((a)=>{
+							return <div className={'ammenities-section'} key={a.id}>
+								<label className={"ammenities-section-title"}>{a.type}</label>
+								{a.values.map((v)=> {
+									return <div><input onChange={(e)=>{this.selectAmmenity(e)}} key={v.id} type={'checkbox'} id={v.id} name={v.value} value={v.id}/><label className={'ammenities-label'} for={v.id}>{v.value}</label></div>
+								})}
+							</div>
+						})}
+					</div>
 				
 				{this.state.size ? <input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/> : null}
 				</div> : null}
+
+		
 			</form>
 		);
 	}

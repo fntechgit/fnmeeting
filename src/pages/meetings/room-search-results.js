@@ -53,7 +53,7 @@ class RoomSearchResults extends React.Component {
 	}
 	
 	render(){
-		const {onSelect, date, size, rooms, days} = this.props
+		const {onSelect, date, size, rooms, days, currentSummit} = this.props
 		
 		return (
 			<div>
@@ -78,7 +78,7 @@ class RoomSearchResults extends React.Component {
 				/>}) : <div>{T.translate("book_meeting.no_results")}</div>}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
-					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
+					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} ammenities={currentSummit.meeting_booking_room_allowed_attributes} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
 				</FilterModal>
 			</div>
 			
