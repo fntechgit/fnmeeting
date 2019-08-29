@@ -45,17 +45,32 @@ class RoomSearch extends React.Component {
 	
 	selectAmmenity(event){
 		let ammenity = event.target.value
-		
+		let newAmmenities
 		let ammenityExists = this.state.ammenities.find((a) => {
 			return a === ammenity
 		})
 		
-		// If this ammenity has already been added, return 
-		if(ammenityExists){
-			return 
+		// Checked
+		if(event.target.checked) {
+			// If this ammenity has already been added, return 
+			if (ammenityExists) {
+				return
+			}
+			newAmmenities = [...this.state.ammenities, ammenity]
+			this.setState({'ammenities': newAmmenities})
+		}
+
+		// Unchecked
+		if(!event.target.checked) {
+			// If this ammenity has already been added, return 
+			if (ammenityExists) {
+				newAmmenities = this.state.ammenities.filter(a => (a == ammenity ? false : true))
+				this.setState({'ammenities': newAmmenities})
+			}else{
+				return
+			}
 		}
 		
-		this.setState(state => state.ammenities.push(ammenity))
 	}
 
 	submitSearch(e){
@@ -96,7 +111,8 @@ class RoomSearch extends React.Component {
 							return <div className={'ammenities-section'} key={a.id}>
 								<label className={"ammenities-section-title"}>{a.type}</label>
 								{a.values.map((v)=> {
-									return <div><input onChange={(e)=>{this.selectAmmenity(e)}} key={v.id} type={'checkbox'} id={v.id} name={v.value} value={v.id}/><label className={'ammenities-label'} for={v.id}>{v.value}</label></div>
+									let isChecked = this.state.ammenities.find((a) => a == v.id)
+									return <div><input onChange={(e)=>{this.selectAmmenity(e)}} checked={isChecked ? true : false} key={v.id} type={'checkbox'} id={v.id} name={v.value} value={v.id}/><label className={'ammenities-label'} for={v.id}>{v.value}</label></div>
 								})}
 							</div>
 						})}
