@@ -26,14 +26,16 @@ class RoomSearchPage extends React.Component {
 		this.state = {
 			date: false,
 			size: false,
+			ammenities: []
 		}
 	}
 
 	componentDidMount() {
-		let {currentSummit, getBookableRooms, history} = this.props
+		// Check URL params when the page mounts
 		this.checkQueryParams()
 	}
 	
+	// Check on page load so that we can pass around URLs to search results
 	checkQueryParams(){
 		const {location} = this.props
 		const {search} = location
@@ -43,17 +45,30 @@ class RoomSearchPage extends React.Component {
 			if (queryParams.get('date') && queryParams.get('size')) {
 				this.setState({date: queryParams.get('date'), size: queryParams.get('size')})
 			}
+
+			if(queryParams.get('ammenities')){
+				this.setState({ammenities: queryParams.get('ammenities').split(",")})
+			}
 		}
 	}
 	
 	setQueryParams(values){
 		const {history} = this.props;
 
-		history.push({
-			search: QueryString.stringify(values)
-		})
+		// Adds search params to react state
+		this.setState(values, () => {
+			// Check for arrays in values, update to csv rather than individual params for URL
+			Object.keys(values).forEach((key)=>{
+				if(Array.isArray(values[key])){
+					values[key] = values[key].join();
+				}
+			})
 
-		this.setState(values)
+			// Adds all search params from state to the URL 
+			history.replace({
+				search: QueryString.stringify(values)
+			})
+		})
 	}
 
 	render(){
@@ -61,12 +76,15 @@ class RoomSearchPage extends React.Component {
 		let {start_date, end_date, time_zone} = currentSummit
 		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 		
+		// If date and size are chosen, show results
 		if(this.state.date && this.state.size ) {
+			// 
 			return (
-				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} onSelect={(room)=>{history.push(`${match.url}/${room}?date=${this.state.date}`)}} />
+				<RoomSearchResults days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} date={this.state.date} size={this.state.size} ammenities={this.state.ammenities} allowed_attributes={currentSummit.meeting_booking_room_allowed_attributes} onSelect={(room)=>{history.push(`${match.url}/${room}?date=${this.state.date}`)}} />
 			);
 		}
-		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} ammenities={currentSummit.meeting_booking_room_allowed_attributes}/>
+		// RoomsSearch component is the initial search form
+		return <RoomSearch days={summitDays} onSubmit={(values)=>{this.setQueryParams(values)}} ammenities={this.state.ammenities} allowed_attributes={currentSummit.meeting_booking_room_allowed_attributes}/>
 	}
 }
 

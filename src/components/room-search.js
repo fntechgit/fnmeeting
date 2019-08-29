@@ -22,7 +22,7 @@ class RoomSearch extends React.Component {
 		
 		this.state = {
 			size: props.size ? props.size : '',
-			ammenities: []
+			ammenities: props.ammenities ? props.ammenities : [],
 		}
 
 		this.options = props.days.map((day, i) => {
@@ -34,6 +34,7 @@ class RoomSearch extends React.Component {
 		}
 	}
 
+	/* Form Actions */
 	dateSelect(option){
 		this.setState({'date': option})
 	}
@@ -43,11 +44,18 @@ class RoomSearch extends React.Component {
 	}
 	
 	selectAmmenity(event){
-		console.log(event.target.checked);
-		console.log(event.target.name);
-		console.log(this.state.ammenities)
-		let newAmmenities = this.state.ammenities.push(event.target.name)
-		this.setState({'ammenities': newAmmenities})
+		let ammenity = event.target.value
+		
+		let ammenityExists = this.state.ammenities.find((a) => {
+			return a === ammenity
+		})
+		
+		// If this ammenity has already been added, return 
+		if(ammenityExists){
+			return 
+		}
+		
+		this.setState(state => state.ammenities.push(ammenity))
 	}
 
 	submitSearch(e){
@@ -84,7 +92,7 @@ class RoomSearch extends React.Component {
 					</div>
 
 					<div className="form-group">
-						{this.props.ammenities.map((a)=>{
+						{this.props.allowed_attributes.map((a)=>{
 							return <div className={'ammenities-section'} key={a.id}>
 								<label className={"ammenities-section-title"}>{a.type}</label>
 								{a.values.map((v)=> {
@@ -96,8 +104,6 @@ class RoomSearch extends React.Component {
 				
 				{this.state.size ? <input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/> : null}
 				</div> : null}
-
-		
 			</form>
 		);
 	}

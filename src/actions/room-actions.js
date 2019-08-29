@@ -39,9 +39,7 @@ export const CREATE_RESERVATION_SUCCESS    = 'CREATE_RESERVATION_SUCCESS';
 export const CREATE_RESERVATION_ERROR      = 'CREATE_RESERVATION_ERROR';
 export const CLEAR_RESERVATION             = 'CLEAR_RESERVATION';
 
-
-
-export const getBookableRooms = (date, size) => (dispatch, getState) => {
+export const getBookableRooms = (date, size, ammenities) => (dispatch, getState) => {
 
     let { loggedUserState, summitReducer} = getState();
     let { accessToken }     = loggedUserState;
@@ -51,7 +49,7 @@ export const getBookableRooms = (date, size) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
-        expand: 'floor'
+        expand: 'floor',
     }
     
     if(date && size){
@@ -61,6 +59,16 @@ export const getBookableRooms = (date, size) => (dispatch, getState) => {
             'filter[]': `capacity>=${size}`
             } 
         }
+    
+    // Add ammenities filters
+    if(ammenities){
+        ammenities.forEach((a)=>{
+            params = {
+                ...params,
+                'filter[]': `attribute==${a}`
+            }  
+        })
+    }
 
     return getRequest(
         createAction(REQUEST_ROOMS),

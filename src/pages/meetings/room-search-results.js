@@ -25,21 +25,22 @@ class RoomSearchResults extends React.Component {
 		super(props);
 
 		this.state = {
-			showFilterModal: false,
+			showFilterModal: false, // controls the modal
 		}
 	}
 
 	componentDidMount() {
-		let {currentSummit, getBookableRooms, date, size} = this.props
+		let {currentSummit, getBookableRooms, date, size, ammenities} = this.props
+		// Search 
 		if(currentSummit !== null) {
-			getBookableRooms(date, size)
+			getBookableRooms(date, size, ammenities)
 		}
 	}
 
 	componentDidUpdate(newProps) {
-		let {currentSummit, getBookableRooms, date, size} = this.props
-		if (date !== newProps.date || size !== newProps.size) {
-			getBookableRooms(date, size)
+		let {currentSummit, getBookableRooms, date, size, ammenities} = this.props
+		if (date !== newProps.date || size !== newProps.size  || ammenities !== newProps.ammenities) {
+			getBookableRooms(date, size, ammenities)
 			this.toggleFilterModal(false);
 		}
 	}
@@ -53,7 +54,7 @@ class RoomSearchResults extends React.Component {
 	}
 	
 	render(){
-		const {onSelect, date, size, rooms, days, currentSummit} = this.props
+		const {onSelect, date, size, rooms, days, currentSummit, ammenities} = this.props
 		
 		return (
 			<div>
@@ -78,7 +79,7 @@ class RoomSearchResults extends React.Component {
 				/>}) : <div>{T.translate("book_meeting.no_results")}</div>}
 				
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
-					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} ammenities={currentSummit.meeting_booking_room_allowed_attributes} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
+					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} ammenities={ammenities} allowed_attributes={currentSummit.meeting_booking_room_allowed_attributes} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
 				</FilterModal>
 			</div>
 			
