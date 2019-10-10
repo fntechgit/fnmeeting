@@ -18,7 +18,7 @@ export default (props) => {
 	<div className={'meeting-room-availability-body col-xs-12'}>
 		{props.availability && props.availability.data !== null ? 
 			props.availability.data.map((a)=>{
-				let isAvailable = a.is_free;
+				let isAvailable = a.status === 'Available';
 				
 				if(isAvailable){
 					return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot available'}>

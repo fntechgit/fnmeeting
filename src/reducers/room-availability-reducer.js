@@ -23,7 +23,7 @@ const roomAvailabilityReducer = (state = DEFAULT_STATE, action) => {
 		}
 			break;
 		case RECEIVE_ROOM_AVAILABILITY: {
-			let entity = {...payload.response.filter(r => status === 'Available')};
+			let entity = {...payload.response};
 			return {...state, availability: entity, errors: {}, loading: false, loaded: true};
 		}
 			break;
