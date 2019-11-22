@@ -14,6 +14,7 @@
 import { createStore, applyMiddleware, compose} from 'redux';
 import { loggedUserReducer } from "openstack-uicore-foundation/lib/reducers"
 import baseReducer from './reducers/base-reducer'
+import allSummitsReducer from './reducers/summit/all-summits-reducer';
 import summitReducer from './reducers/summit/summit-reducer';
 import reservationsReducer from './reducers/reservations-reducer';
 import roomsReducer from './reducers/rooms-reducer';
@@ -33,6 +34,7 @@ const config = {
 
 const reducers = persistCombineReducers(config, {
   loggedUserState: loggedUserReducer,
+  allSummitsReducer: allSummitsReducer,
   summitReducer: summitReducer,
   reservationsReducer: reservationsReducer,
   roomsReducer: roomsReducer,

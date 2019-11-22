@@ -21,38 +21,34 @@ import SearchRoomsLayout from "./rooms-layout"
 import {getSummitById} from '../actions/summit-actions'
 
 class PrimaryLayout extends React.Component {
-  
+
   componentDidMount() {
     let {summit, match} = this.props;
-    if(!summit.loading && !summit.loaded) {
-      let summitId = match.params.id
-      this.props.getSummitById(summitId);
+    if(!summit.loading && !summit.loaded && match.params.id) {
+      this.props.getSummitById(match.params.id);
     }
   }
-  
+
   render(){
     let { match, summit } = this.props;
+    let summitId = match.params.id;
 
     return(
         <div className="primary-layout">
-          <div className="col-md-4">
-            <NavMenu {...this.props}/>
-          </div>
-          <div className="col-md-8">
-            <main id="page-wrap">
-              {(summit.loaded) ? 
-              <Switch>
-                <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations}/>
-                <Route path={`${match.url}/rooms`} component={SearchRoomsLayout}/>
-                  <Redirect
-                      to={{
-                          pathname: `${match.url}/my-meetings`
-                      }}
-                  />
-              </Switch>
-              : 'Loading...' }
+            <div className="col-md-4">
+                <NavMenu {...this.props}/>
+            </div>
+            <div className="col-md-8">
+                <main id="page-wrap">
+                    {summitId && summit.loaded &&
+                    <Switch>
+                        <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations} />
+                        <Route path={`${match.url}/rooms`} component={SearchRoomsLayout} />
+                        <Redirect to={{ pathname: `${match.url}/my-meetings`}} />
+                    </Switch>
+                    }
             </main>
-          </div>
+            </div>
         </div>
     );
   }

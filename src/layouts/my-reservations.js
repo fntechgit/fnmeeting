@@ -25,7 +25,7 @@ class MyReservations extends React.Component {
       getMyReservations()
     }
   }
-  
+
 
   render(){
     let { myReservations, summit} = this.props;
@@ -33,7 +33,7 @@ class MyReservations extends React.Component {
     return(
         <div>
           <h2>{T.translate('my_reservations.page_title')}</h2>
-        <MyMeetingsPage reservations={myReservations} summit={summit.currentSummit}/>
+          <MyMeetingsPage reservations={myReservations} summit={summit.currentSummit}/>
         </div>
     );
   }

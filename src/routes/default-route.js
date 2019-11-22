@@ -21,13 +21,7 @@ class DefaultRoute extends React.Component {
     return (
       <Route {...rest} render={props => {
         if(isLoggedUser)
-          return (<Redirect
-            exact
-            to={{
-              pathname: '/a/my-meetings',
-              state: { from: props.location }
-            }}
-          />)
+          return (<Redirect exact to={{pathname: '/a/summits', state: { from: props.location }}} />)
         return null;
       }} />
     )

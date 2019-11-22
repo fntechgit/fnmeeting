@@ -22,12 +22,14 @@ import {
 
 export const REQUEST_SUMMIT           = 'REQUEST_SUMMIT';
 export const RECEIVE_SUMMIT           = 'RECEIVE_SUMMIT';
+export const REQUEST_SUMMITS          = 'REQUEST_SUMMITS';
+export const RECEIVE_SUMMITS          = 'RECEIVE_SUMMITS';
 
 export const getSummitById = (summitId) => (dispatch, getState) => {
 
     let { loggedUserState } = getState();
     let { accessToken }     = loggedUserState;
-    
+
     dispatch(startLoading());
 
     let params = {
@@ -41,6 +43,32 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
         `${window.API_BASE_URL}/api/v1/summits/all/${summitId}`,
         authErrorHandler
     )(params)(dispatch).then(() => {
+            dispatch(stopLoading());
+        }
+    );
+};
+
+export const loadSummits = () => (dispatch, getState) => {
+
+    let { loggedUserState } = getState();
+    let { accessToken }     = loggedUserState;
+
+    dispatch(startLoading());
+
+    let params = {
+        access_token : accessToken,
+        expand: 'none',
+        relations: 'none',
+        page: 1,
+        per_page: 20
+    };
+
+    getRequest(
+        createAction(REQUEST_SUMMITS),
+        createAction(RECEIVE_SUMMITS),
+        `${window.API_BASE_URL}/api/v1/summits/all?expand=none&relations=none&access_token=${accessToken}`,
+        authErrorHandler
+    )(params)(dispatch, getState).then(() => {
             dispatch(stopLoading());
         }
     );
