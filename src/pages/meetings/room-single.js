@@ -31,7 +31,7 @@ class AvailableRooms extends React.Component {
 			slot: null,
 		}
 	}
-	
+
 	componentDidMount() {
 		let {summit, getBookableRooms} = this.props
 		this.checkQueryParams()
@@ -44,15 +44,15 @@ class AvailableRooms extends React.Component {
 	checkQueryParams(){
 		const {summit, location} = this.props
 		const {search} = location
-		
+
 		if(search) {
 		let queryParams = queryString.parse(search);
 			this.setState({...queryParams})
 		}else{
 			this.setState({'date': summit.currentSummit.start_date})
-		}   
+		}
 	}
-	
+
 	getSingleRoomAvailability(prevState){
 		const {rooms, getRoomAvailability, match, roomAvailability, loading } = this.props
 		let singleRoom = null
@@ -81,13 +81,13 @@ class AvailableRooms extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		this.getSingleRoomAvailability(prevState)
 	}
-	
+
 	changeDate(date){
 		const {match, history} = this.props
 		this.setState({date: date})
 		history.push({search: `?date=${date}`})
 	}
-	
+
 	clearSlot(){
 		this.setState({slot: null})
 	}
@@ -99,44 +99,35 @@ class AvailableRooms extends React.Component {
 		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
 
 		let singleRoom
-		
+
 		// Have rooms been loaded
 		if(rooms.data !== null){
 			singleRoom = rooms.data.find(room => room.id == match.params.id)
 		}else{
 			return null
 		}
-		
+
 		//Is there a room that matches the param ID?
 		if(!singleRoom){
 			return <div>{T.translate("book_meeting.room_not_found")}</div>
 		}
 
-		let amenities = singleRoom.attributes.map(a => a.value).join(', ')
-		
-		
 		return (
 			<div>
 				{this.state.slot ?
 					<div className={'back_to_search'} onClick={()=>this.clearSlot()} ><i className='fa fa-arrow-left'/> {T.translate("book_meeting.back")}</div> :
-					<div className={'back_to_search'} onClick={history.goBack} ><i className='fa fa-arrow-left'/> {T.translate("book_meeting.back")}</div> 
-					
+					<div className={'back_to_search'} onClick={history.goBack} ><i className='fa fa-arrow-left'/> {T.translate("book_meeting.back")}</div>
+
 				}
-				
-				<MeetingRoomCard
-					image={singleRoom.image}
-					name={singleRoom.name}
-					capacity={singleRoom.capacity}
-					floor={singleRoom.floor_id}
-					amenities={amenities}
-				/>
-				
-				{this.state.slot ?  
+
+				<MeetingRoomCard room={singleRoom} />
+
+				{this.state.slot ?
 					<MeetingRoomBook cancel={()=>this.clearSlot()}  days={summitDays} time_zone={time_zone.name}  date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
 					<MeetingRoomAvailability changeDate={(date)=>{this.changeDate(date)}} days={summitDays} time_zone={time_zone.name}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
 				}
 			</div>
-			
+
 		);
 	}
 }

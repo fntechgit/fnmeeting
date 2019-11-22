@@ -6,7 +6,7 @@
   "scripts": {
     "build-dev": "./node_modules/.bin/webpack --config webpack.dev.js",
     "build": "./node_modules/.bin/webpack --config webpack.prod.js",
-    "serve": "webpack-dev-server --open --https --config webpack.dev.js --key /Users/mike/.ssh/localhost.key --cert /Users/mike/.ssh/localhost.crt"
+    "serve": "webpack-dev-server --open --https --config webpack.dev.js"
   },
   "author": "",
   "license": "ISC",

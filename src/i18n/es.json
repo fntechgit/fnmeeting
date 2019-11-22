@@ -1,4 +1,8 @@
 {
+  "general": {
+    "select"    : "Select",
+    "app_title" : "FN Meeting"
+  },
   "landing": {
     "sign_out"            : "Sign out",
     "log_in"              : "Log in",
@@ -9,5 +13,38 @@
     "user_not_set"              : "Hold on. Can not get any valid user.",
     "session_expired"           : "Hold on. Your session expired!.",
     "server_error"              : "There was a problem with our server, please contact admin."
+  },
+  "menu": {
+    "my-meetings": "My Meetings",
+    "rooms": "Book a Meeting"
+  },
+  "my_reservations": {
+    "page_title": "My Meetings",
+    "no_reservations": "No reservations"
+  },
+  "bookable_room": {
+    "placeholder_image": "https://picsum.photos/300/300",
+    "capacity": "Capacity",
+    "floor": "Floor",
+    "amenities": "Amenities",
+    "status": "Status",
+    "see_availability": "See Availability",
+    "available_rooms": "Available Rooms",
+    "filter_rooms": "Filter",
+    "available": "Available",
+    "unavailable": "Unavailable"
+  },
+  "book_meeting": {
+    "i_need_to_book": "I need to book",
+    "for_how_many": "For how many?",
+    "reservation_created": "Reservation Created",
+    "find_a_room": "Find a Room",
+    "no_rooms_found": "No rooms found matching your criteria",
+    "must_cancel_within": "You must cancel within 24hrs. of your reservation, or with 24hrs. notice for a full refund. Otherwise, your reservation is non-refundable.",
+    "day": "Day",
+    "book_this_room": "Book this room",
+    "back": "Back",
+    "room_not_found": "Room not found",
+    "no_results": "No rooms found matching your criteria"
   }
 }

@@ -1,6 +1,6 @@
 {
   "general": {
-    "select"            : "Select",
+    "select"    : "Select",
     "app_title" : "FN Meeting"
   },
   "landing": {

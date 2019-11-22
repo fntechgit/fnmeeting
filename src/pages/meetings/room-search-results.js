@@ -31,7 +31,7 @@ class RoomSearchResults extends React.Component {
 
 	componentDidMount() {
 		let {currentSummit, getBookableRooms, date, size, ammenities} = this.props
-		// Search 
+		// Search
 		if(currentSummit !== null) {
 			getBookableRooms(date, size, ammenities)
 		}
@@ -47,15 +47,15 @@ class RoomSearchResults extends React.Component {
 
 	toggleFilterModal(value){
 		if(value){
-			this.setState({'showFilterModal': value})	
+			this.setState({'showFilterModal': value})
 		}else{
 			this.setState({'showFilterModal': !this.state.showFilterModal})
 		}
 	}
-	
+
 	render(){
 		const {onSelect, date, size, rooms, days, currentSummit, ammenities} = this.props
-		
+
 		return (
 			<div>
 				<h2>{T.translate("bookable_room.available_rooms")}</h2>
@@ -63,26 +63,27 @@ class RoomSearchResults extends React.Component {
 					{T.translate("bookable_room.filter_rooms")}
 					<i className="fa-filter fa"></i>
 				</div>
-				
-				{rooms.data && rooms.data.length > 0 ? rooms.data.map((room, i) => {
-				let amenities = room.attributes.map(a => a.value).join(', ')			
-				return <MeetingRoomCard
-					key={i}
-					room={room.id}
-					image={room.image}
-					name={room.name}
-					capacity={room.capacity}
-					floor={room.floor_id}
-					amenities={amenities}
-					action={onSelect}
-					actionLabel={T.translate("bookable_room.see_availability")}
-				/>}) : <div>{T.translate("book_meeting.no_results")}</div>}
-				
+
+				{rooms.data && rooms.data.length > 0 ?
+					(
+						rooms.data.map((room, i) =>
+							<MeetingRoomCard
+								key={i}
+								room={room}
+								action={onSelect}
+								actionLabel={T.translate("bookable_room.see_availability")}
+							/>
+						)
+					) : (
+						<div>{T.translate("book_meeting.no_results")}</div>
+					)
+				}
+
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}><RoomSearch days={days} date={date} size={size} ammenities={ammenities} allowed_attributes={currentSummit.meeting_booking_room_allowed_attributes} onSubmit={(values)=>this.props.onSubmit(values)}/></div>
 				</FilterModal>
 			</div>
-			
+
 		);
 	}
 }

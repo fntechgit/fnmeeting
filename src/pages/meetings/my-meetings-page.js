@@ -19,7 +19,7 @@ class MyReservationsPage extends React.Component {
 	constructor (props) {
 		super(props);
 	}
-	
+
 	render() {
 		const {reservations, summit} = this.props
 
@@ -41,20 +41,12 @@ class MyReservationsPage extends React.Component {
 		// Render all reservations
 		return <div> {paidReservations.map((reservation, i) => {
 			const {room} = reservation;
-			let amenities = room.attributes.map(a => a.value).join(', ')
 			// Only show paid reservations (payed)
 			return <div key={reservation.id}>
 				<MeetingRoomCard
 					time_zone={summit.time_zone.name}
-					room={room.id}
-					image={room.image}
-					name={room.name}
-					capacity={room.capacity}
-					floor={room.floor_id}
-					amenities={amenities}
-					start_time={reservation.start_datetime}
-					end_time={reservation.end_datetime}
-					status={reservation.status}
+					room={room}
+                    reservation={reservation}
 				/>
 			</div>
 		})}</div>

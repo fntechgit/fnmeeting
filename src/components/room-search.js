@@ -19,7 +19,7 @@ class RoomSearch extends React.Component {
 
 	constructor (props) {
 		super(props);
-		
+
 		this.state = {
 			size: props.size ? props.size : '',
 			ammenities: props.ammenities ? props.ammenities : [],
@@ -28,7 +28,7 @@ class RoomSearch extends React.Component {
 		this.options = props.days.map((day, i) => {
 			return {value: day, label: `${T.translate("book_meeting.day")} ${i + 1} (${getFormatedDate(day)})`}
 		})
-		
+
 		if(props.date){
 			this.state.date = this.options.find(o => o.value == props.date)
 		}
@@ -38,21 +38,21 @@ class RoomSearch extends React.Component {
 	dateSelect(option){
 		this.setState({'date': option})
 	}
-	
+
 	numberChange(event){
 		this.setState({'size': event.target.value})
 	}
-	
+
 	selectAmmenity(event){
 		let ammenity = event.target.value
 		let newAmmenities
 		let ammenityExists = this.state.ammenities.find((a) => {
 			return a === ammenity
 		})
-		
+
 		// Checked
 		if(event.target.checked) {
-			// If this ammenity has already been added, return 
+			// If this ammenity has already been added, return
 			if (ammenityExists) {
 				return
 			}
@@ -62,7 +62,7 @@ class RoomSearch extends React.Component {
 
 		// Unchecked
 		if(!event.target.checked) {
-			// If this ammenity has already been added, return 
+			// If this ammenity has already been added, return
 			if (ammenityExists) {
 				newAmmenities = this.state.ammenities.filter(a => (a == ammenity ? false : true))
 				this.setState({'ammenities': newAmmenities})
@@ -70,14 +70,14 @@ class RoomSearch extends React.Component {
 				return
 			}
 		}
-		
+
 	}
 
 	submitSearch(e){
 		e.preventDefault();
 		this.props.onSubmit({date: this.state.date.value, size: this.state.size, ammenities: this.state.ammenities})
 	}
-	
+
 	render(){
 		return (
 			<form onSubmit={(e)=>{this.submitSearch(e)}}>
@@ -97,9 +97,9 @@ class RoomSearch extends React.Component {
 						<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
 						<div className="input-group">
 							<input
-								type={'number'}
-								min={'1'}
-								className={'input-number'}
+								type="number"
+								min="1"
+								className="input-number form-control"
 								value={this.state.size}
 								onChange={(event)=>{this.numberChange(event)}}
 							/>
@@ -117,7 +117,7 @@ class RoomSearch extends React.Component {
 							</div>
 						})}
 					</div>
-				
+
 				{this.state.size ? <input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/> : null}
 				</div> : null}
 			</form>

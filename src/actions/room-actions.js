@@ -49,24 +49,24 @@ export const getBookableRooms = (date, size, ammenities) => (dispatch, getState)
 
     let params = {
         access_token : accessToken,
-        expand: 'floor',
+        expand: 'floor,attribute.type',
     }
-    
+
     if(date && size){
         params = {
             ...params,
             'filter[]': `availability_day==${date}`,
             'filter[]': `capacity>=${size}`
-            } 
+            }
         }
-    
+
     // Add ammenities filters
     if(ammenities){
         ammenities.forEach((a)=>{
             params = {
                 ...params,
                 'filter[]': `attribute==${a}`
-            }  
+            }
         })
     }
 
@@ -114,7 +114,7 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
     let { currentSummit }   = summitReducer;
 
     dispatch(startLoading());
-    
+
     let normalizedEntity = {room_id, start_datetime: start_time, end_datetime: end_time, currency, amount}
 
     let params = {
