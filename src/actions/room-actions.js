@@ -44,31 +44,28 @@ export const getBookableRooms = (date, size, ammenities) => (dispatch, getState)
     let { loggedUserState, summitReducer} = getState();
     let { accessToken }     = loggedUserState;
     let { currentSummit }   = summitReducer;
+    let filter = [];
 
     dispatch(startLoading());
 
     let params = {
         access_token : accessToken,
-        expand: 'floor,attribute.type',
+        expand: 'floor,attribute_type',
     }
 
     if(date && size){
-        params = {
-            ...params,
-            'filter[]': `availability_day==${date}`,
-            'filter[]': `capacity>=${size}`
-            }
-        }
+        filter.push(`availability_day==${date}`);
+        filter.push(`capacity>=${size}`);
+    }
 
     // Add ammenities filters
     if(ammenities){
         ammenities.forEach((a)=>{
-            params = {
-                ...params,
-                'filter[]': `attribute==${a}`
-            }
-        })
+            filter.push(`attribute==${a}`);
+        });
     }
+
+    params['filter[]']= filter;
 
     return getRequest(
         createAction(REQUEST_ROOMS),
@@ -143,11 +140,6 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
 export const payReservation = (card, stripe, clientSecret) => (dispatch, getState) => {
     let {loggedUserState, summitReducer} = getState();
 
-    let success_message = {
-        title: T.translate("book_meeting.reservation_created"),
-        type: 'success'
-    };
-
     if(card._empty || card._invalid) {
         return false
     }else{
@@ -162,10 +154,16 @@ export const payReservation = (card, stripe, clientSecret) => (dispatch, getStat
         ).then(function(result) {
             if (result.error) {
                 // Display error.message in your UI.
+                dispatch(showMessage({
+                        title: T.translate("book_meeting.reservation_error"),
+                        type: 'warning'
+                    },
+                    () => location.reload()
+                ));
             } else {
                 dispatch(stopLoading());
                 dispatch(showMessage(
-                    success_message,
+                    {title: T.translate("book_meeting.reservation_created"), type: 'success'},
                     () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
                 ));
                 // The payment has succeeded. Display a success message.

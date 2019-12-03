@@ -8,7 +8,7 @@ export default ({room, reservation, time_zone, actionLabel, action}) => {
 	const {start_datetime, end_datetime, status} = reservation || {};
 	const image_url = image ? image.url : defaultImage;
 	const datetime = start_datetime ? `${getFormatedDate(start_datetime, time_zone)}, ${getFormatedTime(start_datetime, time_zone)} - ${getFormatedTime(end_datetime, time_zone)}` : null;
-	const amenities = attributes ? attributes.map(a => a.value).join(', ') : '';
+	const amenities = attributes ? attributes.map(a => `${a.type.type}:${a.value}`).join(' | ') : '';
 
 	return (
         <div className="meeting-room">
@@ -43,7 +43,7 @@ export default ({room, reservation, time_zone, actionLabel, action}) => {
                 </div>
                 <div className="row meeting-room-amenities">
                     <div className="col-xs-12">
-                        {T.translate("bookable_room.amenities")} : {amenities}
+                        {amenities}
                     </div>
                 </div>
 

@@ -15,14 +15,21 @@ import React from 'react'
 import { connect } from 'react-redux';
 import MyMeetingsPage from "../pages/meetings/my-meetings-page"
 import {getMyReservations} from '../actions/reservation-actions'
+
 import T from 'i18n-react'
 
 class MyReservations extends React.Component {
 
   componentWillMount() {
-    let {summit, getMyReservations} = this.props;
+    let {summit, getMyReservations, location} = this.props;
+    const qs = new URLSearchParams(location.search);
+
     if(summit.loaded & !summit.loading) {
-      getMyReservations()
+      getMyReservations();
+
+     /* if (qs.get('refresh')) {
+        setTimeout(getMyReservations, 10000);
+      }*/
     }
   }
 

@@ -31,7 +31,7 @@ class MyReservationsPage extends React.Component {
 		}
 
 		// Filter out  only Paid Reservations
-		let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Payed'))
+		let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Paid'));
 
 		// If there are no paid reservations, show no reservation message
 		if (paidReservations.length < 1) {
@@ -39,17 +39,23 @@ class MyReservationsPage extends React.Component {
 		}
 
 		// Render all reservations
-		return <div> {paidReservations.map((reservation, i) => {
-			const {room} = reservation;
-			// Only show paid reservations (payed)
-			return <div key={reservation.id}>
-				<MeetingRoomCard
-					time_zone={summit.time_zone.name}
-					room={room}
-                    reservation={reservation}
-				/>
+		return (
+			<div>
+				{paidReservations.map(reservation => {
+					const {room} = reservation;
+					// Only show paid reservations (payed)
+					return (
+						<div key={`res_${reservation.id}`}>
+							<MeetingRoomCard
+								time_zone={summit.time_zone.name}
+								room={room}
+								reservation={reservation}
+							/>
+						</div>
+					);
+				})}
 			</div>
-		})}</div>
+		);
 	}
 }
 

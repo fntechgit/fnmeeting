@@ -32,6 +32,9 @@ class RoomSearch extends React.Component {
 		if(props.date){
 			this.state.date = this.options.find(o => o.value == props.date)
 		}
+
+        this.numberChange = this.numberChange.bind(this);
+        this.selectAmmenity = this.selectAmmenity.bind(this);
 	}
 
 	/* Form Actions */
@@ -92,34 +95,51 @@ class RoomSearch extends React.Component {
 						isClearable={false}
 					/>
 				</div>
-				{this.state.date ? <div>
-					<div className="form-group form-inline inline-number-field">
-						<label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
-						<div className="input-group">
-							<input
-								type="number"
-								min="1"
-								className="input-number form-control"
-								value={this.state.size}
-								onChange={(event)=>{this.numberChange(event)}}
-							/>
-						</div>
-					</div>
+                {this.state.date &&
+				<div>
+                    <div className="form-group form-inline inline-number-field">
+                        <label className={"pr-1"}>{T.translate("book_meeting.for_how_many")}</label>
+                        <div className="input-group">
+                            <input
+                                type="number"
+                                min="1"
+                                className="input-number form-control"
+                                value={this.state.size}
+                                onChange={this.numberChange}
+                            />
+                        </div>
+                    </div>
 
-					<div className="form-group">
-						{this.props.allowed_attributes.map((a)=>{
-							return <div className={'ammenities-section'} key={a.id}>
-								<label className={"ammenities-section-title"}>{a.type}</label>
-								{a.values.map((v)=> {
-									let isChecked = this.state.ammenities.find((a) => a == v.id)
-									return <div><input onChange={(e)=>{this.selectAmmenity(e)}} checked={isChecked ? true : false} key={v.id} type={'checkbox'} id={v.id} name={v.value} value={v.id}/><label className={'ammenities-label'} for={v.id}>{v.value}</label></div>
-								})}
-							</div>
-						})}
-					</div>
+                    <div className="form-group">
+                        {this.props.allowed_attributes.map((a) => {
+                            return (
+                            	<div className={'ammenities-section'} key={`attribute_${a.id}`}>
+                                	<label className={"ammenities-section-title"}>{a.type}</label>
+									{a.values.map((v) => {
+										let isChecked = this.state.ammenities.find((a) => a == v.id)
+										return (
+											<div key={`att_val_${v.id}`}>
+												<input
+                                                    id={v.id}
+                                                    value={v.id}
+                                                    className={'ammenities-label'}
+													onChange={this.selectAmmenity}
+													checked={isChecked}
+													type="checkbox"
+												/>
+												<label htmlFor={v.id}>{v.value}</label>
+											</div>
+										);
+									})}
+                            </div>)
+                        })}
+                    </div>
 
-				{this.state.size ? <input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/> : null}
-				</div> : null}
+                    {this.state.size &&
+						<input type="submit" className={'btn btn-warning btn-lg btn-block'} value={T.translate("book_meeting.find_a_room")}/>
+                    }
+                </div>
+                }
 			</form>
 		);
 	}
