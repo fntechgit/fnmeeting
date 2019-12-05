@@ -14,6 +14,7 @@ import React from 'react';
 import Select from 'react-select';
 import T from "i18n-react";
 import {getFormatedDate} from '../utils/helpers'
+import 'awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css'
 
 class RoomSearch extends React.Component {
 
@@ -21,13 +22,13 @@ class RoomSearch extends React.Component {
 		super(props);
 
 		this.state = {
-			size: props.size ? props.size : '',
-			ammenities: props.ammenities ? props.ammenities : [],
-		}
+			size: props.size || '',
+			ammenities: props.ammenities || [],
+		};
 
 		this.options = props.days.map((day, i) => {
 			return {value: day, label: `${T.translate("book_meeting.day")} ${i + 1} (${getFormatedDate(day)})`}
-		})
+		});
 
 		if(props.date){
 			this.state.date = this.options.find(o => o.value == props.date)
@@ -111,28 +112,29 @@ class RoomSearch extends React.Component {
                     </div>
 
                     <div className="form-group">
-                        {this.props.allowed_attributes.map((a) => {
-                            return (
-                            	<div className={'ammenities-section'} key={`attribute_${a.id}`}>
-                                	<label className={"ammenities-section-title"}>{a.type}</label>
-									{a.values.map((v) => {
-										let isChecked = this.state.ammenities.find((a) => a == v.id)
-										return (
-											<div key={`att_val_${v.id}`}>
-												<input
-                                                    id={v.id}
-                                                    value={v.id}
-                                                    className={'ammenities-label'}
-													onChange={this.selectAmmenity}
-													checked={isChecked}
-													type="checkbox"
-												/>
-												<label htmlFor={v.id}>{v.value}</label>
-											</div>
-										);
-									})}
-                            </div>)
-                        })}
+                        {this.props.allowed_attributes.filter(a => a.values.length > 0).map((a) => (
+							<div className={'ammenities-section'} key={`attribute_${a.id}`}>
+								<label className={"ammenities-section-title"}>{a.type}</label>
+								<div className="checkboxes-div">
+								{a.values.map((v) => {
+									let isChecked = this.state.ammenities.includes(`${v.id}`);
+									return (
+										<div key={`att_val_${v.id}`} className="form-check abc-checkbox checkbox-inline">
+											<input
+												id={v.id}
+												value={v.id}
+												className="form-check-input ammenities-label"
+												onChange={this.selectAmmenity}
+												checked={isChecked}
+												type="checkbox"
+											/>
+											<label className="form-check-label" htmlFor={v.id}>{v.value}</label>
+										</div>
+									);
+								})}
+								</div>
+							</div>
+						))}
                     </div>
 
                     {this.state.size &&

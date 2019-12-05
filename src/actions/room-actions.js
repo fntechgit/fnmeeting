@@ -60,9 +60,7 @@ export const getBookableRooms = (date, size, ammenities) => (dispatch, getState)
 
     // Add ammenities filters
     if(ammenities){
-        ammenities.forEach((a)=>{
-            filter.push(`attribute==${a}`);
-        });
+        filter.push(`attribute==${ammenities.join('&&')}`);
     }
 
     params['filter[]']= filter;

@@ -19,6 +19,7 @@ import NavMenu from '../components/nav-menu'
 import MyReservations from "./my-reservations"
 import SearchRoomsLayout from "./rooms-layout"
 import {getSummitById} from '../actions/summit-actions'
+import Swal from "sweetalert2";
 
 class PrimaryLayout extends React.Component {
 
@@ -32,6 +33,13 @@ class PrimaryLayout extends React.Component {
   render(){
     let { match, summit } = this.props;
     let summitId = match.params.id;
+
+    if (summit.loaded && !summit.currentSummit.active) {
+        Swal.fire({title: "Summit is not active", text: "Please choose an active summit.",type: "warning"})
+            .then((result) => {
+                window.location = '/a/summits';
+            });
+    }
 
     return(
         <div className="primary-layout">

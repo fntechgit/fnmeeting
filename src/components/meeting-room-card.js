@@ -8,7 +8,7 @@ export default ({room, reservation, time_zone, actionLabel, action}) => {
 	const {start_datetime, end_datetime, status} = reservation || {};
 	const image_url = image ? image.url : defaultImage;
 	const datetime = start_datetime ? `${getFormatedDate(start_datetime, time_zone)}, ${getFormatedTime(start_datetime, time_zone)} - ${getFormatedTime(end_datetime, time_zone)}` : null;
-	const amenities = attributes ? attributes.map(a => `${a.type.type}:${a.value}`).join(' | ') : '';
+	const amenities = attributes ? attributes.map(a => `${a.type.type}: ${a.value}`).join(' | ') : '';
 
 	return (
         <div className="meeting-room">
@@ -25,19 +25,19 @@ export default ({room, reservation, time_zone, actionLabel, action}) => {
                 {status &&
 				<div className="row row meeting-room-info">
                     <div className="col-xs-12">
-                        {T.translate("bookable_room.status")} : {status}
+                        {T.translate("bookable_room.status")}: {status}
                     </div>
                 </div>
                 }
                 <div className="row meeting-room-info">
                     <div className="col-xs-6">
                         <div>
-                            {T.translate("bookable_room.capacity")} : {capacity}
+                            {T.translate("bookable_room.capacity")}: {capacity}
                         </div>
                     </div>
                     {floor &&
                     <div className="col-xs-6">
-						{T.translate("bookable_room.floor")} : {floor.name}
+						{T.translate("bookable_room.floor")}: {floor.name}
                     </div>
                     }
                 </div>
