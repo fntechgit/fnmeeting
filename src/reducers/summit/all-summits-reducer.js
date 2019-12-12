@@ -19,8 +19,11 @@ const allSummitsReducer = (state = DEFAULT_STATE, action) => {
 			break;
 		case RECEIVE_SUMMITS: {
 			let {data} = payload.response;
+			let now = Math.floor(Date.now()/1000);
 
-			let activeSummits = data.filter(d => d.active);
+			let activeSummits = data.filter(s => {
+				return s.begin_allow_booking_date < now && s.end_allow_booking_date > now;
+			});
 
 			return {...state, summits: activeSummits, loading: false};
 		}

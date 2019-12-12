@@ -47,7 +47,9 @@ export const DEFAULT_ENTITY = {
 	tracks: [],
 	type_id: 0,
 	wifi_connections: [],
-	selection_plans: []
+	selection_plans: [],
+	begin_allow_booking_date: 0,
+	end_allow_booking_date: 0,
 }
 
 const DEFAULT_STATE = {

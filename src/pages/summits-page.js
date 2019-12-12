@@ -42,7 +42,7 @@ class SummitsPage extends React.Component {
 
 					<div className="row summits-wrapper">
 					{summits.map(s =>
-						<div className="col-md-6">
+						<div className="col-md-4" key={`summit_${s.id}`}>
 							<a href={`/a/${s.id}/my-bookings`} className="btn btn-default">
 								{s.name}
 							</a>

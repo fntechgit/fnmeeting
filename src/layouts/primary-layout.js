@@ -32,10 +32,13 @@ class PrimaryLayout extends React.Component {
 
   render(){
     let { match, summit } = this.props;
+    let {currentSummit, loaded} = summit;
     let summitId = match.params.id;
+    let now = Math.floor(Date.now()/1000);
+    let active = currentSummit.begin_allow_booking_date < now && currentSummit.end_allow_booking_date > now;
 
-    if (summit.loaded && !summit.currentSummit.active) {
-        Swal.fire({title: "Summit is not active", text: "Please choose an active summit.",type: "warning"})
+    if (loaded && !active) {
+        Swal.fire({title: "Booking Closed", text: "Please choose an active summit.",type: "warning"})
             .then((result) => {
                 window.location = '/a/summits';
             });

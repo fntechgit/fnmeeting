@@ -62,6 +62,7 @@ class App extends React.PureComponent {
   render() {
     let { currentSummit, isLoggedUser, onUserAuth, doLogout, getUserInfo, member, backUrl} = this.props;
     let profile_pic = member ? member.pic : '';
+
     return (
         <Router history={history}>
           <div>
@@ -72,7 +73,7 @@ class App extends React.PureComponent {
             {/*/>*/}
             <div className="header">
               <div className={"header-title " + (isLoggedUser ? '' : 'center')}>
-                {T.translate("general.app_title")} - {currentSummit.name}
+                <a href="/a/summits">{T.translate("general.app_title")}</a> {currentSummit.id > 0 && ` - ${currentSummit.name}`}
                 <AuthButton isLoggedUser={isLoggedUser} picture={profile_pic} doLogin={this.onClickLogin.bind(this)} initLogOut={initLogOut}/>
               </div>
             </div>
