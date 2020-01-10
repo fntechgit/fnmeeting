@@ -80,7 +80,7 @@ class App extends React.PureComponent {
             <Switch>
               <AuthorizedRoute currentSummit={currentSummit} isLoggedUser={isLoggedUser} backUrl={backUrl} path="/a/summits" component={SummitsPage} />
               <AuthorizedRoute currentSummit={currentSummit} isLoggedUser={isLoggedUser} backUrl={backUrl} path="/a/:id" component={PrimaryLayout} />
-              <AuthorizationCallbackRoute onUserAuth={onUserAuth} path='/auth/callback' getUserInfo={getUserInfo} />
+              <AuthorizationCallbackRoute onUserAuth={onUserAuth} path='/auth/callback'/>
               <LogOutCallbackRoute doLogout={doLogout}  path='/auth/logout'/>
               <Route path="/logout" render={props => (<p>404 - Not Found</p>)}/>
               <Route path="/404" render={props => (<p>404 - Not Found</p>)}/>

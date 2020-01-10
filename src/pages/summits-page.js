@@ -41,7 +41,10 @@ class SummitsPage extends React.Component {
 					<h1>Pick a Show</h1>
 
 					<div className="row summits-wrapper">
-					{summits.map(s =>
+						{summits.length == 0 &&
+							<p>There are not shows Available.</p>
+						}
+						{summits.length > 0 &&  summits.map(s =>
 						<div className="col-md-4" key={`summit_${s.id}`}>
 							<a href={`/a/${s.id}/my-bookings`} className="btn btn-default">
 								{s.name}
