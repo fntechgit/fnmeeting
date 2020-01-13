@@ -18,7 +18,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import {getBookableRooms, getRoomAvailability} from "../../actions/room-actions";
 import queryString from 'query-string'
-import {daysBetweenDates} from "../../utils/helpers";
+import {getSummitDates} from "../../utils/helpers";
 import T from "i18n-react";
 
 class AvailableRooms extends React.Component {
@@ -93,12 +93,10 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {match, history, rooms, roomAvailability, summit} = this.props
+		const {match, history, rooms, roomAvailability, summit} = this.props;
+		let summitDays = getSummitDates(summit.currentSummit);
 
-		let {start_date, end_date, time_zone} = summit.currentSummit
-		let summitDays = daysBetweenDates(start_date, end_date, time_zone.name)
-
-		let singleRoom
+		let singleRoom;
 
 		// Have rooms been loaded
 		if(rooms.data !== null){
@@ -122,9 +120,25 @@ class AvailableRooms extends React.Component {
 
 				<MeetingRoomCard room={singleRoom} />
 
-				{this.state.slot ?
-					<MeetingRoomBook cancel={()=>this.clearSlot()}  days={summitDays} time_zone={time_zone.name}  date={this.state.date} room={singleRoom} slot={this.state.slot} /> :
-					<MeetingRoomAvailability changeDate={(date)=>{this.changeDate(date)}} days={summitDays} time_zone={time_zone.name}  date={this.state.date} availability={roomAvailability} onSelect={(availability)=>{this.setState({slot: availability})}} />
+				{this.state.slot &&
+				<MeetingRoomBook
+					cancel={() => this.clearSlot()}
+					days={summitDays}
+					time_zone={summit.currentSummit.time_zone_id}
+					date={this.state.date}
+					room={singleRoom}
+					slot={this.state.slot}
+				/>
+				}
+				{!this.state.slot &&
+					<MeetingRoomAvailability
+						changeDate={(date)=>{this.changeDate(date)}}
+						days={summitDays}
+						time_zone={summit.currentSummit.time_zone_id}
+						date={this.state.date}
+						availability={roomAvailability}
+						onSelect={(availability)=>{this.setState({slot: availability})}}
+					/>
 				}
 			</div>
 

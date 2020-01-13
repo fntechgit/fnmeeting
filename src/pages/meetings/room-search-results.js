@@ -54,7 +54,7 @@ class RoomSearchResults extends React.Component {
 	}
 
 	render(){
-		const {onSelect, date, size, rooms, days, currentSummit, ammenities} = this.props;
+		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities} = this.props;
 
 		return (
 			<div>
@@ -82,7 +82,8 @@ class RoomSearchResults extends React.Component {
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}>
 						<RoomSearch
-							days={days}
+							summitDays={summitDays}
+							availableDays={availableDays}
 							date={date}
 							size={size}
 							ammenities={ammenities}

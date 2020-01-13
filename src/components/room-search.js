@@ -13,7 +13,7 @@
 import React from 'react';
 import Select from 'react-select';
 import T from "i18n-react";
-import {getFormatedDate} from '../utils/helpers'
+import {getFormatedDate, getDayNumberFromDate} from '../utils/helpers'
 import 'awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css'
 
 class RoomSearch extends React.Component {
@@ -26,8 +26,8 @@ class RoomSearch extends React.Component {
 			ammenities: props.ammenities || [],
 		};
 
-		this.options = props.days.map((day, i) => {
-			return {value: day, label: `${T.translate("book_meeting.day")} ${i + 1} (${getFormatedDate(day)})`}
+		this.options = props.availableDays.map(day => {
+			return {value: day, label: `${T.translate("book_meeting.day")} ${getDayNumberFromDate(props.summitDays, day)} (${getFormatedDate(day)})`}
 		});
 
 		if(props.date){
