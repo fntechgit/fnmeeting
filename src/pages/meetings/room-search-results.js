@@ -17,6 +17,7 @@ import FilterModal from '../../components/modal'
 import {connect} from "react-redux";
 import T from 'i18n-react';
 import {getBookableRooms} from "../../actions/room-actions";
+import { Pagination } from 'react-bootstrap';
 
 
 class RoomSearchResults extends React.Component {
@@ -27,6 +28,8 @@ class RoomSearchResults extends React.Component {
 		this.state = {
 			showFilterModal: false, // controls the modal
 		}
+
+		this.handlePageChange = this.handlePageChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -38,9 +41,10 @@ class RoomSearchResults extends React.Component {
 	}
 
 	componentDidUpdate(newProps) {
-		let {currentSummit, getBookableRooms, date, size, ammenities} = this.props;
+		let {currentSummit, getBookableRooms, date, size, ammenities, rooms} = this.props;
+		let {current_page, per_page} = rooms;
 		if (date !== newProps.date || size !== newProps.size  || ammenities !== newProps.ammenities) {
-			getBookableRooms(date, size, ammenities);
+			getBookableRooms(date, size, ammenities, current_page, per_page);
 			this.toggleFilterModal(false);
 		}
 	}
@@ -53,8 +57,15 @@ class RoomSearchResults extends React.Component {
 		}
 	}
 
+	handlePageChange(page) {
+		let {date, size, ammenities, rooms} = this.props;
+		let {current_page, per_page} = rooms;
+		this.props.getBookableRooms(date, size, ammenities, page, per_page);
+	}
+
 	render(){
 		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities} = this.props;
+		const {data, current_page, per_page, last_page, total} = rooms;
 
 		return (
 			<div>
@@ -64,20 +75,33 @@ class RoomSearchResults extends React.Component {
 					<i className="fa-filter fa"></i>
 				</div>
 
-				{rooms.data && rooms.data.length > 0 ?
-					(
-						rooms.data.map((room, i) =>
+				{data && data.length > 0 &&
+					<>
+						{data.map((room, i) =>
 							<MeetingRoomCard
 								key={i}
 								room={room}
 								action={onSelect}
 								actionLabel={T.translate("bookable_room.see_availability")}
 							/>
-						)
-					) : (
-						<div>{T.translate("book_meeting.no_results")}</div>
-					)
+						)}
+						<Pagination
+							bsSize="medium"
+							prev
+							next
+							first
+							last
+							ellipsis
+							boundaryLinks
+							maxButtons={10}
+							items={last_page}
+							activePage={current_page}
+							onSelect={this.handlePageChange}
+						/>
+					</>
 				}
+
+				{!data && <div>{T.translate("book_meeting.no_results")}</div>}
 
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}>

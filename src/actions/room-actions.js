@@ -31,6 +31,9 @@ import history from "../../src/history";
 export const REQUEST_ROOMS            = 'REQUEST_ROOMS';
 export const RECEIVE_ROOMS            = 'RECEIVE_ROOMS';
 
+export const REQUEST_ROOM            = 'REQUEST_ROOM';
+export const RECEIVE_ROOM            = 'RECEIVE_ROOM';
+
 export const REQUEST_ROOM_AVAILABILITY = 'REQUEST_ROOM_AVAILABILITY';
 export const RECEIVE_ROOM_AVAILABILITY = 'RECEIVE_ROOM_AVAILABILITY';
 
@@ -39,7 +42,7 @@ export const CREATE_RESERVATION_SUCCESS    = 'CREATE_RESERVATION_SUCCESS';
 export const CREATE_RESERVATION_ERROR      = 'CREATE_RESERVATION_ERROR';
 export const CLEAR_RESERVATION             = 'CLEAR_RESERVATION';
 
-export const getBookableRooms = (date, size, ammenities) => (dispatch, getState) => {
+export const getBookableRooms = (date, size, ammenities, current_page = 1, per_page = 5) => (dispatch, getState) => {
 
     let { loggedUserState, summitReducer} = getState();
     let { accessToken }     = loggedUserState;
@@ -51,6 +54,8 @@ export const getBookableRooms = (date, size, ammenities) => (dispatch, getState)
     let params = {
         access_token : accessToken,
         expand: 'floor,attribute_type',
+        per_page: per_page,
+        page: current_page
     }
 
     if(date && size){
@@ -74,7 +79,30 @@ export const getBookableRooms = (date, size, ammenities) => (dispatch, getState)
             dispatch(stopLoading());
         }
     );
-}
+};
+
+export const getBookableRoom = (room_id) => (dispatch, getState) => {
+
+    let { loggedUserState, summitReducer } = getState();
+    let { accessToken }     = loggedUserState;
+    let { currentSummit }   = summitReducer;
+    dispatch(startLoading());
+
+    let params = {
+        access_token : accessToken,
+        expand: 'floor'
+    };
+
+    return getRequest(
+        createAction(REQUEST_ROOM),
+        createAction(RECEIVE_ROOM),
+        `${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/${room_id}`,
+        authErrorHandler
+    )(params)(dispatch).then(() => {
+            dispatch(stopLoading());
+        }
+    );
+};
 
 export const getRoomAvailability = (room_id, day) => (dispatch, getState) => {
 

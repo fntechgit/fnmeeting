@@ -3,8 +3,8 @@ import {REQUEST_ROOMS, RECEIVE_ROOMS} from '../actions/room-actions';
 export const DEFAULT_ENTITY = {
 	current_page: 1,
 	data: null,
-	last_page: 0,
-	per_page: 0,
+	last_page: 1,
+	per_page: 5,
 	total: 0
 };
 

@@ -16,7 +16,7 @@ import MeetingRoomAvailability from '../../components/meeting-room-availability'
 import MeetingRoomBook from './room-book'
 import {Redirect, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
-import {getBookableRooms, getRoomAvailability} from "../../actions/room-actions";
+import {getBookableRoom, getRoomAvailability} from "../../actions/room-actions";
 import queryString from 'query-string'
 import {getSummitDates} from "../../utils/helpers";
 import T from "i18n-react";
@@ -33,11 +33,10 @@ class AvailableRooms extends React.Component {
 	}
 
 	componentDidMount() {
-		let {summit, getBookableRooms} = this.props
+		let {summit, match} = this.props
 		this.checkQueryParams()
 		if(!summit.loading && summit.loaded) {
-			// Getting all bookable rooms on mount, would be better to get just this ID.
-			getBookableRooms()
+			this.props.getBookableRoom(match.params.id)
 		}
 	}
 
@@ -54,26 +53,20 @@ class AvailableRooms extends React.Component {
 	}
 
 	getSingleRoomAvailability(prevState){
-		const {rooms, getRoomAvailability, match, roomAvailability, loading } = this.props
-		let singleRoom = null
+		const {room, summit, getRoomAvailability, match, roomAvailability, loading } = this.props
 
-		// If there are rooms
-		if(rooms.data !== null){
+		if(room && room.id === parseInt(match.params.id)){
+			// Load availability if not loaded yet
+			if(this.state.date && roomAvailability.data == null  && !loading){
+				getRoomAvailability(room.id, this.state.date)
+			}
 
-			// Find this room
-			singleRoom = rooms.data.find(room => room.id == match.params.id)
-
-			// If this room was found
-			if(singleRoom !== null){
-
-				// Load availability if not loaded yet
-				if(this.state.date && roomAvailability.data == null  && !loading){
-					getRoomAvailability(singleRoom.id, this.state.date)
-				}
-
-				if(prevState.date !== this.state.date){
-					getRoomAvailability(singleRoom.id, this.state.date)
-				}
+			if(prevState.date !== this.state.date){
+				getRoomAvailability(room.id, this.state.date)
+			}
+		} else {
+			if(!summit.loading && summit.loaded) {
+				this.props.getBookableRoom(match.params.id)
 			}
 		}
 	}
@@ -93,22 +86,11 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {match, history, rooms, roomAvailability, summit} = this.props;
+		const {match, history, room, roomAvailability, summit} = this.props;
 		let summitDays = getSummitDates(summit.currentSummit);
 
-		let singleRoom;
-
-		// Have rooms been loaded
-		if(rooms.data !== null){
-			singleRoom = rooms.data.find(room => room.id == match.params.id)
-		}else{
-			return null
-		}
-
-		//Is there a room that matches the param ID?
-		if(!singleRoom){
-			return <div>{T.translate("book_meeting.room_not_found")}</div>
-		}
+		// Have room been loaded
+		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
 
 		return (
 			<div>
@@ -118,7 +100,7 @@ class AvailableRooms extends React.Component {
 
 				}
 
-				<MeetingRoomCard room={singleRoom} />
+				<MeetingRoomCard room={room} />
 
 				{this.state.slot &&
 				<MeetingRoomBook
@@ -126,7 +108,7 @@ class AvailableRooms extends React.Component {
 					days={summitDays}
 					time_zone={summit.currentSummit.time_zone_id}
 					date={this.state.date}
-					room={singleRoom}
+					room={room}
 					slot={this.state.slot}
 				/>
 				}
@@ -146,14 +128,14 @@ class AvailableRooms extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer, roomsReducer, roomAvailabilityReducer, baseState }) => ({
+const mapStateToProps = ({ summitReducer, roomAvailabilityReducer, baseState }) => ({
 	summit: summitReducer,
-	rooms: roomsReducer.rooms,
+	room: roomAvailabilityReducer.room,
 	roomAvailability: roomAvailabilityReducer.availability,
 	loading: roomAvailabilityReducer.loading
 })
 
 export default connect(
 	mapStateToProps,
-	{getBookableRooms, getRoomAvailability}
+	{getBookableRoom, getRoomAvailability}
 )(AvailableRooms)
