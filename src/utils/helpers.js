@@ -14,7 +14,7 @@ export const daysBetweenDates = (summit) => {
 
 	// Add all additional days
 	while(startDate.diff(endDate) < 0) {
-		if (startDate.diff(now) > 0 ||
+		if ((startDate.diff(now) > 0 && endDate.diff(now) < 0) ||
 			(startDate.format('YYYY-M-D') === now.format('YYYY-M-D') && nowTime > startTime && nowTime < endTime)
 		) {
 			dates.push(startDate.clone().unix());

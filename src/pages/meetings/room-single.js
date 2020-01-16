@@ -65,7 +65,7 @@ class AvailableRooms extends React.Component {
 				getRoomAvailability(room.id, this.state.date)
 			}
 		} else {
-			if(!summit.loading && summit.loaded) {
+			if(!summit.loading && summit.loaded && !loading) {
 				this.props.getBookableRoom(match.params.id)
 			}
 		}

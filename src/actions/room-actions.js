@@ -90,7 +90,7 @@ export const getBookableRoom = (room_id) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
-        expand: 'floor'
+        expand: 'floor,attribute_type'
     };
 
     return getRequest(
