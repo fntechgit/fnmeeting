@@ -12,15 +12,21 @@ export const daysBetweenDates = (summit) => {
 	let endTime = parseInt(epochToMomentTimeZone(meeting_room_booking_end_time, 'UTC').format('Hmm')) - 100; // 1hr buffer
 	let dates = [];
 
-	// Add all additional days
-	while(startDate.diff(endDate) < 0) {
-		if ((startDate.diff(now) > 0 && endDate.diff(now) < 0) ||
-			(startDate.format('YYYY-M-D') === now.format('YYYY-M-D') && nowTime > startTime && nowTime < endTime)
-		) {
-			dates.push(startDate.clone().unix());
-		}
+	console.log(now.format('YYYY-M-D HHmm'));
+	console.log(endDate.format('YYYY-M-D HHmm'));
+	console.log(endDate.diff(now));
 
-		startDate.add(1, 'days');
+	// Add all additional days
+	if (endDate.diff(now) > 0) { // summit hasnt finished
+		while (startDate.diff(endDate) < 0) {
+			if (startDate.diff(now) > 0 ||
+				(startDate.format('YYYY-M-D') === now.format('YYYY-M-D') && nowTime > startTime && nowTime < endTime)
+			) {
+				dates.push(startDate.clone().unix());
+			}
+
+			startDate.add(1, 'days');
+		}
 	}
 	return dates
 };
