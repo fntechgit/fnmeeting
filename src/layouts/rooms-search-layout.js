@@ -16,7 +16,7 @@ import RoomSearchResults from '../pages/meetings/room-search-results'
 import {connect} from "react-redux"
 import {getBookableRooms} from "../actions/room-actions"
 var QueryString = require('querystring')
-import { daysBetweenDates, getSummitDates } from '../utils/helpers'
+import { getAvailableDates, getSummitDates } from '../utils/helpers'
 
 class RoomSearchPage extends React.Component {
 
@@ -73,7 +73,7 @@ class RoomSearchPage extends React.Component {
 
 	render(){
 		const {currentSummit, history, match} = this.props;
-		let availableDays = daysBetweenDates(currentSummit);
+		let availableDays = getAvailableDates(currentSummit);
 		let summitDays = getSummitDates(currentSummit);
 
 

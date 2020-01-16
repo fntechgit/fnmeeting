@@ -2,31 +2,37 @@ import moment from "moment-timezone";
 import { epochToMomentTimeZone, epochToMoment } from "openstack-uicore-foundation/lib/methods";
 
 
-export const daysBetweenDates = (summit) => {
-	let {start_date, end_date, meeting_room_booking_start_time, meeting_room_booking_end_time, time_zone_id} = summit;
+export const getAvailableDates = (summit) => {
+	let {
+		start_date,
+		end_date,
+		begin_allow_booking_date,
+		end_allow_booking_date,
+		meeting_room_booking_start_time,
+		meeting_room_booking_end_time,
+		time_zone_id
+	} = summit;
 	let startDate = epochToMomentTimeZone(start_date, time_zone_id);
 	let endDate = epochToMomentTimeZone(end_date, time_zone_id);
+	let bookStartDate = epochToMomentTimeZone(begin_allow_booking_date, time_zone_id);
+	let bookEndDate = epochToMomentTimeZone(end_allow_booking_date, time_zone_id);
 	let now = moment().tz(time_zone_id);
 	let nowTime = parseInt(now.format('Hmm'));
 	let startTime = parseInt(epochToMomentTimeZone(meeting_room_booking_start_time, 'UTC').format('Hmm'));
 	let endTime = parseInt(epochToMomentTimeZone(meeting_room_booking_end_time, 'UTC').format('Hmm')) - 100; // 1hr buffer
 	let dates = [];
 
-	console.log(now.format('YYYY-M-D HHmm'));
-	console.log(endDate.format('YYYY-M-D HHmm'));
-	console.log(endDate.diff(now));
+	while (parseInt(startDate.format('YYYYMD')) <= parseInt(endDate.format('YYYYMD'))) {
+		let afterStart = bookStartDate.diff(now) < 0 && nowTime > startTime;
+		let beforeEnd = bookEndDate.diff(now) > 0 && nowTime < endTime;
 
-	// Add all additional days
-	if (endDate.diff(now) > 0) { // summit hasnt finished
-		while (startDate.diff(endDate) < 0) {
-			if (startDate.diff(now) > 0 ||
-				(startDate.format('YYYY-M-D') === now.format('YYYY-M-D') && nowTime > startTime && nowTime < endTime)
-			) {
-				dates.push(startDate.clone().unix());
-			}
+		let afterSummitStart = parseInt(startDate.format('YYYYMD')) >= parseInt(now.format('YYYYMD'));
 
-			startDate.add(1, 'days');
+		if (afterSummitStart && afterStart && beforeEnd ) {
+			dates.push(startDate.clone().unix());
 		}
+
+		startDate.add(1, 'days');
 	}
 	return dates
 };

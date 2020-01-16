@@ -27,9 +27,12 @@ class SummitsPage extends React.Component {
 
 	render() {
 		let {summits} = this.props;
+		const nowEpoch = Math.round(Date.now() / 1000);
 
-		if (summits.length === 1) {
-			let summitId = summits[0].id;
+		let availableSummits = summits.filter(s => s.begin_allow_booking_date < nowEpoch && nowEpoch < s.end_allow_booking_date);
+
+		if (availableSummits.length === 1) {
+			let summitId = availableSummits[0].id;
 			return (
                 <Redirect to={{pathname: `/a/${summitId}/my-meetings`}} />
 			);
@@ -41,10 +44,10 @@ class SummitsPage extends React.Component {
 					<h1>Pick a Show</h1>
 
 					<div className="row summits-wrapper">
-						{summits.length == 0 &&
+						{availableSummits.length === 0 &&
 							<p>There are not shows Available.</p>
 						}
-						{summits.length > 0 &&  summits.map(s =>
+						{availableSummits.length > 0 &&  availableSummits.map(s =>
 						<div className="col-md-4" key={`summit_${s.id}`}>
 							<a href={`/a/${s.id}/my-bookings`} className="btn btn-default">
 								{s.name}

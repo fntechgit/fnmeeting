@@ -1,6 +1,8 @@
 import React from "react";
 import {getDayNumberFromDate, getFormatedDate, getFormatedTime} from '../utils/helpers'
 import T from "i18n-react";
+import moment from "moment-timezone";
+import { epochToMomentTimeZone, epochToMoment } from "openstack-uicore-foundation/lib/methods";
 
 export default (props) => {
 	let currentDay = getDayNumberFromDate(props.days, props.date);
@@ -18,15 +20,25 @@ export default (props) => {
 		{props.availability && props.availability.data !== null ?
 			props.availability.data.map((a)=>{
 				let isAvailable = a.status === 'Available';
+				let formatedStartTime = epochToMomentTimeZone(a.start_date, props.time_zone).format('HH:mm');
+				let formatedEndTime = epochToMomentTimeZone(a.end_date, props.time_zone).format('HH:mm');
 
 				if(isAvailable){
-					return <div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot available'}>
-						{T.translate("bookable_room.available")}
-						<br/>{getFormatedTime(a.start_date, props.time_zone)} - {getFormatedTime(a.end_date, props.time_zone)}</div>
-				}else{
-					return <div key={a.start_date} className={'meeting-room-availability-slot unavailable'}>
-						{T.translate("bookable_room.unavailable")}
-						<br/>{getFormatedTime(a.start_date, props.time_zone)} - {getFormatedTime(a.end_date, props.time_zone)}</div>
+					return (
+						<div key={a.start_date} onClick={()=>{props.onSelect(a)}} className={'meeting-room-availability-slot available'}>
+							{T.translate("bookable_room.available")}
+							<br/>
+							{formatedStartTime} - {formatedEndTime}
+						</div>
+					);
+				} else {
+					return (
+						<div key={a.start_date} className={'meeting-room-availability-slot unavailable'}>
+							{T.translate("bookable_room.unavailable")}
+							<br/>
+							{formatedStartTime} - {formatedEndTime}
+						</div>
+					);
 				}
 
 			}) : null }

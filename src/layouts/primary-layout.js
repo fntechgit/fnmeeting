@@ -18,6 +18,7 @@ import NavMenu from '../components/nav-menu'
 
 import MyReservations from "./my-reservations"
 import SearchRoomsLayout from "./rooms-layout"
+import BookingClosedPage from "../pages/booking-closed-page"
 import {getSummitById} from '../actions/summit-actions'
 import Swal from "sweetalert2";
 
@@ -34,14 +35,11 @@ class PrimaryLayout extends React.Component {
     let { match, summit } = this.props;
     let {currentSummit, loaded} = summit;
     let summitId = match.params.id;
-    let now = Math.floor(Date.now()/1000);
+    let now = Math.round(Date.now()/1000);
     let active = currentSummit.begin_allow_booking_date < now && currentSummit.end_allow_booking_date > now;
 
     if (loaded && !active) {
-        Swal.fire({title: "Booking Closed", text: "Please choose an active summit.",type: "warning"})
-            .then((result) => {
-                window.location = '/a/summits';
-            });
+        return <BookingClosedPage summit={currentSummit} />
     }
 
     return(

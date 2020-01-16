@@ -6,7 +6,8 @@
   "landing": {
     "sign_out"            : "Sign out",
     "log_in"              : "Log in",
-    "not_logged_in"       : "You are not logged in. Please log in to continue:"
+    "not_logged_in"       : "You are not logged in. Please log in to continue:",
+    "booking_closed"      : "Booking is closed."
   },
   "errors": {
     "user_not_authz"            : "Hold on. Your user is not authorized!.",
