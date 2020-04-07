@@ -50,6 +50,7 @@ export const DEFAULT_ENTITY = {
 	selection_plans: [],
 	begin_allow_booking_date: 0,
 	end_allow_booking_date: 0,
+	payment_profiles: [],
 }
 
 const DEFAULT_STATE = {
