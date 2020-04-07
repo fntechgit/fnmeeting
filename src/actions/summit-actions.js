@@ -28,19 +28,17 @@ export const RECEIVE_SUMMITS          = 'RECEIVE_SUMMITS';
 export const getSummitById = (summitId) => (dispatch, getState) => {
 
     let { loggedUserState } = getState();
-    let { accessToken }     = loggedUserState;
 
     dispatch(startLoading());
 
     let params = {
-        access_token : accessToken,
         expand: 'values'
     };
 
     return getRequest(
         createAction(REQUEST_SUMMIT),
         createAction(RECEIVE_SUMMIT),
-        `${window.API_BASE_URL}/api/v1/summits/all/${summitId}`,
+        `${window.API_BASE_URL}/api/public/v1/summits/all/${summitId}`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -51,14 +49,12 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
 export const loadSummits = () => (dispatch, getState) => {
 
     let { loggedUserState } = getState();
-    let { accessToken }     = loggedUserState;
 
     dispatch(startLoading());
 
     let params = {
-        access_token : accessToken,
         expand: 'none',
-        relations: 'none',
+        relations: 'payment_profiles',
         page: 1,
         per_page: 20
     };
@@ -66,7 +62,7 @@ export const loadSummits = () => (dispatch, getState) => {
     getRequest(
         createAction(REQUEST_SUMMITS),
         createAction(RECEIVE_SUMMITS),
-        `${window.API_BASE_URL}/api/v1/summits/all?expand=none&relations=none&access_token=${accessToken}`,
+        `${window.API_BASE_URL}/api/public/v1/summits/all`,
         authErrorHandler
     )(params)(dispatch, getState).then(() => {
             dispatch(stopLoading());

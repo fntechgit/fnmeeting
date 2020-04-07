@@ -62,8 +62,14 @@ class RoomBook extends React.Component {
 
 	render(){
 		
-		const {days, date, time, slot, room, payReservation, member, time_zone} = this.props
-		
+		const {days, date, time, slot, room, payReservation, member, time_zone, currentSummit} = this.props;
+		let publicKey = null;
+		for(let profile of currentSummit.payment_profiles){
+			if(profile.application_type == 'BookableRooms'){
+				publicKey = profile.test_mode_enabled ? profile.test_publishable_key : profile.live_publishable_key;
+				break;
+			}
+		}
 		// Show confirmation if payment has been made
 		if(this.state.confirmed){
 			return <div>
@@ -99,7 +105,7 @@ class RoomBook extends React.Component {
 						<div className={'book-meeting-profile-pic'}><img src={member.pic}/>
 							<div className={'book-meeting-name'}>{member.first_name} {member.last_name}</div>
 						</div>
-						<StripeProvider apiKey={window.STRIPE_PRIVATE_KEY}>
+						<StripeProvider apiKey={publicKey}>
 							<Elements>
 								<CheckoutForm price={room.time_slot_cost} currency={room.currency} submit={(ev, stripe, clientSecret)=>{payReservation(ev, stripe, clientSecret)}} clientSecret={this.props.newReservation.reservation.payment_gateway_client_token} />
 							</Elements>
