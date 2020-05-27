@@ -53,7 +53,7 @@ export const getBookableRooms = (date, size, ammenities, current_page = 1, per_p
 
     let params = {
         access_token : accessToken,
-        expand: 'floor,attribute_type',
+        expand: 'floor,attributes.type',
         per_page: per_page,
         page: current_page
     }
@@ -90,7 +90,7 @@ export const getBookableRoom = (room_id) => (dispatch, getState) => {
 
     let params = {
         access_token : accessToken,
-        expand: 'floor,attribute_type'
+        expand: 'floor,attributes.type'
     };
 
     return getRequest(
