@@ -69,7 +69,7 @@
     "sweetalert2": "^8.19.0",
     "urijs": "^1.19.2",
     "url-loader": "^0.6.2",
-    "validator": "^9.4.1",
+    "validator": "^13.7.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
