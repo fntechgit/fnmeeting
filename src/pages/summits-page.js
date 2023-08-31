@@ -28,7 +28,7 @@ class SummitsPage extends React.Component {
 	render() {
 		let {summits} = this.props;
 		const nowEpoch = Math.round(Date.now() / 1000);
-
+		debugger;
 		let availableSummits = summits.filter(s => s.begin_allow_booking_date < nowEpoch && nowEpoch < s.end_allow_booking_date);
 
 		if (availableSummits.length === 1) {

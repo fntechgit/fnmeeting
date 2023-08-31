@@ -32,7 +32,7 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
     dispatch(startLoading());
 
     let params = {
-        expand: 'values'
+        expand: 'meeting_booking_room_allowed_attributes,meeting_booking_room_allowed_attributes.values'
     };
 
     return getRequest(
@@ -56,7 +56,7 @@ export const loadSummits = () => (dispatch, getState) => {
         expand: 'none',
         relations: 'payment_profiles',
         page: 1,
-        per_page: 20
+        per_page: 100
     };
 
     getRequest(
