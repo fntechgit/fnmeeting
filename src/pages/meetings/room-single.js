@@ -86,7 +86,6 @@ class AvailableRooms extends React.Component {
 
 	render(){
 		const {match, history, room, roomAvailability, summit} = this.props;
-		let summitDays = getSummitDates(summit.currentSummit);
 
 		// Have room been loaded
 		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
@@ -104,7 +103,7 @@ class AvailableRooms extends React.Component {
 				{this.state.slot &&
 				<MeetingRoomBook
 					cancel={() => this.clearSlot()}
-					days={summitDays}
+					days={summit.currentSummit.summitDays}
 					time_zone={summit.currentSummit.time_zone_id}
 					date={this.state.date}
 					room={room}
@@ -114,7 +113,7 @@ class AvailableRooms extends React.Component {
 				{!this.state.slot &&
 					<MeetingRoomAvailability
 						changeDate={(date)=>{this.changeDate(date)}}
-						days={summitDays}
+						days={summit.currentSummit.summitDays}
 						time_zone={summit.currentSummit.time_zone_id}
 						date={this.state.date}
 						availability={roomAvailability}

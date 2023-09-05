@@ -16,9 +16,8 @@ import {
     createAction,
     stopLoading,
     startLoading,
-    showMessage,
     authErrorHandler
-} from 'openstack-uicore-foundation/lib/methods';
+} from 'openstack-uicore-foundation/lib/utils/actions';
 
 export const REQUEST_SUMMIT           = 'REQUEST_SUMMIT';
 export const RECEIVE_SUMMIT           = 'RECEIVE_SUMMIT';
@@ -26,8 +25,6 @@ export const REQUEST_SUMMITS          = 'REQUEST_SUMMITS';
 export const RECEIVE_SUMMITS          = 'RECEIVE_SUMMITS';
 
 export const getSummitById = (summitId) => (dispatch, getState) => {
-
-    let { loggedUserState } = getState();
 
     dispatch(startLoading());
 
@@ -47,8 +44,6 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
 };
 
 export const loadSummits = () => (dispatch, getState) => {
-
-    let { loggedUserState } = getState();
 
     dispatch(startLoading());
 

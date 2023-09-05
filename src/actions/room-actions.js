@@ -13,20 +13,17 @@
 
 import {
     getRequest,
-    putRequest,
     postRequest,
-    deleteRequest,
     createAction,
     stopLoading,
     startLoading,
     showMessage,
-    showSuccessMessage,
-    postFile,
-    putFile,
     authErrorHandler
-} from 'openstack-uicore-foundation/lib/methods';
+} from 'openstack-uicore-foundation/lib/utils/actions';
 import T from "i18n-react/dist/i18n-react"
 import history from "../../src/history";
+import { getAccessTokenSafely } from '../utils/helpers';
+
 
 export const REQUEST_ROOMS            = 'REQUEST_ROOMS';
 export const RECEIVE_ROOMS            = 'RECEIVE_ROOMS';
@@ -42,12 +39,11 @@ export const CREATE_RESERVATION_SUCCESS    = 'CREATE_RESERVATION_SUCCESS';
 export const CREATE_RESERVATION_ERROR      = 'CREATE_RESERVATION_ERROR';
 export const CLEAR_RESERVATION             = 'CLEAR_RESERVATION';
 
-export const getBookableRooms = (date, size, ammenities, current_page = 1, per_page = 5) => (dispatch, getState) => {
-
-    let { loggedUserState, summitReducer} = getState();
-    let { accessToken }     = loggedUserState;
-    let { currentSummit }   = summitReducer;
-    let filter = [];
+export const getBookableRooms = (date, size, ammenities, current_page = 1, per_page = 5) => async (dispatch, getState) => {
+    const { summitReducer} = getState();
+    const accessToken = await getAccessTokenSafely();
+    const { currentSummit }   = summitReducer;
+    const filter = [];
 
     dispatch(startLoading());
 
@@ -81,11 +77,10 @@ export const getBookableRooms = (date, size, ammenities, current_page = 1, per_p
     );
 };
 
-export const getBookableRoom = (room_id) => (dispatch, getState) => {
-
-    let { loggedUserState, summitReducer } = getState();
-    let { accessToken }     = loggedUserState;
-    let { currentSummit }   = summitReducer;
+export const getBookableRoom = (room_id) => async (dispatch, getState) => {
+    const { summitReducer } = getState();
+    const accessToken = await getAccessTokenSafely();
+    const { currentSummit }   = summitReducer;
     dispatch(startLoading());
 
     let params = {
@@ -104,11 +99,11 @@ export const getBookableRoom = (room_id) => (dispatch, getState) => {
     );
 };
 
-export const getRoomAvailability = (room_id, day) => (dispatch, getState) => {
+export const getRoomAvailability = (room_id, day) => async (dispatch, getState) => {
 
-    let { loggedUserState, summitReducer } = getState();
-    let { accessToken }     = loggedUserState;
-    let { currentSummit }   = summitReducer;
+    const { summitReducer } = getState();
+    const accessToken = await getAccessTokenSafely();
+    const { currentSummit }   = summitReducer;
     dispatch(startLoading());
 
     let params = {
@@ -131,10 +126,10 @@ export const clearReservation = () => (dispatch, getState) => {
     dispatch(createAction(CLEAR_RESERVATION)())
 }
 
-export const createReservation = (room_id, start_time, end_time, currency, amount) => (dispatch, getState) => {
-    let { loggedUserState, summitReducer } = getState();
-    let { accessToken }     = loggedUserState;
-    let { currentSummit }   = summitReducer;
+export const createReservation = (room_id, start_time, end_time, currency, amount) => async (dispatch, getState) => {
+    const { summitReducer } = getState();
+    const accessToken = await getAccessTokenSafely();
+    const { currentSummit }   = summitReducer;
 
     dispatch(startLoading());
 

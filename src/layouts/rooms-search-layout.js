@@ -16,7 +16,6 @@ import RoomSearchResults from '../pages/meetings/room-search-results'
 import {connect} from "react-redux"
 import {getBookableRooms} from "../actions/room-actions"
 var QueryString = require('querystring')
-import { getAvailableDates, getSummitDates } from '../utils/helpers'
 
 class RoomSearchPage extends React.Component {
 
@@ -73,17 +72,14 @@ class RoomSearchPage extends React.Component {
 
 	render(){
 		const {currentSummit, history, match} = this.props;
-		let availableDays = getAvailableDates(currentSummit);
-		let summitDays = getSummitDates(currentSummit);
-
 
 		// If date and size are chosen, show results
 		if(this.state.date && this.state.size ) {
 			//
 			return (
 				<RoomSearchResults
-					summitDays={summitDays}
-					availableDays={availableDays}
+					summitDays={currentSummit.summitDays}
+					availableDays={currentSummit.bookingDays}
 					onSubmit={(values)=>{this.setQueryParams(values)}}
 					date={this.state.date}
 					size={this.state.size}
@@ -96,8 +92,8 @@ class RoomSearchPage extends React.Component {
 		// RoomsSearch component is the initial search form
 		return (
 			<RoomSearch
-				summitDays={summitDays}
-				availableDays={availableDays}
+				summitDays={currentSummit.summitDays}
+				availableDays={currentSummit.bookingDays}
 				onSubmit={(values)=>{this.setQueryParams(values)}}
 				ammenities={this.state.ammenities}
 				allowed_attributes={currentSummit.meeting_booking_room_allowed_attributes}

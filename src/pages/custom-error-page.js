@@ -14,11 +14,11 @@
 import React from 'react';
 import URI from "urijs";
 import swal from "sweetalert2";
-import '../styles/error-page.less';
 import T from "i18n-react/dist/i18n-react";
-import {doLogin} from "openstack-uicore-foundation/lib/reducers";
-import {getBackURL} from "openstack-uicore-foundation/lib/methods";
+import {doLogin} from "openstack-uicore-foundation/lib/security/methods";
+import {getBackURL} from "openstack-uicore-foundation/lib/utils/methods";
 
+import '../styles/error-page.less';
 
 class CustomErrorPage extends React.Component {
 

@@ -14,8 +14,7 @@
 import React from 'react';
 import '../styles/error-page.less';
 import T from "i18n-react/dist/i18n-react";
-import moment from "moment-timezone";
-import { epochToMomentTimeZone, epochToMoment } from "openstack-uicore-foundation/lib/methods";
+import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
 
 class BookingClosedPage extends React.Component {
 

@@ -12,7 +12,7 @@
  **/
 
 import { createStore, applyMiddleware, compose} from 'redux';
-import { loggedUserReducer } from "openstack-uicore-foundation/lib/reducers"
+import { loggedUserReducer } from "openstack-uicore-foundation/lib/security/reducers";
 import baseReducer from './reducers/base-reducer'
 import allSummitsReducer from './reducers/summit/all-summits-reducer';
 import summitReducer from './reducers/summit/summit-reducer';
@@ -47,14 +47,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
-window.apiBaseUrl = process.env['API_BASE_URL'];
-window.clientId = process.env['OAUTH2_CLIENT_ID'];
-window.idpBaseUrl= process.env['IDP_BASE_URL'];
-
 const onRehydrateComplete = () => {
   // repopulate access token on global access variable
-  window.accessToken = store.getState().loggedUserState.accessToken;
-  window.idToken = store.getState().loggedUserState.idToken;
   window.sessionState = store.getState().loggedUserState.sessionState;
 }
 

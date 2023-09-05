@@ -11,9 +11,8 @@
  * limitations under the License.
  **/
 import T from "i18n-react/dist/i18n-react";
-import {stopLoading, startLoading, createAction, getBackURL, objectToQueryString} from "openstack-uicore-foundation/lib/methods";
+import {stopLoading, startLoading, createAction, getBackURL} from "openstack-uicore-foundation/lib/utils/actions";
 import swal from "sweetalert2";
-import {doLogin} from "openstack-uicore-foundation/lib/actions";
 export const apiBaseUrl         = process.env['API_BASE_URL'];
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
 export const VALIDATE           = 'VALIDATE';

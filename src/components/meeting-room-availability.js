@@ -1,8 +1,7 @@
 import React from "react";
-import {getDayNumberFromDate, getFormatedDate, getFormatedTime} from '../utils/helpers'
+import {getDayNumberFromDate, getFormatedDate} from '../utils/helpers'
 import T from "i18n-react";
-import moment from "moment-timezone";
-import { epochToMomentTimeZone, epochToMoment } from "openstack-uicore-foundation/lib/methods";
+import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
 
 export default (props) => {
 	let currentDay = getDayNumberFromDate(props.days, props.date);
