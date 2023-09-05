@@ -1,21 +1,40 @@
-const HtmlWebpackPlugin         = require('html-webpack-plugin');
-const { CleanWebpackPlugin }    = require('clean-webpack-plugin');
-const Dotenv                    = require('dotenv-webpack');
-const MiniCssExtractPlugin      = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     entry: "./src/index.js",
     plugins: [
-        new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin({
-            title: 'Summit Admin',
-            template: './src/index.ejs'
-        }),
         new Dotenv({
             expand: true
-        })
+        }),
+        // Work around for Buffer is undefined:
+        // https://github.com/webpack/changelog-v5/issues/10
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+            process: 'process/browser',
+        }),
+        new CleanWebpackPlugin(),
+        //new webpack.DefinePlugin(),
+        new HtmlWebpackPlugin({
+            title: 'FnMeeting',
+            template: './src/index.ejs'
+        }),
     ],
-    node: {fs: 'empty'},
+    resolve: {
+        mainFields: ['browser', 'module', 'main'],
+        fallback: {
+            querystring: require.resolve('querystring-es3'),
+            path: require.resolve('path-browserify'),
+            crypto: require.resolve('crypto-browserify'),
+            stream: require.resolve('stream-browserify'),
+            buffer: require.resolve("buffer"),
+            fs: require.resolve('fs'),
+            process: require.resolve("process"),
+        }
+    },
     module: {
         rules: [
             {
@@ -27,12 +46,16 @@ module.exports = {
                         presets: [
                             [
                                 "@babel/preset-env",
-                                { "targets": { "node": "current" } }
+                                {"targets": {"node": "current"}}
                             ],
                             '@babel/preset-react',
                             '@babel/preset-flow'
                         ],
-                        plugins: ['@babel/plugin-proposal-object-rest-spread']
+                        plugins: [
+                            "@babel/plugin-proposal-object-rest-spread",
+                            "@babel/plugin-proposal-class-properties",
+                            "@babel/plugin-proposal-nullish-coalescing-operator"
+                        ]
                     }
                 }
             },
@@ -42,7 +65,26 @@ module.exports = {
             },
             {
                 test: /\.less/,
+                exclude: /\.module\.less/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"]
+            },
+            {
+                test: /\.module.less/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            sourceMap: true,
+                            modules: true,
+                        }
+                    },
+                    {
+                        loader: "less-loader"
+                    }
+                ]
             },
             {
                 test: /\.scss/,
@@ -50,12 +92,8 @@ module.exports = {
                 use: [MiniCssExtractPlugin.loader, "css-loader", 'sass-loader']
             },
             {
-                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: "url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]"
-            },
-            {
-                test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: "file-loader?name=fonts/[name].[ext]"
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
             },
             {
                 test: /\.jpg|\.png|\.gif$/,
@@ -68,6 +106,13 @@ module.exports = {
             {
                 test: /\.yaml$/,
                 use: 'js-yaml-loader',
+            },
+            // word around for react dnd
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false
+                }
             }
         ]
     },

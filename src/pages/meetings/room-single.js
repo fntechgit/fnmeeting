@@ -14,10 +14,9 @@ import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
 import MeetingRoomAvailability from '../../components/meeting-room-availability'
 import MeetingRoomBook from './room-book'
-import {Redirect, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import {getBookableRoom, getRoomAvailability} from "../../actions/room-actions";
-import queryString from 'query-string'
+var QueryString = require('querystring')
 import {getSummitDates} from "../../utils/helpers";
 import T from "i18n-react";
 
@@ -45,7 +44,7 @@ class AvailableRooms extends React.Component {
 		const {search} = location
 
 		if(search) {
-		let queryParams = queryString.parse(search);
+		let queryParams = QueryString.parse(search);
 			this.setState({...queryParams})
 		}else{
 			this.setState({'date': summit.currentSummit.start_date})
