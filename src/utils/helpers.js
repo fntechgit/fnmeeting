@@ -42,7 +42,7 @@ export const getSummitDates = (summit) => {
 };
 
 export const getDayNumberFromDate = (days, date) => {
-	const dateIndex = days.findIndex(d => d.str === date.str);
+	const dateIndex = days.findIndex(d => d.str === date);
 	return (dateIndex + 1);
 }
 

@@ -43,10 +43,10 @@ class AvailableRooms extends React.Component {
 		const {summit, location} = this.props
 		const {search} = location
 
-		if(search) {
-		let queryParams = QueryString.parse(search);
+		if (search) {
+			const queryParams = QueryString.parse(search.slice(1));
 			this.setState({...queryParams})
-		}else{
+		} else {
 			this.setState({'date': summit.currentSummit.start_date})
 		}
 	}
@@ -113,7 +113,7 @@ class AvailableRooms extends React.Component {
 				{!this.state.slot &&
 					<MeetingRoomAvailability
 						changeDate={(date)=>{this.changeDate(date)}}
-						days={summit.currentSummit.summitDays}
+						availableDays={summit.currentSummit.bookingDays}
 						time_zone={summit.currentSummit.time_zone_id}
 						date={this.state.date}
 						availability={roomAvailability}
