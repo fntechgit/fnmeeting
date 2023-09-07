@@ -158,20 +158,18 @@ export const createReservation = (room_id, start_time, end_time, currency, amoun
         })
 }
 
-export const payReservation = (card, stripe, clientSecret) => (dispatch, getState) => {
-    let {loggedUserState, summitReducer} = getState();
+export const payReservation = (token, stripe) => (dispatch, getState) => {
+    const {newReservationReducer, summitReducer} = getState();
+    const {reservation} = newReservationReducer;
+    const { id, card } = token;
 
-    if(card._empty || card._invalid) {
+    if (card._empty || card._invalid) {
         return false
-    }else{
+    } else {
         dispatch(startLoading());
 
-        stripe.handleCardPayment(
-            clientSecret, card, {
-                payment_method_data: {
-                    billing_details: {name: `${loggedUserState.member.first_name} ${loggedUserState.member.last_name}`}
-                }
-            }
+        stripe.confirmCardPayment(
+          reservation.payment_gateway_client_token, { payment_method: { card: { token: id } } }
         ).then(function(result) {
             if (result.error) {
                 // Display error.message in your UI.
