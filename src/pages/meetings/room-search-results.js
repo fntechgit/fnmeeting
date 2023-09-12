@@ -41,7 +41,7 @@ class RoomSearchResults extends React.Component {
 	}
 
 	componentDidUpdate(newProps) {
-		let {currentSummit, getBookableRooms, date, size, ammenities, rooms} = this.props;
+		let {getBookableRooms, date, size, ammenities, rooms} = this.props;
 		let {current_page, per_page} = rooms;
 		if (date !== newProps.date || size !== newProps.size  || ammenities !== newProps.ammenities) {
 			getBookableRooms(date, size, ammenities, current_page, per_page);

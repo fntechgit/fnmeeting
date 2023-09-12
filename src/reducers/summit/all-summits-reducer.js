@@ -1,4 +1,4 @@
-import { LOGOUT_USER, VALIDATE } from 'openstack-uicore-foundation/lib/actions';
+import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import {REQUEST_SUMMITS, RECEIVE_SUMMITS} from '../../actions/summit-actions';
 
 const DEFAULT_STATE = {

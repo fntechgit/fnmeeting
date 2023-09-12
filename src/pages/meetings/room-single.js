@@ -14,10 +14,9 @@ import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
 import MeetingRoomAvailability from '../../components/meeting-room-availability'
 import MeetingRoomBook from './room-book'
-import {Redirect, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import {getBookableRoom, getRoomAvailability} from "../../actions/room-actions";
-import queryString from 'query-string'
+var QueryString = require('querystring')
 import {getSummitDates} from "../../utils/helpers";
 import T from "i18n-react";
 
@@ -44,10 +43,10 @@ class AvailableRooms extends React.Component {
 		const {summit, location} = this.props
 		const {search} = location
 
-		if(search) {
-		let queryParams = queryString.parse(search);
+		if (search) {
+			const queryParams = QueryString.parse(search.slice(1));
 			this.setState({...queryParams})
-		}else{
+		} else {
 			this.setState({'date': summit.currentSummit.start_date})
 		}
 	}
@@ -87,7 +86,6 @@ class AvailableRooms extends React.Component {
 
 	render(){
 		const {match, history, room, roomAvailability, summit} = this.props;
-		let summitDays = getSummitDates(summit.currentSummit);
 
 		// Have room been loaded
 		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
@@ -105,7 +103,7 @@ class AvailableRooms extends React.Component {
 				{this.state.slot &&
 				<MeetingRoomBook
 					cancel={() => this.clearSlot()}
-					days={summitDays}
+					days={summit.currentSummit.summitDays}
 					time_zone={summit.currentSummit.time_zone_id}
 					date={this.state.date}
 					room={room}
@@ -115,7 +113,7 @@ class AvailableRooms extends React.Component {
 				{!this.state.slot &&
 					<MeetingRoomAvailability
 						changeDate={(date)=>{this.changeDate(date)}}
-						days={summitDays}
+						availableDays={summit.currentSummit.bookingDays}
 						time_zone={summit.currentSummit.time_zone_id}
 						date={this.state.date}
 						availability={roomAvailability}

@@ -11,41 +11,46 @@
  * limitations under the License.
  **/
 
-import React, {Component} from 'react';
-import {CardElement, injectStripe} from 'react-stripe-elements';
+import React from 'react';
+import {useElements, useStripe, CardElement} from "@stripe/react-stripe-js";
 
-class CheckoutForm extends Component {
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            card: undefined
+const CheckoutForm = ({price, currency, userName, payBooking}) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: currency }).format(price)
+    const style = {
+        base: {
+            fontSize: '16px',
+            color: "#32325d",
         }
-    }
-    
-    setCardElement(el){
-        this.setState({card: el})
-    }
-    
-    render() {
-        const {price, currency} = this.props ;
+    };
 
-        const style = {
-            base: {
-                fontSize: '16px',
-                color: "#32325d",
-            }
-        };
+    const handlePay = async (event) => {
+        event.preventDefault();
 
-        let cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: currency }).format(price)
-        
-        return (
-            <div className="checkout">
-                <CardElement style={style} onReady={(el) => {this.setCardElement(el)}} />
-                <button className={'btn btn-warning btn-lg btn-block'} onClick={(e)=>{this.props.submit(this.state.card, this.props.stripe, this.props.clientSecret)}}>Pay {cost}</button>
-            </div>
-        );
-    }
+        if (!stripe) {
+            // Stripe.js has not loaded yet. Make sure to disable
+            // form submission until Stripe.js has loaded.
+            return;
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        const { error, token } = await stripe.createToken(cardElement, {name: userName});
+
+        if (token) {
+            payBooking(token, stripe);
+        } else if (error) {
+            console.log('error', error);
+        }
+
+    };
+
+    return (
+      <div className="checkout">
+          <CardElement options={{ style }} />
+          <button className={'btn btn-warning btn-lg btn-block'} onClick={handlePay}>Pay {cost}</button>
+      </div>
+    );
 }
 
-export default injectStripe(CheckoutForm);
+export default CheckoutForm;

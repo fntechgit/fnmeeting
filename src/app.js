@@ -21,11 +21,15 @@ import LogOutCallbackRoute from './routes/logout-callback-route'
 import AuthButton from './components/auth-button'
 import DefaultRoute from './routes/default-route'
 import { connect } from 'react-redux'
-import { AjaxLoader, OPSessionChecker } from "openstack-uicore-foundation/lib/components";
-import { getBackURL,onUserAuth, doLogin, doLogout, initLogOut, getUserInfo } from "openstack-uicore-foundation/lib/methods";
+import { AjaxLoader } from "openstack-uicore-foundation/lib/components";
+import { getBackURL } from "openstack-uicore-foundation/lib/utils/methods";
+import { resetLoading } from "openstack-uicore-foundation/lib/utils/actions";
+import { doLogout, onUserAuth, getUserInfo} from 'openstack-uicore-foundation/lib/security/actions';
+import { initLogOut, doLoginBasicLogin, getIdToken} from 'openstack-uicore-foundation/lib/security/methods';
 import T from 'i18n-react';
 import CustomErrorPage from "./pages/custom-error-page";
 import history from './history'
+import IdTokenVerifier from 'idtoken-verifier';
 
 
 // here is set by default user lang as en
@@ -46,30 +50,45 @@ T.setTexts(require(`./i18n/${language}.json`));
 
 // move all env var to global scope so ui core has access to this
 
-window.IDP_BASE_URL        = process.env['IDP_BASE_URL'];
-window.API_BASE_URL        = process.env['API_BASE_URL'];
-window.OAUTH2_CLIENT_ID    = process.env['OAUTH2_CLIENT_ID'];
-window.SCOPES              = process.env['SCOPES'];
+window.IDP_BASE_URL = process.env['IDP_BASE_URL'];
+window.API_BASE_URL = process.env['API_BASE_URL'];
+window.MARKETING_API_BASE_URL = process.env['MARKETING_API_BASE_URL'];
+window.OAUTH2_CLIENT_ID = process.env['OAUTH2_CLIENT_ID'];
+window.SCOPES = process.env['SCOPES'];
 window.ALLOWED_USER_GROUPS = process.env['ALLOWED_USER_GROUPS'];
+window.OAUTH2_FLOW = process.env['OAUTH2_FLOW'] || "token id_token";
 
 class App extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    props.resetLoading();
+  }
 
   onClickLogin(){
-    doLogin(getBackURL());
+    doLoginBasicLogin(getBackURL());
   }
 
   render() {
     let { currentSummit, isLoggedUser, onUserAuth, doLogout, getUserInfo, member, backUrl} = this.props;
+
+    // get user pic from idtoken claims (IDP)
     let profile_pic = member ? member.pic : '';
+
+    const idToken = getIdToken();
+
+    if(idToken){
+      let verifier = new IdTokenVerifier({
+        issuer:   window.IDP_BASE_URL,
+        audience: window.OAUTH2_CLIENT_ID
+      });
+      let jwt = verifier.decode(idToken);
+      profile_pic = jwt.payload.picture;
+    }
 
     return (
         <Router history={history}>
           <div>
             <AjaxLoader show={ this.props.loading } size={ 120 }/>
-            {/*<OPSessionChecker*/}
-                {/*clientId={window.OAUTH2_CLIENT_ID}*/}
-                {/*idpBaseUrl={window.IDP_BASE_URL}*/}
-            {/*/>*/}
             <div className="header">
               <div className={"header-title " + (isLoggedUser ? '' : 'center')}>
                 <a href="/a/summits">{T.translate("general.app_title")}</a> {currentSummit.id > 0 && ` - ${currentSummit.name}`}
@@ -104,4 +123,5 @@ export default connect(mapStateToProps, {
   onUserAuth,
   doLogout,
   getUserInfo,
+  resetLoading
 })(App)

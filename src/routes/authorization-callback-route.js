@@ -10,12 +10,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+
 import history from '../history'
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { AbstractAuthorizationCallbackRoute } from "openstack-uicore-foundation/lib/components";
-import { getUserInfo } from "openstack-uicore-foundation/lib/methods";
+import AbstractAuthorizationCallbackRoute from "openstack-uicore-foundation/lib/security/abstract-auth-callback-route";
+import { getUserInfo } from "openstack-uicore-foundation/lib/security/actions";
 
 class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
 
@@ -24,7 +25,8 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
   }
 
   _callback(backUrl) {
-    this.props.getUserInfo(backUrl, history);
+    if(!backUrl) backUrl = '/app/directory';
+    this.props.getUserInfo('groups','', backUrl, history);
   }
 
   _redirect2Error(error){
@@ -36,11 +38,7 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
   }
 }
 
-const mapStateToProps = ({ loggedUserState }) => ({
-  accessToken: loggedUserState.accessToken,
-  idToken:  loggedUserState.idToken,
-  sessionState: loggedUserState.sessionState,
-})
+const mapStateToProps = ({ loggedUserState }) => ({})
 
 export default connect(mapStateToProps,{
   getUserInfo

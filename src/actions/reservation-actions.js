@@ -17,16 +17,17 @@ import {
 	stopLoading,
 	startLoading,
 	authErrorHandler
-} from 'openstack-uicore-foundation/lib/methods';
+} from 'openstack-uicore-foundation/lib/utils/actions';
+import { getAccessTokenSafely } from '../utils/helpers';
+
 
 export const REQUEST_RESERVATIONS            = 'REQUEST_RESERVATIONS';
 export const RECEIVE_RESERVATIONS            = 'RECEIVE_RESERVATIONS';
 
-export const getMyReservations = () => (dispatch, getState) => {
-
-	let { loggedUserState, summitReducer } = getState();
-	let { accessToken }     = loggedUserState;
-	let { currentSummit }   = summitReducer;
+export const getMyReservations = () => async (dispatch, getState) => {
+	const accessToken = await getAccessTokenSafely();
+	const { summitReducer } = getState();
+	const { currentSummit }   = summitReducer;
 
 	dispatch(startLoading());
 

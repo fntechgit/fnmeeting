@@ -1,6 +1,7 @@
 import moment from "moment-timezone";
-import { epochToMomentTimeZone, epochToMoment } from "openstack-uicore-foundation/lib/methods";
-
+import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
+import {getAccessToken} from 'openstack-uicore-foundation/lib/security/methods'
+import { initLogOut} from 'openstack-uicore-foundation/lib/security/methods';
 
 export const getAvailableDates = (summit) => {
 	let {
@@ -16,7 +17,8 @@ export const getAvailableDates = (summit) => {
 	while (bookStartDate <= bookEndDate) {
 
 		if (bookStartDate >= now) {
-			dates.push(bookStartDate.clone().unix());
+			const tmp = bookStartDate.clone();
+			dates.push({str: tmp.format('Y-M-D'), epoch: tmp.unix()});
 		}
 
 		bookStartDate.add(1, 'days');
@@ -32,14 +34,15 @@ export const getSummitDates = (summit) => {
 
 	// Add all additional days
 	while(startDate.diff(endDate) < 0) {
-		dates.push(startDate.clone().unix());
+		const tmp = startDate.clone();
+		dates.push({str: tmp.format('Y-M-D'), epoch: tmp.unix()});
 		startDate.add(1, 'days');
 	}
 	return dates
 };
 
 export const getDayNumberFromDate = (days, date) => {
-	let dateIndex = days.findIndex(d => d === parseInt(date));
+	const dateIndex = days.findIndex(d => d.str === date);
 	return (dateIndex + 1);
 }
 
@@ -60,3 +63,13 @@ export const getFormatedTime = (datetime, time_zone = false) => {
 	}
 	return moment.unix(datetime).format('HH:mm')
 }
+
+export const getAccessTokenSafely = async () => {
+	try {
+		return await getAccessToken();
+	}
+	catch (e) {
+		console.log('log out: ', e);
+		initLogOut();
+	}
+};
