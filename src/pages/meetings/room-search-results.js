@@ -50,22 +50,26 @@ class RoomSearchResults extends React.Component {
 	}
 
 	toggleFilterModal(value){
-		if(value){
-			this.setState({'showFilterModal': value})
-		}else{
-			this.setState({'showFilterModal': !this.state.showFilterModal})
-		}
+		this.setState({'showFilterModal': value})
 	}
 
 	handlePageChange(page) {
 		let {date, size, ammenities, rooms} = this.props;
-		let {current_page, per_page} = rooms;
+		let {per_page} = rooms;
 		this.props.getBookableRooms(date, size, ammenities, page, per_page);
 	}
 
+	clearFilters = (ev) => {
+		const {date, size} = this.props;
+		ev.preventDefault();
+		this.props.onSubmit({date, size, ammenities: []});
+	}
+
 	render(){
-		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities} = this.props;
-		const {data, current_page, per_page, last_page, total} = rooms;
+		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities, loading} = this.props;
+		const {data, current_page, last_page} = rooms;
+
+		console.log('FILTERSSSS  ',date,size,ammenities);
 
 		return (
 			<div>
@@ -101,7 +105,12 @@ class RoomSearchResults extends React.Component {
 					</>
 				}
 
-				{!data && <div>{T.translate("book_meeting.no_results")}</div>}
+				{!data?.length > 0 && !loading &&
+					<div>
+						{T.translate("book_meeting.no_results")}
+						<a href="" onClick={this.clearFilters} >clear all optional filters</a>
+					</div>
+				}
 
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}>
@@ -122,10 +131,11 @@ class RoomSearchResults extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer, roomsReducer, loggedUserState }) => ({
+const mapStateToProps = ({ summitReducer, roomsReducer, loggedUserState, baseState }) => ({
 	currentSummit: summitReducer.currentSummit,
 	rooms: roomsReducer.rooms,
-	member: loggedUserState.member
+	member: loggedUserState.member,
+	loading : baseState.loading,
 })
 
 export default connect(

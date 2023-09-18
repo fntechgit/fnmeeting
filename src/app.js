@@ -68,8 +68,17 @@ class App extends React.PureComponent {
     doLoginBasicLogin(getBackURL());
   }
 
+  getHeaderLink = () => {
+    const {currentSummit} = this.props;
+    if (currentSummit?.id) {
+      return `/a/${currentSummit.id}/my-meetings`;
+    } else {
+      return '/a/summits'
+    }
+  }
+
   render() {
-    let { currentSummit, isLoggedUser, onUserAuth, doLogout, getUserInfo, member, backUrl} = this.props;
+    let { currentSummit, isLoggedUser, onUserAuth, doLogout, member, backUrl} = this.props;
 
     // get user pic from idtoken claims (IDP)
     let profile_pic = member ? member.pic : '';
@@ -91,7 +100,7 @@ class App extends React.PureComponent {
             <AjaxLoader show={ this.props.loading } size={ 120 }/>
             <div className="header">
               <div className={"header-title " + (isLoggedUser ? '' : 'center')}>
-                <a href="/a/summits">{T.translate("general.app_title")}</a> {currentSummit.id > 0 && ` - ${currentSummit.name}`}
+                <a href={this.getHeaderLink()}>{T.translate("general.app_title")}</a> {currentSummit?.id > 0 && ` - ${currentSummit.name}`}
                 <AuthButton isLoggedUser={isLoggedUser} picture={profile_pic} doLogin={this.onClickLogin.bind(this)} initLogOut={initLogOut}/>
               </div>
             </div>
