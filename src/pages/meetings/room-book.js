@@ -19,8 +19,10 @@ import {createReservation, payReservation, clearReservation} from "../../actions
 import {getDayNumberFromDate, getFormatedTime, getFormatedDate} from "../../utils/helpers";
 import T from 'i18n-react';
 import PaymentForm from "../../components/payment-form";
+import Swal from "sweetalert2";
 
-const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zone, currentSummit, newReservation, clearReservation, createReservation}) => {
+
+const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zone, currentSummit, history, newReservation, clearReservation, createReservation}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [confirmed, setConfirmed] = useState(false);
 	const [apiKeyToken, setApiKeyToken] = useState(null);
@@ -38,9 +40,22 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 	const clickBook = () => {
 		if (!newReservation.loaded && !newReservation.loading) {
 			createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)
-				.then((a)=>{
-					if (!a.err) {
-						toggleModal(true)
+				.then(payload => {
+					if (!payload.err) {
+						const {response} = payload;
+						if (response.status === 'Paid') {
+							Swal.fire({
+								title: T.translate("book_meeting.reservation_created_title"),
+								text: T.translate("book_meeting.free_reservation_created_subtitle"),
+								type: "success",
+							}).then(function(result){
+								if (result.value) {
+									history.push(`/a/${currentSummit.id}/my-meetings`)
+								}
+							});
+						} else {
+							toggleModal(true)
+						}
 					}
 				}).catch(e => {})
 		}
@@ -48,7 +63,7 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 
 	let publicKey = null;
 	for (let profile of currentSummit.payment_profiles) {
-		if (profile.application_type == 'BookableRooms') {
+		if (profile.application_type === 'BookableRooms') {
 			publicKey = profile.test_mode_enabled ? profile.test_publishable_key : profile.live_publishable_key;
 			break;
 		}

@@ -17,7 +17,6 @@ import MeetingRoomBook from './room-book'
 import {connect} from "react-redux";
 import {getBookableRoom, getRoomAvailability} from "../../actions/room-actions";
 var QueryString = require('querystring')
-import {getSummitDates} from "../../utils/helpers";
 import T from "i18n-react";
 
 class AvailableRooms extends React.Component {
@@ -85,7 +84,7 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {match, history, room, roomAvailability, summit} = this.props;
+		const {history, room, roomAvailability, summit} = this.props;
 
 		// Have room been loaded
 		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
@@ -108,6 +107,7 @@ class AvailableRooms extends React.Component {
 					date={this.state.date}
 					room={room}
 					slot={this.state.slot}
+					history={history}
 				/>
 				}
 				{!this.state.slot &&

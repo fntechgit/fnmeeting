@@ -182,7 +182,11 @@ export const payReservation = (token, stripe) => (dispatch, getState) => {
             } else {
                 dispatch(stopLoading());
                 dispatch(showMessage(
-                    {title: T.translate("book_meeting.reservation_created"), type: 'success'},
+                    {
+                        title: T.translate("book_meeting.reservation_created_title"),
+                        text: T.translate("book_meeting.reservation_created_subtitle"),
+                        type: 'success'
+                    },
                     () => { history.push(`/a/${summitReducer.currentSummit.id}/my-meetings`) }
                 ));
                 // The payment has succeeded. Display a success message.

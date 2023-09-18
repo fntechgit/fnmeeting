@@ -20,7 +20,6 @@ import MyReservations from "./my-reservations"
 import SearchRoomsLayout from "./rooms-layout"
 import BookingClosedPage from "../pages/booking-closed-page"
 import {getSummitById} from '../actions/summit-actions'
-import Swal from "sweetalert2";
 
 class PrimaryLayout extends React.Component {
 
