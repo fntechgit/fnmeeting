@@ -57,6 +57,7 @@ window.OAUTH2_CLIENT_ID = process.env['OAUTH2_CLIENT_ID'];
 window.SCOPES = process.env['SCOPES'];
 window.ALLOWED_USER_GROUPS = process.env['ALLOWED_USER_GROUPS'];
 window.OAUTH2_FLOW = process.env['OAUTH2_FLOW'] || "token id_token";
+window.TIMEINTERVALSINCE1970_API_URL= process.env['TIMEINTERVALSINCE1970_API_URL'];
 
 class App extends React.PureComponent {
   constructor(props) {

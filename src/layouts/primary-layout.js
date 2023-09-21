@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-
+import moment from "moment-timezone";
 import React from 'react'
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ import MyReservations from "./my-reservations"
 import SearchRoomsLayout from "./rooms-layout"
 import BookingClosedPage from "../pages/booking-closed-page"
 import {getSummitById} from '../actions/summit-actions'
-
+import ClockComponent from '../components/clock';
 class PrimaryLayout extends React.Component {
 
   componentDidMount() {
@@ -31,11 +31,11 @@ class PrimaryLayout extends React.Component {
   }
 
   render(){
-    let { match, summit } = this.props;
+    let { match, summit, nowUtc } = this.props;
     let {currentSummit, loaded} = summit;
     let summitId = match.params.id;
-    let now = Math.round(Date.now()/1000);
-    let active = currentSummit.begin_allow_booking_date < now && currentSummit.end_allow_booking_date > now;
+
+    let active = currentSummit.end_allow_booking_date >= moment(nowUtc).unix();
 
     if (loaded && !active) {
         return <BookingClosedPage summit={currentSummit} />
@@ -49,11 +49,14 @@ class PrimaryLayout extends React.Component {
             <div className="col-md-8">
                 <main id="page-wrap">
                     {summitId && summit.loaded &&
-                    <Switch>
-                        <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations} />
-                        <Route path={`${match.url}/rooms`} component={SearchRoomsLayout} />
-                        <Redirect to={{ pathname: `${match.url}/my-meetings`}} />
-                    </Switch>
+                        <>
+                        <ClockComponent active={true} summit={summit} />
+                        <Switch>
+                            <Route strict exact path={`${match.url}/my-meetings`} component={MyReservations} />
+                            <Route path={`${match.url}/rooms`} component={SearchRoomsLayout} />
+                            <Redirect to={{ pathname: `${match.url}/my-meetings`}} />
+                        </Switch>
+                        </>
                     }
             </main>
             </div>
@@ -63,10 +66,11 @@ class PrimaryLayout extends React.Component {
 
 }
 
-const mapStateToProps = ({ summitReducer, loggedUserState, roomsReducer }) => ({
+const mapStateToProps = ({ summitReducer, loggedUserState, roomsReducer, clockState }) => ({
   summit: summitReducer,
   member: loggedUserState.member,
   rooms: roomsReducer.rooms,
+  nowUtc: clockState.nowUtc,
 })
 
 export default connect(

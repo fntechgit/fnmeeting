@@ -20,7 +20,7 @@ import reservationsReducer from './reducers/reservations-reducer';
 import roomsReducer from './reducers/rooms-reducer';
 import roomAvailabilityReducer from './reducers/room-availability-reducer';
 import newReservationReducer from './reducers/room-booking-reducer';
-
+import clockReducer from "./reducers/clock-reducer";
 
 import thunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist'
@@ -40,7 +40,8 @@ const reducers = persistCombineReducers(config, {
   roomsReducer: roomsReducer,
   roomAvailabilityReducer: roomAvailabilityReducer,
   newReservationReducer: newReservationReducer,
-  baseState: baseReducer
+  baseState: baseReducer,
+  clockState: clockReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

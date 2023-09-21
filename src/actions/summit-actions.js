@@ -43,7 +43,7 @@ export const getSummitById = (summitId) => (dispatch, getState) => {
     );
 };
 
-export const loadSummits = () => (dispatch, getState) => {
+export const loadSummits = (nowUTC) => (dispatch, getState) => {
 
     dispatch(startLoading());
 
@@ -51,8 +51,13 @@ export const loadSummits = () => (dispatch, getState) => {
         expand: 'none',
         relations: 'payment_profiles',
         page: 1,
-        per_page: 100
+        per_page: 100,
     };
+
+    const filter = [];
+    filter.push(`end_allow_booking_date>=${nowUTC}`);
+
+    params['filter[]']= filter;
 
     getRequest(
         createAction(REQUEST_SUMMITS),
