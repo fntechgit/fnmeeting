@@ -42,9 +42,9 @@ class RoomSearchResults extends React.Component {
 
 	componentDidUpdate(newProps) {
 		let {getBookableRooms, date, size, ammenities, rooms} = this.props;
-		let {current_page, per_page} = rooms;
+		let {per_page} = rooms;
 		if (date !== newProps.date || size !== newProps.size  || ammenities !== newProps.ammenities) {
-			getBookableRooms(date, size, ammenities, current_page, per_page);
+			getBookableRooms(date, size, ammenities, 1, per_page);
 			this.toggleFilterModal(false);
 		}
 	}
@@ -68,8 +68,6 @@ class RoomSearchResults extends React.Component {
 	render(){
 		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities, loading} = this.props;
 		const {data, current_page, last_page} = rooms;
-
-		console.log('FILTERSSSS  ',date,size,ammenities);
 
 		return (
 			<div>

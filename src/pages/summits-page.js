@@ -11,60 +11,63 @@
  * limitations under the License.
  **/
 import React from 'react';
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import {connect} from "react-redux";
 import {loadSummits} from '../actions/summit-actions'
 
 class SummitsPage extends React.Component {
 
-	constructor (props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+  }
 
-	componentDidMount() {
-		this.props.loadSummits();
-	}
+  componentDidMount() {
+    this.props.loadSummits();
+  }
 
-	render() {
-		let {summits} = this.props;
-		const nowEpoch = Math.round(Date.now() / 1000);
-		let availableSummits = summits.filter(s => s.begin_allow_booking_date < nowEpoch && nowEpoch < s.end_allow_booking_date);
+  render() {
+    const {summits, loading} = this.props;
+    const nowEpoch = Math.round(Date.now() / 1000);
+    let availableSummits = summits.filter(s => s.begin_allow_booking_date < nowEpoch && nowEpoch < s.end_allow_booking_date);
 
-		if (availableSummits.length === 1) {
-			let summitId = availableSummits[0].id;
-			return (
-                <Redirect to={{pathname: `/a/${summitId}/my-meetings`}} />
-			);
-		}
+    if (availableSummits.length === 1) {
+      let summitId = availableSummits[0].id;
+      return (
+        <Redirect to={{pathname: `/a/${summitId}/my-meetings`}}/>
+      );
+    }
 
-		return (
-            <div className="primary-layout">
-                <main id="page-wrap">
-					<h1>Pick a Show</h1>
+    if (loading) return null;
 
-					<div className="row summits-wrapper">
-						{availableSummits.length === 0 &&
-							<p>There are not shows Available.</p>
-						}
-						{availableSummits.length > 0 &&  availableSummits.map(s =>
-						<div className="col-md-4" key={`summit_${s.id}`}>
-							<a href={`/a/${s.id}/my-bookings`} className="btn btn-default">
-								{s.name}
-							</a>
-						</div>
-					)}
-					</div>
-				</main>
-			</div>
-		);
-	}
+    return (
+      <div className="primary-layout">
+        <main id="page-wrap">
+          <h1>Pick a Show</h1>
+
+          <div className="row summits-wrapper">
+            {availableSummits.length === 0 &&
+              <p>There are not shows Available.</p>
+            }
+            {availableSummits.length > 0 && availableSummits.map(s =>
+              <div className="col-md-4" key={`summit_${s.id}`}>
+                <a href={`/a/${s.id}/my-bookings`} className="btn btn-default">
+                  {s.name}
+                </a>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    );
+  }
 }
 
-const mapStateToProps = ({ allSummitsReducer }) => ({
-    summits: allSummitsReducer.summits,
+const mapStateToProps = ({allSummitsReducer, baseState}) => ({
+  summits: allSummitsReducer.summits,
+  loading: baseState.loading
 });
 
 export default connect(
-    mapStateToProps,
-    {loadSummits}
+  mapStateToProps,
+  {loadSummits}
 )(SummitsPage)
