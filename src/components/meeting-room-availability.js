@@ -7,8 +7,8 @@ export default ({date, availableDays, time_zone, availability, changeDate, onSel
   const dateStr = date ? epochToMomentTimeZone(date, time_zone).format('Y-M-D') : '';
   const currentDay = getDayNumberFromDate(availableDays, dateStr);
   const currentIndex = currentDay - 1
-  const previousIndex = (currentIndex > 0) ? currentIndex - 1 : false;
-  const nextIndex = (currentIndex + 1 < availableDays.length) ? currentIndex + 1 : false;
+  const previousIndex = (currentIndex > 0) ? currentIndex - 1 : -1;
+  const nextIndex = (currentIndex + 1 < availableDays.length) ? currentIndex + 1 : -1;
 
   return (
     <div className={'meeting-room-availability'}>
@@ -20,7 +20,7 @@ export default ({date, availableDays, time_zone, availability, changeDate, onSel
           <h3>Availability</h3>{getFormatedDate(date, time_zone)}
         </div>
         <div className={'col-xs-2 nav-arrow next-arrow'}>
-          {nextIndex && <i className='fa-arrow-right fa' onClick={() => changeDate(availableDays[nextIndex]?.epoch)} />}
+          {nextIndex > 0 && <i className='fa-arrow-right fa' onClick={() => changeDate(availableDays[nextIndex]?.epoch)} />}
         </div>
       </div>
       <div className={'meeting-room-availability-body col-xs-12'}>
