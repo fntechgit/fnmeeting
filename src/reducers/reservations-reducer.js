@@ -1,4 +1,4 @@
-import {REQUEST_RESERVATIONS, RECEIVE_RESERVATIONS} from '../actions/reservation-actions';
+import {REQUEST_RESERVATIONS, RECEIVE_RESERVATIONS, RESERVATION_CANCELLED} from '../actions/reservation-actions';
 
 export const DEFAULT_ENTITY = {
 	current_page: 1,
@@ -21,12 +21,14 @@ const reservationsReducer = (state = DEFAULT_STATE, action) => {
 		case REQUEST_RESERVATIONS: {
 			return DEFAULT_STATE
 		}
-			break;
 		case RECEIVE_RESERVATIONS: {
 			let entity = {...payload.response};
 			return {...state, reservations: entity, errors: {}, loading: false, loaded: true};
 		}
-			break;
+		case RESERVATION_CANCELLED: {
+			const data = state.reservations.data.filter(r => r.id !== payload)
+			return {...state, reservations: {...state.reservations, data}};
+		}
 		default:
 			return state;
 	}

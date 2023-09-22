@@ -14,7 +14,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import MyMeetingsPage from "../pages/meetings/my-meetings-page"
-import {getMyReservations} from '../actions/reservation-actions'
+import {getMyReservations, cancelReservation} from '../actions/reservation-actions'
 
 import T from 'i18n-react'
 
@@ -26,34 +26,36 @@ class MyReservations extends React.Component {
 
     if(summit.loaded & !summit.loading) {
       getMyReservations();
-
-     /* if (qs.get('refresh')) {
-        setTimeout(getMyReservations, 10000);
-      }*/
     }
   }
 
 
   render(){
-    let { myReservations, summit} = this.props;
+    let { myReservations, summit, nowUtc} = this.props;
 
     return(
         <div>
           <h2>{T.translate('my_reservations.page_title')}</h2>
-          <MyMeetingsPage reservations={myReservations} summit={summit.currentSummit}/>
+          <MyMeetingsPage
+            reservations={myReservations}
+            summit={summit.currentSummit}
+            nowUtc={nowUtc}
+            cancelReservation={this.props.cancelReservation}
+          />
         </div>
     );
   }
 
 }
 
-const mapStateToProps = ({ summitReducer, reservationsReducer, loggedUserState }) => ({
+const mapStateToProps = ({ summitReducer, reservationsReducer, loggedUserState, clockState }) => ({
   summit: summitReducer,
   myReservations: reservationsReducer.reservations,
-  member: loggedUserState.member
+  member: loggedUserState.member,
+  nowUtc: clockState.nowUtc
 })
 
 export default connect(
     mapStateToProps,
-    {getMyReservations}
+    {getMyReservations, cancelReservation}
 )(MyReservations)

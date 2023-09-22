@@ -84,7 +84,7 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {history, room, roomAvailability, summit} = this.props;
+		const {history, room, roomAvailability, summit, nowUtc} = this.props;
 
 		// Have room been loaded
 		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
@@ -97,7 +97,11 @@ class AvailableRooms extends React.Component {
 
 				}
 
-				<MeetingRoomCard room={room} />
+				<MeetingRoomCard
+					room={room}
+					nowUtc={nowUtc}
+					time_zone={summit.currentSummit.time_zone_id}
+				/>
 
 				{this.state.slot &&
 				<MeetingRoomBook
@@ -126,11 +130,12 @@ class AvailableRooms extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer, roomAvailabilityReducer, baseState }) => ({
+const mapStateToProps = ({ summitReducer, roomAvailabilityReducer, clockState }) => ({
 	summit: summitReducer,
 	room: roomAvailabilityReducer.room,
 	roomAvailability: roomAvailabilityReducer.availability,
-	loading: roomAvailabilityReducer.loading
+	loading: roomAvailabilityReducer.loading,
+	nowUtc: clockState.nowUtc
 })
 
 export default connect(

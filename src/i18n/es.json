@@ -1,7 +1,9 @@
 {
   "general": {
-    "select"    : "Select",
-    "app_title" : "FNmeeting App"
+    "select"     : "Select",
+    "app_title"  : "FNmeeting App",
+    "yes_cancel" : "Yes, cancel",
+    "are_you_sure": "Are you sure?"
   },
   "landing": {
     "sign_out"            : "Sign out",
@@ -21,7 +23,8 @@
   },
   "my_reservations": {
     "page_title": "My Meetings",
-    "no_reservations": "No reservations"
+    "no_reservations": "No reservations",
+    "cancel_reservation": "Do you wish to cancel your reservation for "
   },
   "bookable_room": {
     "placeholder_image": "https://picsum.photos/300/300",
@@ -33,7 +36,8 @@
     "available_rooms": "Available Rooms",
     "filter_rooms": "Filter",
     "available": "Available",
-    "unavailable": "Unavailable"
+    "unavailable": "Unavailable",
+    "cancel": "Cancel"
   },
   "book_meeting": {
     "i_need_to_book": "I need to book",

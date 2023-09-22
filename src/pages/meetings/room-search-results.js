@@ -66,7 +66,7 @@ class RoomSearchResults extends React.Component {
 	}
 
 	render(){
-		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities, loading} = this.props;
+		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities, loading, nowUtc} = this.props;
 		const {data, current_page, last_page} = rooms;
 
 		return (
@@ -82,6 +82,8 @@ class RoomSearchResults extends React.Component {
 						{data.map((room, i) =>
 							<MeetingRoomCard
 								key={i}
+								nowUtc={nowUtc}
+								time_zone={currentSummit.time_zone.name}
 								room={room}
 								action={onSelect}
 								actionLabel={T.translate("bookable_room.see_availability")}
@@ -129,11 +131,12 @@ class RoomSearchResults extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ summitReducer, roomsReducer, loggedUserState, baseState }) => ({
+const mapStateToProps = ({ summitReducer, roomsReducer, loggedUserState, baseState, clockState }) => ({
 	currentSummit: summitReducer.currentSummit,
 	rooms: roomsReducer.rooms,
 	member: loggedUserState.member,
 	loading : baseState.loading,
+	nowUtc: clockState.nowUtc
 })
 
 export default connect(

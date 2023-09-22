@@ -16,13 +16,15 @@ import {
 	createAction,
 	stopLoading,
 	startLoading,
-	authErrorHandler
+	authErrorHandler,
+	deleteRequest
 } from 'openstack-uicore-foundation/lib/utils/actions';
 import { getAccessTokenSafely } from '../utils/helpers';
 
 
 export const REQUEST_RESERVATIONS            = 'REQUEST_RESERVATIONS';
 export const RECEIVE_RESERVATIONS            = 'RECEIVE_RESERVATIONS';
+export const RESERVATION_CANCELLED            = 'RESERVATION_CANCELLED';
 
 export const getMyReservations = () => async (dispatch, getState) => {
 	const accessToken = await getAccessTokenSafely();
@@ -40,6 +42,29 @@ export const getMyReservations = () => async (dispatch, getState) => {
 		createAction(REQUEST_RESERVATIONS),
 		createAction(RECEIVE_RESERVATIONS),
 		`${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/all/reservations/me`,
+		authErrorHandler
+	)(params)(dispatch).then(() => {
+			dispatch(stopLoading());
+		}
+	);
+}
+
+export const cancelReservation = (reservationId) => async (dispatch, getState) => {
+	const accessToken = await getAccessTokenSafely();
+	const { summitReducer } = getState();
+	const { currentSummit }   = summitReducer;
+
+	dispatch(startLoading());
+
+	let params = {
+		access_token : accessToken
+	};
+
+	return deleteRequest(
+		null,
+		createAction(RESERVATION_CANCELLED)(reservationId),
+		`${window.API_BASE_URL}/api/v1/summits/${currentSummit.id}/locations/bookable-rooms/all/reservations/${reservationId}`,
+		{},
 		authErrorHandler
 	)(params)(dispatch).then(() => {
 			dispatch(stopLoading());

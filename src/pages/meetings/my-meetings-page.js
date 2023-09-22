@@ -13,50 +13,61 @@
 import React from 'react';
 import MeetingRoomCard from '../../components/meeting-room-card'
 import T from 'i18n-react'
+import Swal from "sweetalert2";
 
-class MyReservationsPage extends React.Component {
 
-	constructor (props) {
-		super(props);
+const MyReservationsPage = ({reservations, summit, nowUtc, cancelReservation}) => {
+
+	const handleCancelReservation = (reservation, date) => {
+		Swal.fire({
+			title: T.translate("general.are_you_sure"),
+			text: `${T.translate("my_reservations.cancel_reservation")} ${reservation.room.name} on ${date}`,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: T.translate("general.yes_cancel")
+		}).then(function(result){
+			if (result.value) {
+				cancelReservation(reservation.id);
+			}
+		});
 	}
 
-	render() {
-		const {reservations, summit} = this.props
+	const noReservations = <div>{T.translate("my_reservations.no_reservations")}</div>
 
-		const noReservations = <div>{T.translate("my_reservations.no_reservations")}</div>
-
-		// If there are no reservations
-		if (!reservations.data || reservations.data.length < 1) {
-			return noReservations
-		}
-
-		// Filter out  only Paid Reservations
-		let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Paid'));
-
-		// If there are no paid reservations, show no reservation message
-		if (paidReservations.length < 1) {
-			return noReservations
-		}
-
-		// Render all reservations
-		return (
-			<div>
-				{paidReservations.map(reservation => {
-					const {room} = reservation;
-					// Only show paid reservations (payed)
-					return (
-						<div key={`res_${reservation.id}`}>
-							<MeetingRoomCard
-								time_zone={summit.time_zone.name}
-								room={room}
-								reservation={reservation}
-							/>
-						</div>
-					);
-				})}
-			</div>
-		);
+	// If there are no reservations
+	if (!reservations.data || reservations.data.length < 1) {
+		return noReservations
 	}
+
+	// Filter out  only Paid Reservations
+	let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Paid'));
+
+	// If there are no paid reservations, show no reservation message
+	if (paidReservations.length < 1) {
+		return noReservations
+	}
+
+	// Render all reservations
+	return (
+		<div>
+			{paidReservations.map(reservation => {
+				const {room} = reservation;
+				// Only show paid reservations (payed)
+				return (
+					<div key={`res_${reservation.id}`}>
+						<MeetingRoomCard
+							time_zone={summit.time_zone.name}
+							room={room}
+							reservation={reservation}
+							nowUtc={nowUtc}
+							onCancel={handleCancelReservation}
+						/>
+					</div>
+				);
+			})}
+		</div>
+	);
 }
 
 export default MyReservationsPage;
