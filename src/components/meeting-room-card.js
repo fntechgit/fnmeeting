@@ -9,7 +9,8 @@ export default ({room, reservation, time_zone, actionLabel, action, nowUtc, onCa
   const image_url = image ? image.url : defaultImage;
   const datetime = start_datetime ? `${getFormatedDate(start_datetime, time_zone)}, ${getFormatedTime(start_datetime, time_zone)} - ${getFormatedTime(end_datetime, time_zone)}` : null;
   const amenities = attributes ? attributes.map(a => `${a.type.type}: ${a.value}`).join(' | ') : '';
-  const oneDay = 60 * 60 * 24;
+  const oneDay = 60 * 60 * parseInt(window.CANCELLATION_PERIOD_IN_HOURS);
+
   const canCancel = () => {
     if (created && start_datetime) {
       return ((nowUtc - created) < oneDay) || ((start_datetime - nowUtc) > oneDay);

@@ -13,7 +13,7 @@
 import moment from "moment-timezone";
 import React from 'react'
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import NavMenu from '../components/nav-menu'
 
 import MyReservations from "./my-reservations"

@@ -15,7 +15,6 @@ import React from 'react'
 import { connect } from 'react-redux';
 import MyMeetingsPage from "../pages/meetings/my-meetings-page"
 import {getMyReservations, cancelReservation} from '../actions/reservation-actions'
-
 import T from 'i18n-react'
 
 class MyReservations extends React.Component {

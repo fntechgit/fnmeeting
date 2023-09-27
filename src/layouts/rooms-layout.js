@@ -14,8 +14,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Breadcrumbs, Breadcrumb } from 'react-breadcrumbs'
-
 import RoomSearchLayout from "./rooms-search-layout"
 import MeetingRoomAvailability from "../pages/meetings/room-single"
 

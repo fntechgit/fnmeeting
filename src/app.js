@@ -58,6 +58,8 @@ window.SCOPES = process.env['SCOPES'];
 window.ALLOWED_USER_GROUPS = process.env['ALLOWED_USER_GROUPS'];
 window.OAUTH2_FLOW = process.env['OAUTH2_FLOW'] || "token id_token";
 window.TIMEINTERVALSINCE1970_API_URL= process.env['TIMEINTERVALSINCE1970_API_URL'];
+window.CANCELLATION_PERIOD_IN_HOURS = process.env['CANCELLATION_PERIOD_IN_HOURS'] || 24;
+window.SUPPORT_EMAIL = process.env['SUPPORT_EMAIL'] || null;
 
 class App extends React.PureComponent {
   constructor(props) {

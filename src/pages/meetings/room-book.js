@@ -36,7 +36,25 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 	const toggleModal = (value) => {
 		setShowModal(value)
 	}
-	
+
+	const bookingLegend = () => {
+		const supportEmail = window.SUPPORT_EMAIL || currentSummit.support_email;
+		return (
+			<p dangerouslySetInnerHTML={{__html:
+					T.translate(
+						room.time_slot_cost > 0 ?
+							"book_meeting.must_cancel_within_non_free" :
+							"book_meeting.must_cancel_within_free",
+						{
+							cancellation_period_in_hours: window.CANCELLATION_PERIOD_IN_HOURS,
+							support_email: supportEmail,
+							mail_subject: `${currentSummit.name} - Have an inquired related to ${room.name}`
+						}
+					)
+				}}></p>
+		);
+	}
+
 	const clickBook = () => {
 		if (!newReservation.loaded && !newReservation.loading) {
 			createReservation(room.id, slot.start_date, slot.end_date, room.currency, room.time_slot_cost)
@@ -70,14 +88,13 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 	}
 
 	const [stripePromise, setStripePromise] = useState(() => loadStripe(publicKey))
-
 	// Show confirmation if payment has been made
 	if (confirmed) {
 		return <div>
 			<h3>{T.translate("book_meeting.confirmation")}</h3>
 			<h4>{T.translate("book_meeting.you_have_booked")} {room.name}</h4>
 			<h3>{date} - {time}</h3>
-			<p>{T.translate("book_meeting.must_cancel_within")}</p>
+			{ bookingLegend() }
 		</div>
 	}
 
@@ -89,8 +106,7 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 			<h3>{room.name}<div className={'pull-right'}>{cost}</div></h3>
 			<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date, time_zone)}, {getFormatedTime(slot.start_date, time_zone)} - {getFormatedTime(slot.end_date, time_zone)}</h4>
 			<br  />
-			<p>{T.translate("book_meeting.must_cancel_within")}</p>
-
+			{ bookingLegend() }
 			{/* Book this room button */}
 			<div onClick={clickBook} className={'btn btn-warning btn-lg btn-block'}>
 				{T.translate("book_meeting.book_this_room")}
@@ -132,5 +148,5 @@ export default connect(
 		payReservation,
 		clearReservation
 	}
-)(RoomBook)
+)(RoomBook);
 
