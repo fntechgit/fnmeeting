@@ -16,16 +16,16 @@ import {connect} from "react-redux";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import {createReservation, payReservation, clearReservation} from "../../actions/room-actions";
-import {getDayNumberFromDate, getFormatedTime, getFormatedDate} from "../../utils/helpers";
+import {getFormatedTime, getFormatedDate} from "../../utils/helpers";
 import T from 'i18n-react';
 import PaymentForm from "../../components/payment-form";
 import Swal from "sweetalert2";
 
 
-const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zone, currentSummit, history, newReservation, clearReservation, createReservation}) => {
+const RoomBook = ({date, time, slot, room, payReservation, member, currentSummit, history, newReservation, clearReservation, createReservation}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [confirmed, setConfirmed] = useState(false);
-	const [apiKeyToken, setApiKeyToken] = useState(null);
+	const {time_zone_id, bookingDays} = currentSummit;
 
 	useEffect(() => {
 		return () => {
@@ -99,12 +99,13 @@ const RoomBook = ({days, date, time, slot, room, payReservation, member, time_zo
 	}
 
 	// Localize cost to currency passed by API
-	let cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: room.currency }).format(room.time_slot_cost)
+	const cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: room.currency }).format(room.time_slot_cost)
+	const {summitDayNumber} = bookingDays.find(bd => bd.epoch == date) || {};
 
 	return (
 		<div>
 			<h3>{room.name}<div className={'pull-right'}>{cost}</div></h3>
-			<h4>{T.translate("book_meeting.day")} {getDayNumberFromDate(days, date)}, {getFormatedDate(date, time_zone)}, {getFormatedTime(slot.start_date, time_zone)} - {getFormatedTime(slot.end_date, time_zone)}</h4>
+			<h4>{T.translate("book_meeting.day")} {summitDayNumber}, {getFormatedDate(date, time_zone_id)}, {getFormatedTime(slot.start_date, time_zone_id)} - {getFormatedTime(slot.end_date, time_zone_id)}</h4>
 			<br  />
 			{ bookingLegend() }
 			{/* Book this room button */}

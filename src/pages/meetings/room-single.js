@@ -106,8 +106,6 @@ class AvailableRooms extends React.Component {
 				{this.state.slot &&
 				<MeetingRoomBook
 					cancel={() => this.clearSlot()}
-					days={summit.currentSummit.summitDays}
-					time_zone={summit.currentSummit.time_zone_id}
 					date={this.state.date}
 					room={room}
 					slot={this.state.slot}

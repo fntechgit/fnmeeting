@@ -11,39 +11,32 @@
  * limitations under the License.
  **/
 
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux';
 import MyMeetingsPage from "../pages/meetings/my-meetings-page"
 import {getMyReservations, cancelReservation} from '../actions/reservation-actions'
 import T from 'i18n-react'
 
-class MyReservations extends React.Component {
+const MyReservations = ({myReservations, summit, nowUtc, cancelReservation, getMyReservations, loadedRes}) => {
 
-  componentWillMount() {
-    let {summit, getMyReservations, location} = this.props;
-    const qs = new URLSearchParams(location.search);
-
-    if(summit.loaded & !summit.loading) {
+  useEffect(() => {
+    if(summit.loaded && !summit.loading) {
       getMyReservations();
     }
-  }
+  }, [summit.loaded, summit.loading]);
 
-
-  render(){
-    let { myReservations, summit, nowUtc} = this.props;
-
-    return(
-        <div>
-          <h2>{T.translate('my_reservations.page_title')}</h2>
-          <MyMeetingsPage
-            reservations={myReservations}
-            summit={summit.currentSummit}
-            nowUtc={nowUtc}
-            cancelReservation={this.props.cancelReservation}
-          />
-        </div>
-    );
-  }
+  return(
+    <div>
+      <h2>{T.translate('my_reservations.page_title')}</h2>
+      <MyMeetingsPage
+        reservations={myReservations}
+        summit={summit.currentSummit}
+        loadedRes={loadedRes}
+        nowUtc={nowUtc}
+        cancelReservation={cancelReservation}
+      />
+    </div>
+  );
 
 }
 
@@ -51,7 +44,8 @@ const mapStateToProps = ({ summitReducer, reservationsReducer, loggedUserState, 
   summit: summitReducer,
   myReservations: reservationsReducer.reservations,
   member: loggedUserState.member,
-  nowUtc: clockState.nowUtc
+  nowUtc: clockState.nowUtc,
+  loadedRes: reservationsReducer.loaded
 })
 
 export default connect(

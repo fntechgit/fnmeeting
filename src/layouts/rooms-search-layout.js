@@ -78,7 +78,6 @@ class RoomSearchPage extends React.Component {
 			//
 			return (
 				<RoomSearchResults
-					summitDays={currentSummit.summitDays}
 					availableDays={currentSummit.bookingDays}
 					onSubmit={(values)=>{this.setQueryParams(values)}}
 					date={this.state.date}
@@ -92,7 +91,6 @@ class RoomSearchPage extends React.Component {
 		// RoomsSearch component is the initial search form
 		return (
 			<RoomSearch
-				summitDays={currentSummit.summitDays}
 				availableDays={currentSummit.bookingDays}
 				onSubmit={(values)=>{this.setQueryParams(values)}}
 				ammenities={this.state.ammenities}

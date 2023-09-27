@@ -16,7 +16,8 @@ import T from 'i18n-react'
 import Swal from "sweetalert2";
 
 
-const MyReservationsPage = ({reservations, summit, nowUtc, cancelReservation}) => {
+const MyReservationsPage = ({reservations, summit, nowUtc, loadedRes, cancelReservation}) => {
+	const paidReservations = reservations?.data?.filter(reservation => (reservation.status === 'Paid')) || [];
 
 	const handleCancelReservation = (reservation, date) => {
 		Swal.fire({
@@ -33,19 +34,9 @@ const MyReservationsPage = ({reservations, summit, nowUtc, cancelReservation}) =
 		});
 	}
 
-	const noReservations = <div>{T.translate("my_reservations.no_reservations")}</div>
-
-	// If there are no reservations
-	if (!reservations.data || reservations.data.length < 1) {
-		return noReservations
-	}
-
-	// Filter out  only Paid Reservations
-	let paidReservations = reservations.data.filter(reservation => (reservation.status === 'Paid'));
-
 	// If there are no paid reservations, show no reservation message
-	if (paidReservations.length < 1) {
-		return noReservations
+	if (!paidReservations.length > 0 && loadedRes) {
+		return <div>{T.translate("my_reservations.no_reservations")}</div>
 	}
 
 	// Render all reservations

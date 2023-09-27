@@ -2,49 +2,33 @@ import moment from "moment-timezone";
 import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
 import {getAccessToken} from 'openstack-uicore-foundation/lib/security/methods'
 import { initLogOut} from 'openstack-uicore-foundation/lib/security/methods';
+import {DAY_IN_SECONDS} from "./constants";
 
 export const getAvailableDates = (summit) => {
-	let {
+	const {
 		begin_allow_booking_date,
 		end_allow_booking_date,
+		start_date,
+		end_date,
 		time_zone_id
 	} = summit;
-	let bookStartDate = epochToMomentTimeZone(begin_allow_booking_date, time_zone_id);
-	let bookEndDate = epochToMomentTimeZone(end_allow_booking_date, time_zone_id);
-	let now = moment().tz(time_zone_id);
-	let dates = [];
+	const bookStartDate = epochToMomentTimeZone(begin_allow_booking_date, time_zone_id);
+	const bookEndDate = epochToMomentTimeZone(end_allow_booking_date, time_zone_id);
+	const now = moment().utc();
+	const dates = [];
 
 	while (bookStartDate <= bookEndDate) {
-
 		if (bookStartDate >= now) {
 			const tmp = bookStartDate.clone();
-			dates.push({str: tmp.format('Y-M-D'), epoch: tmp.unix()});
+			const dayIdx = Math.ceil((tmp.unix() - start_date) / DAY_IN_SECONDS);
+			const summitDayNumber = dayIdx >= 0 && tmp.unix() <= end_date ? dayIdx + 1 : null;
+			dates.push({str: tmp.format('Y-M-D'), epoch: tmp.unix(), summitDayNumber});
 		}
-
 		bookStartDate.add(1, 'days');
 	}
+
 	return dates
 };
-
-export const getSummitDates = (summit) => {
-	let {start_date, end_date, time_zone_id} = summit;
-	let startDate = epochToMomentTimeZone(start_date, time_zone_id);
-	let endDate = epochToMomentTimeZone(end_date, time_zone_id);
-	let dates = [];
-
-	// Add all additional days
-	while(startDate.diff(endDate) < 0) {
-		const tmp = startDate.clone();
-		dates.push({str: tmp.format('Y-M-D'), epoch: tmp.unix()});
-		startDate.add(1, 'days');
-	}
-	return dates
-};
-
-export const getDayNumberFromDate = (days, date) => {
-	const dateIndex = days.findIndex(d => d.str === date);
-	return (dateIndex + 1);
-}
 
 export const getFormatedDate = (datetime, time_zone = false) => {
 

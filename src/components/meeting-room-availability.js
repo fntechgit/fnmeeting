@@ -1,12 +1,11 @@
 import React from "react";
-import {getDayNumberFromDate, getFormatedDate} from '../utils/helpers'
+import {getFormatedDate} from '../utils/helpers'
 import T from "i18n-react";
 import {epochToMomentTimeZone} from "openstack-uicore-foundation/lib/utils/methods";
 
 export default ({date, availableDays, time_zone, availability, changeDate, onSelect}) => {
   const dateStr = date ? epochToMomentTimeZone(date, time_zone).format('Y-M-D') : '';
-  const currentDay = getDayNumberFromDate(availableDays, dateStr);
-  const currentIndex = currentDay - 1
+  const currentIndex = availableDays.findIndex(d => d.str === dateStr);
   const previousIndex = (currentIndex > 0) ? currentIndex - 1 : -1;
   const nextIndex = (currentIndex + 1 < availableDays.length) ? currentIndex + 1 : -1;
 

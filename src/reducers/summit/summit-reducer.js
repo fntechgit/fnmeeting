@@ -1,6 +1,6 @@
-import{ LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
+import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import {REQUEST_SUMMIT, RECEIVE_SUMMIT} from '../../actions/summit-actions';
-import {getAvailableDates, getSummitDates} from "../../utils/helpers";
+import {getAvailableDates} from "../../utils/helpers";
 
 export const DEFAULT_ENTITY = {
 	id: 0,
@@ -81,8 +81,6 @@ const summitReducer = (state = DEFAULT_STATE, action) => {
 				}
 			}
 
-			// build summitDays array
-			entity.summitDays = getSummitDates(entity);
 			// build bookingDays array
 			entity.bookingDays = getAvailableDates(entity);
 

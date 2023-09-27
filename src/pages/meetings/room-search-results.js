@@ -66,7 +66,7 @@ class RoomSearchResults extends React.Component {
 	}
 
 	render(){
-		const {onSelect, date, size, rooms, availableDays, summitDays, currentSummit, ammenities, loading, nowUtc} = this.props;
+		const {onSelect, date, size, rooms, availableDays, currentSummit, ammenities, loading, nowUtc} = this.props;
 		const {data, current_page, last_page} = rooms;
 
 		return (
@@ -105,7 +105,7 @@ class RoomSearchResults extends React.Component {
 					</>
 				}
 
-				{!data?.length > 0 && !loading &&
+				{data && data.length === 0 && !loading &&
 					<div>
 						{T.translate("book_meeting.no_results")}
 						<a href="" onClick={this.clearFilters} >clear all optional filters</a>
@@ -115,7 +115,6 @@ class RoomSearchResults extends React.Component {
 				<FilterModal show={this.state.showFilterModal} onClose={()=>{this.toggleFilterModal(false)}} title={'Filter Available Rooms'}>
 					<div style={{padding: '1em'}}>
 						<RoomSearch
-							summitDays={summitDays}
 							availableDays={availableDays}
 							date={date}
 							size={size}
