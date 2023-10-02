@@ -84,10 +84,11 @@ class AvailableRooms extends React.Component {
 	}
 
 	render(){
-		const {history, room, roomAvailability, summit, nowUtc} = this.props;
+		const {history, room, roomAvailability, summit, nowUtc, loading} = this.props;
 
 		// Have room been loaded
-		if(!room) return <div>{T.translate("book_meeting.room_not_found")}</div>
+		if(loading) return null;
+		if(!room && !loading) return <div>{T.translate("book_meeting.room_not_found")}</div>
 
 		return (
 			<div>

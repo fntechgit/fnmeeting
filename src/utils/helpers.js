@@ -14,7 +14,7 @@ export const getAvailableDates = (summit) => {
 	} = summit;
 	const bookStartDate = epochToMomentTimeZone(begin_allow_booking_date, time_zone_id);
 	const bookEndDate = epochToMomentTimeZone(end_allow_booking_date, time_zone_id);
-	const now = moment().utc();
+	const now = moment().tz(time_zone_id);
 	const dates = [];
 
 	while (bookStartDate <= bookEndDate) {

@@ -101,11 +101,13 @@ const RoomBook = ({date, time, slot, room, payReservation, member, currentSummit
 	// Localize cost to currency passed by API
 	const cost = new Intl.NumberFormat(Intl.getCanonicalLocales(), { style: 'currency', currency: room.currency }).format(room.time_slot_cost)
 	const {summitDayNumber} = bookingDays.find(bd => bd.epoch == date) || {};
+	const summitDayStr = summitDayNumber ? `{T.translate("book_meeting.day")} {summitDayNumber}, ` : '';
+
 
 	return (
 		<div>
 			<h3>{room.name}<div className={'pull-right'}>{cost}</div></h3>
-			<h4>{T.translate("book_meeting.day")} {summitDayNumber}, {getFormatedDate(date, time_zone_id)}, {getFormatedTime(slot.start_date, time_zone_id)} - {getFormatedTime(slot.end_date, time_zone_id)}</h4>
+			<h4>{summitDayStr}{getFormatedDate(date, time_zone_id)}, {getFormatedTime(slot.start_date, time_zone_id)} - {getFormatedTime(slot.end_date, time_zone_id)}</h4>
 			<br  />
 			{ bookingLegend() }
 			{/* Book this room button */}
