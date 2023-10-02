@@ -14,7 +14,6 @@ import React from 'react';
 import {Redirect} from 'react-router-dom'
 import {connect} from "react-redux";
 import {loadSummits} from '../actions/summit-actions'
-import moment from "moment-timezone";
 
 class SummitsPage extends React.Component {
 
@@ -24,8 +23,7 @@ class SummitsPage extends React.Component {
 
     componentDidMount() {
         const {loadSummits, nowUtc} = this.props
-        const now = moment(nowUtc);
-        loadSummits(now.unix());
+        loadSummits(nowUtc);
     }
 
     render() {

@@ -10,11 +10,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+import moment from "moment-timezone";
 import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/utils/actions';
 import {
     UPDATE_CLOCK,
 } from '../actions/clock-actions';
-const localNowUtc = Date.now();
+
+const localNowUtc = moment().unix();;
 
 const DEFAULT_STATE = {
     nowUtc: localNowUtc,
@@ -28,7 +30,7 @@ const clockReducer = (state = DEFAULT_STATE, action) => {
             return DEFAULT_STATE;
         case UPDATE_CLOCK: {
             const { timestamp } = payload;
-            return { ...state, nowUtc: timestamp };
+            return { ...state, nowUtc: parseInt(timestamp) };
         }
         default:
             return state;
