@@ -12,10 +12,9 @@ export default ({room, reservation, time_zone, actionLabel, action, nowUtc, onCa
   const oneDay = 60 * 60 * parseInt(window.CANCELLATION_PERIOD_IN_HOURS);
 
   const canCancel = () => {
-    if (created && start_datetime) {
-      return ((nowUtc - created) < oneDay) || ((start_datetime - nowUtc) > oneDay);
+    if (start_datetime) {
+      return ((start_datetime - nowUtc) > oneDay);
     }
-
     return false;
   };
 
