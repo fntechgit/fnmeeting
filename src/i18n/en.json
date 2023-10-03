@@ -37,7 +37,8 @@
     "filter_rooms": "Filter",
     "available": "Available",
     "unavailable": "Unavailable",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "not_available_slots": "There are Available Slots."
   },
   "book_meeting": {
     "i_need_to_book": "I need to book",
