@@ -49,7 +49,7 @@
     "find_a_room": "Find a Room",
     "must_cancel_within_non_free": "You may cancel your reservation up to {cancellation_period_in_hours} hours before your scheduled time for a full refund. To cancel, go to \"My Meetings\" and click the \"Cancel\" button on your reservation. Please send any questions to <a target='_blank' href='mailto:{support_email}?subject={mail_subject}'>{support_email}.</a>",
     "must_cancel_within_free": "You may cancel your reservation up to {cancellation_period_in_hours} hours before your scheduled time. To cancel, go to \"My Meetings\" and click the \"Cancel\" button on your reservation. Please send any questions to <a target='_blank' href='mailto:{support_email}?subject={mail_subject}'>{support_email}.</a>",
-    "day": "Day",
+    "day": "Day {day}",
     "book_this_room": "Book this room",
     "back": "Back",
     "room_not_found": "Room not found",

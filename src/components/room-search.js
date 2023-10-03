@@ -27,7 +27,7 @@ class RoomSearch extends React.Component {
     };
 
     this.options = props.availableDays.map(day => {
-      const label = `${getFormatedDate(day.epoch)} ${day.summitDayNumber ? ` - ${T.translate("book_meeting.day")} ${day.summitDayNumber}` : ''}`;
+      const label = `${getFormatedDate(day.epoch)} ${day.summitDayNumber ? ` - ${T.translate("book_meeting.day", {day: day.summitDayNumber})}` : ''}`;
       return {value: day.epoch, label: label}
     });
 
