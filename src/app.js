@@ -46,7 +46,12 @@ if (language.length > 2) {
 
 //console.log(`user language is ${language}`);
 
-T.setTexts(require(`./i18n/${language}.json`));
+try {
+  const i18nGlobalResources = require(`./i18n/${language}.json`);
+  T.setTexts(i18nGlobalResources);
+} catch (e) {
+  T.setTexts(require(`./i18n/en.json`));
+}
 
 // move all env var to global scope so ui core has access to this
 
