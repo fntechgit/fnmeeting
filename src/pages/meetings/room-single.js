@@ -33,7 +33,7 @@ class AvailableRooms extends React.Component {
 	componentDidMount() {
 		let {summit, match} = this.props
 		this.checkQueryParams()
-		if(!summit.loading && summit.loaded) {
+		if (!summit.loading && summit.loaded) {
 			this.props.getBookableRoom(match.params.id)
 		}
 	}
@@ -87,8 +87,7 @@ class AvailableRooms extends React.Component {
 		const {history, room, roomAvailability, summit, nowUtc, loading} = this.props;
 
 		// Have room been loaded
-		if(loading) return null;
-		if(!room && !loading) return <div>{T.translate("book_meeting.room_not_found")}</div>
+		if (!loading && !room) return <div>{T.translate("book_meeting.room_not_found")}</div>
 
 		return (
 			<div>

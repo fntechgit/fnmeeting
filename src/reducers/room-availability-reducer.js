@@ -13,7 +13,7 @@ const DEFAULT_STATE = {
 	room: null,
 	errors: {},
 	loaded: false,
-	loading: false,
+	loading: true,
 }
 
 const roomAvailabilityReducer = (state = DEFAULT_STATE, action) => {
